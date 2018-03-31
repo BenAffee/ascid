@@ -1,0 +1,52 @@
+// Begin page
+#wrapper
+	// Top Bar Start
+	.topbar
+		//---------------------------------------------LOGO
+		.topbar-left
+			.text-center
+				a.logo(href='index.html')
+					i.mdi.mdi-radar
+					span АСКИД
+							
+		//----------------------------------------------Button mobile view to collapse sidebar menu
+		nav.navbar-custom
+			ul.list-inline.float-right.mb-0
+				li.list-inline-item.notification-list.hide-phone
+					a#btn-fullscreen.nav-link.waves-light.waves-effect(href='#')
+						i.mdi.mdi-crop-free.noti-icon
+								
+				//-------------------------------------кнопка регистрация
+				//li.list-inline-item
+					button.btn.btn-success.waves-effect.waves-light.col-12.m-t-10.m-b-10(href='#ModalReg', type='button', data-toggle='modal', data-animation='slit', data-plugin='custommodal', data-overlayspeed='100', data-overlaycolor='#36404a')
+						i.ti-id-badge
+						|  Регистрация
+						
+				- if (username)
+					.btn-group
+						button.btn.btn-secondary.dropdown-toggle.waves-effect.waves-light(type='button', data-toggle='dropdown', aria-expanded='false')
+							strong #{post_short} 
+							span.caret
+						.dropdown-menu(x-placement='bottom-start', style='position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;')
+							- if (isAdministrator)
+								a.dropdown-item.control_href(href='1') Админка
+							a.dropdown-item(href='#') Настройки
+							a.dropdown-item(href='/logout') Выйти
+						
+				- else
+					li.list-inline-item#profile_area
+						button.btn.btn-warning.waves-effect.waves-light.m-t-10.m-b-10(href='#ModalEnter', type='button', data-toggle='modal', data-animation='slit', data-plugin='custommodal', data-overlayspeed='100', data-overlaycolor='#36404a')
+							i.mdi.mdi-power
+							span.ml-3
+								strong Вход
+					
+			ul.list-inline.menu-left.mb-0
+				li.float-left
+					button.button-menu-mobile.open-left.waves-light.waves-effect
+						i.mdi.mdi-menu
+				li.hide-phone.app-search
+					form(role='search')
+						input.form-control(type='text', placeholder='Search...')
+						a(href='')
+							i.fa.fa-search
+		// Top Bar End

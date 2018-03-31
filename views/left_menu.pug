@@ -1,0 +1,65 @@
+mixin mixin_li_add_doc
+
+	li
+		a.waves-effect.waves-primary.control_href(href='2')
+			i.ti-home
+			span  Добавить документ		
+
+// ========== Left Sidebar Start ==========
+.left.side-menu
+	.sidebar-inner.slimscrollleft
+		// - Divider
+		#sidebar-menu
+			ul
+				li.menu-title Main
+				li
+					a.waves-effect.waves-primary(href='/')
+						i.ti-home
+						span  На главную
+				
+				if (isModerator)
+					+ mixin_li_add_doc
+					
+				li.has_sub
+					a.waves-effect.waves-primary(href='javascript:void(0);')
+						i.ti-paint-bucket
+						span  Исполнение 
+						span.badge.badge-pink.pull-right 1
+						span.menu-arrow
+					ul.list-unstyled
+						li
+							a(href='ui-buttons.html') Новые
+						li
+							a(href='ui-cards.html') Не отработанные
+						li
+							a(href='ui-portlets.html') Просроченные
+						li
+							a(href='ui-checkbox-radio.html') Истекают сегодня
+						li
+							a(href='ui-tabs.html') Истекают завтра
+							
+				li.has_sub
+					a.waves-effect.waves-primary(href='javascript:void(0);')
+						i.ti-paint-bucket
+						span  Контроль 
+						span.badge.badge-pink.pull-right 1
+						span.menu-arrow
+					ul.list-unstyled
+						li
+							a(href='ui-buttons.html') Новые
+						li
+							a(href='ui-cards.html') Не отработанные
+						li
+							a(href='ui-portlets.html') Просроченные
+						li
+							a(href='ui-checkbox-radio.html') Истекают сегодня
+						li
+							a(href='ui-tabs.html') Истекают завтра
+				li
+					a.waves-effect.waves-primary(href='typography.html')
+						i.ti-infinite
+						span  Архив 
+														
+			.clearfix
+		.clearfix
+			// Left Sidebar End
