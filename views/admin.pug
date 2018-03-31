@@ -1,0 +1,33 @@
+//Форма нового пользователя
+h4.m-t-0.header-title Регистрация нового пользователя
+
+form#form_reg(name='form_reg', action='/reg', method='post')
+	.form-group.row.m-b-5
+		label.col-3.col-form-label Имя пользователя:
+		.col-4
+			input#new_username.form-control(type='text', name='new_username', placeholder='пользователь')
+
+	.form-group.row.m-b-5
+		label.col-3.col-form-label Должность:
+		.col-4
+			input#new_post_long.form-control(type='text', name='new_post_long', placeholder='должность')
+
+	.form-group.row.m-b-5
+		label.col-3.col-form-label Аббревиатура должнсти:
+		.col-4
+			input#new_post_short.form-control(type='text', name='new_post_short', placeholder='аббревиатура')
+
+	.form-group.row.m-b-5
+		label.col-3.col-form-label Пароль:
+		.col-4
+			input#new_password_1.form-control(type='password', name='new_password_1', value='password')
+
+	.form-group.row.m-b-5
+		label.col-3.col-form-label Пароль ещё раз:
+		.col-4
+			input#new_password_2.form-control(type='password', name='new_password_2', value='password')
+
+	button.m-b-5.row.btn.btn-primary.btn-custom.w-md.waves-effect.waves-light.col-7#reg_button(name='reg_button', type='button') Регистрация
+
+#reg_message.row.m-b-5.text-danger
+	//здесь сообщения от сервера

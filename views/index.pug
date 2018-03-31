@@ -1,0 +1,417 @@
+doctype html
+html
+	head
+		meta(charset='utf-8')
+		meta(name='viewport', content='width=device-width,initial-scale=1')
+		meta(name='description', content='Автоматизированная система контроля исполнения документов')
+		meta(name='author', content='Nesterenko_Oleg')
+		//link(rel='shortcut icon', href='images/favicon.ico')
+		title АСКИД
+		link(href='plugins/switchery/switchery.min.css', rel='stylesheet')
+		link(href='plugins/jquery-circliful/css/jquery.circliful.css', rel='stylesheet', type='text/css')
+		link(href='css/bootstrap.min.css', rel='stylesheet', type='text/css')
+		link(href='css/icons.css', rel='stylesheet', type='text/css')
+		link(href='css/style.css', rel='stylesheet', type='text/css')
+		script(src='js/modernizr.min.js')
+	body.fixed-left
+
+		//-------------------------------Модальное окно входа		
+		.container-fluid
+			#ModalEnter.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+				.modal-dialog.col-12
+					.modal-content
+						.modal-header
+							h4#myModalLabel.modal-title Авторизация
+						.modal-body.col-12
+							.text-center
+								a.logo-lg(href='index.html')
+									i.mdi.mdi-radio
+									span АСКИД
+							form.form-horizontal.m-t-20(id='form_auth', name='form_auth', action='/auth', method='post')
+								.form-group.row
+									.col-11
+										.input-group
+											span.input-group-addon
+												i.mdi.mdi-account
+											input.form-control(type='text', required='', placeholder='Имя пользователя', id='username', name='username')
+								.form-group.row
+									.col-11
+										.input-group
+											span.input-group-addon
+												i.mdi.mdi-key
+											input.form-control(type='password', required='', placeholder='Пароль', id='password', name='password')
+								.form-group.row.col-12.m-0.p-0
+									.col-6.m-0.p-0.m-t-10
+										.checkbox.checkbox-primary
+											input#checkbox-signup(type='checkbox')
+											label(for='checkbox-signup') Запомнить меня
+									.col-6.m-0.p-0.text-right
+										button.btn.btn-primary.btn-custom.w-md.waves-effect.waves-light(type='submit') Войти
+								.form-group.row.col-12.m-0.p-0.m-t-15
+									.col-6.m-0.p-0
+										a.text-muted(href='pages-recoverpw.html')
+											i.fa.fa-lock.m-r-5
+											|  Забыли пароль?
+									.col-6.text-right.m-0.p-0
+										a.text-muted(href='pages-register.html') Регистрация
+
+
+		
+		
+		
+		
+		
+		
+		
+		
+		// Begin page
+		#wrapper
+			// Top Bar Start
+			.topbar
+				//---------------------------------------------LOGO
+				.topbar-left
+					.text-center
+						a.logo(href='index.html')
+							i.mdi.mdi-radar
+							span АСКИД
+	
+
+							
+							
+							
+				//----------------------------------------------Button mobile view to collapse sidebar menu
+				nav.navbar-custom
+					ul.list-inline.float-right.mb-0
+									
+						li.list-inline-item.notification-list.hide-phone
+							a#btn-fullscreen.nav-link.waves-light.waves-effect(href='#')
+								i.mdi.mdi-crop-free.noti-icon
+								
+						//-------------------------------------кнопка регистрация
+						//li.list-inline-item
+							button.btn.btn-success.waves-effect.waves-light.col-12.m-t-10.m-b-10(href='#ModalReg', type='button', data-toggle='modal', data-animation='slit', data-plugin='custommodal', data-overlayspeed='100', data-overlaycolor='#36404a')
+								i.ti-id-badge
+								|  Регистрация
+
+						
+						- if (username)
+							.btn-group
+								button.btn.btn-secondary.dropdown-toggle.waves-effect.waves-light(type='button', data-toggle='dropdown', aria-expanded='false')
+									strong #{post_short} 
+									span.caret
+								.dropdown-menu(x-placement='bottom-start', style='position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;')
+									- if (isAdministrator)
+										a.dropdown-item.control_href(href='1') Админка
+									a.dropdown-item(href='#') Настройки
+									a.dropdown-item(href='/logout') Выйти
+						
+						- else
+							li.list-inline-item#profile_area
+								button.btn.btn-warning.waves-effect.waves-light.m-t-10.m-b-10(href='#ModalEnter', type='button', data-toggle='modal', data-animation='slit', data-plugin='custommodal', data-overlayspeed='100', data-overlaycolor='#36404a')
+									i.mdi.mdi-power
+									span.ml-3
+										strong Вход
+
+								
+					ul.list-inline.menu-left.mb-0
+						li.float-left
+							button.button-menu-mobile.open-left.waves-light.waves-effect
+								i.mdi.mdi-menu
+						li.hide-phone.app-search
+							form(role='search')
+								input.form-control(type='text', placeholder='Search...')
+								a(href='')
+									i.fa.fa-search
+
+			// Top Bar End
+			// ========== Left Sidebar Start ==========
+			.left.side-menu
+				.sidebar-inner.slimscrollleft
+					// - Divider
+					#sidebar-menu
+						ul
+							li.menu-title Main
+							li
+								a.waves-effect.waves-primary(href='/')
+									i.ti-home
+									span  На главную
+							
+							if (isModerator)
+							li
+								a.waves-effect.waves-primary.control_href(href='2')
+									i.ti-home
+									span  Добавить документ								
+								
+								
+								
+							li.has_sub
+								a.waves-effect.waves-primary(href='javascript:void(0);')
+									i.ti-paint-bucket
+									span  Исполнение 
+									span.badge.badge-pink.pull-right 1
+									span.menu-arrow
+
+								ul.list-unstyled
+									li
+										a(href='ui-buttons.html') Новые
+									li
+										a(href='ui-cards.html') Не отработанные
+									li
+										a(href='ui-portlets.html') Просроченные
+									li
+										a(href='ui-checkbox-radio.html') Истекают сегодня
+									li
+										a(href='ui-tabs.html') Истекают завтра
+										
+							li.has_sub
+								a.waves-effect.waves-primary(href='javascript:void(0);')
+									i.ti-paint-bucket
+									span  Контроль 
+									span.badge.badge-pink.pull-right 1
+									span.menu-arrow
+
+								ul.list-unstyled
+									li
+										a(href='ui-buttons.html') Новые
+									li
+										a(href='ui-cards.html') Не отработанные
+									li
+										a(href='ui-portlets.html') Просроченные
+									li
+										a(href='ui-checkbox-radio.html') Истекают сегодня
+									li
+										a(href='ui-tabs.html') Истекают завтра
+
+							li
+								a.waves-effect.waves-primary(href='typography.html')
+									i.ti-infinite
+									span  Архив 
+
+														
+						.clearfix
+					.clearfix
+			// Left Sidebar End
+			// ==============================================================
+			// Start right Content here
+			// ==============================================================
+			.content-page
+				// Start content
+				.content
+					.container-fluid
+						// Page-Title
+						//.row
+							.col-sm-12
+								.page-title-box
+									h4.page-title Welcome !
+									ol.breadcrumb.float-right
+										li.breadcrumb-item
+											a(href='#') Minton
+										li.breadcrumb-item.active Dashboard
+									.clearfix
+						.row
+							#main_content.col-10
+								
+								h4.m-t-0.header-title Таблица тестовых имён пользователей и паролей
+								table.table.table-bordered
+									thead
+										tr
+											th #
+											th UserName
+											th Password
+											th Описание
+									tbody
+										tr
+											th(scope='row') 1
+											td admin
+											td 123456
+											td Администратор
+										tr
+											th(scope='row') 2
+											td moder
+											td 123456
+											td Модератор
+
+							
+							
+							
+							
+							
+								//.form-group.row.m-b-5
+									label.col-form-label(for='file_doc') Файл для загрузки:
+									input.form-control#file_doc(type='file', name='file_doc')
+								
+								//.form-group.row.m-b-5
+									label.col-form-label Описание документа:
+									
+										
+								//.form-group.row.m-b-5
+									label.col-4.col-form-label Описание документа:
+									.col-4
+										input.form-control#about_doc(type='text', required='', placeholder='Описание', name='about_doc')*/										
+
+							//	input(type='submit', value='Upload')
+
+
+					// end container
+				// end content
+				footer.footer
+					| 2018 © Nesterenko inc.
+					span.hide-phone - benaffee@mail.ru
+			// ==============================================================
+			// End Right content here
+			// ==============================================================
+			// Right Sidebar
+			.side-bar.right-bar
+				div
+					ul.nav.nav-tabs.tabs-bordered.nav-justified
+						li.nav-item
+							a.nav-link.active(href='#home-2', data-toggle='tab', aria-expanded='false')
+								| Activity
+						li.nav-item
+							a.nav-link(href='#messages-2', data-toggle='tab', aria-expanded='true')
+								| Settings
+					.tab-content
+						#home-2.tab-pane.fade.show.active
+							.timeline-2
+								.time-item
+									.item-info
+										small.text-muted 5 minutes ago
+										p
+											strong
+												a.text-info(href='#') John Doe
+											|  Uploaded a photo 
+											strong "DSC000586.jpg"
+								.time-item
+									.item-info
+										small.text-muted 30 minutes ago
+										p
+											a.text-info(href='') Lorem
+											|  commented your post.
+										p
+											em
+												| "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam laoreet tellus ut tincidunt euismod. "
+								.time-item
+									.item-info
+										small.text-muted 59 minutes ago
+										p
+											a.text-info(href='') Jessi
+											|  attended a meeting with
+											a.text-success(href='#') John Doe
+											| .
+										p
+											em
+												| "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam laoreet tellus ut tincidunt euismod. "
+								.time-item
+									.item-info
+										small.text-muted 1 hour ago
+										p
+											strong
+												a.text-info(href='#') John Doe
+											| Uploaded 2 new photos
+								.time-item
+									.item-info
+										small.text-muted 3 hours ago
+										p
+											a.text-info(href='') Lorem
+											|  commented your post.
+										p
+											em
+												| "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam laoreet tellus ut tincidunt euismod. "
+								.time-item
+									.item-info
+										small.text-muted 5 hours ago
+										p
+											a.text-info(href='') Jessi
+											|  attended a meeting with
+											a.text-success(href='#') John Doe
+											| .
+										p
+											em
+												| "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam laoreet tellus ut tincidunt euismod. "
+						#messages-2.tab-pane
+							.row.m-t-20
+								.col-8
+									h5.m-0.font-15 Notifications
+									p.text-muted.m-b-0
+										small Do you need them?
+								.col-4.text-right
+									input(type='checkbox', checked='', data-plugin='switchery', data-color='#3bafda', data-size='small')
+							.row.m-t-20
+								.col-8
+									h5.m-0.font-15 API Access
+									p.m-b-0.text-muted
+										small Enable/Disable access
+								.col-4.text-right
+									input(type='checkbox', checked='', data-plugin='switchery', data-color='#3bafda', data-size='small')
+							.row.m-t-20
+								.col-8
+									h5.m-0.font-15 Auto Updates
+									p.m-b-0.text-muted
+										small Keep up to date
+								.col-4.text-right
+									input(type='checkbox', checked='', data-plugin='switchery', data-color='#3bafda', data-size='small')
+							.row.m-t-20
+								.col-8
+									h5.m-0.font-15 Online Status
+									p.m-b-0.text-muted
+										small Show your status to all
+								.col-4.text-right
+									input(type='checkbox', checked='', data-plugin='switchery', data-color='#3bafda', data-size='small')
+			// /Right-bar
+		// END wrapper
+		script.
+			var resizefunc = [];
+		// Plugins
+		script(src='js/jquery.min.js')
+		script(src='js/popper.min.js')
+		// Popper for Bootstrap
+		script(src='js/bootstrap.min.js')
+		script(src='js/detect.js')
+		script(src='js/fastclick.js')
+		script(src='js/jquery.slimscroll.js')
+		script(src='js/jquery.blockUI.js')
+		script(src='js/waves.js')
+		script(src='js/wow.min.js')
+		script(src='js/jquery.nicescroll.js')
+		script(src='js/jquery.scrollTo.min.js')
+		script(src='plugins/switchery/switchery.min.js')
+		script(src='plugins/custombox/src/js/custombox.js')
+		// Counter Up
+		script(src='plugins/waypoints/lib/jquery.waypoints.min.js')
+		script(src='plugins/counterup/jquery.counterup.min.js')
+		// circliful Chart
+		script(src='plugins/jquery-circliful/js/jquery.circliful.min.js')
+		script(src='plugins/jquery-sparkline/jquery.sparkline.min.js')
+		// skycons
+		script(src='plugins/skyicons/skycons.min.js', type='text/javascript')
+		// Page js
+		script(src='pages/jquery.dashboard.js')
+		// Custom main Js
+		script(src='js/jquery.core.js')
+		script(src='js/jquery.app.js')
+		
+		script(src='js/noejs.js')
+		script(type='text/javascript').
+			jQuery(document).ready(function($) {
+			$('.counter').counterUp({
+			delay: 100,
+			time: 1200
+			});
+			$('.circliful-chart').circliful();
+			});
+			// BEGIN SVG WEATHER ICON
+			if (typeof Skycons !== 'undefined'){
+			var icons = new Skycons(
+			{"color": "#3bafda"},
+			{"resizeClear": true}
+			),
+			list  = [
+			"clear-day", "clear-night", "partly-cloudy-day",
+			"partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+			"fog"
+			],
+			i;
+			for(i = list.length; i--; )
+			icons.set(list[i], list[i]);
+			icons.play();
+			};

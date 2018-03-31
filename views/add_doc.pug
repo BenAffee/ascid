@@ -1,0 +1,37 @@
+form#uploadForm(ref='uploadForm', action='/upload', method='post', enctype='multipart/form-data')
+	h4.m-t-0.header-title Форма ввода документа
+	table.table
+		tbody
+			tr
+				td(style='vertical-align: middle') Файл для загрузки:
+				td 
+					input.form-control#file_doc(type='file', name='file_doc')
+					
+			tr
+				td(style='vertical-align: middle') Тип документа:
+				td
+					select#type_doc.custom-select.form-control(type='text', name='type_doc')
+						option(selected='') Выберите тип
+						option(value='1') Приказание
+						option(value='2') Приказ
+						option(value='3') Входящий
+			
+			tr
+				td(style='vertical-align: middle') Номер документа:
+				td
+					input#num_doc.form-control(type='text', name='num_doc', placeholder='Описание')
+				
+				
+			tr
+				td(style='vertical-align: middle') Дата документа:
+				td
+					input#date_doc.form-control(type='date', name='date_doc')
+			
+			
+			tr
+				td(style='vertical-align: middle') Описание документа:
+				td
+					input#about_doc.form-control(type='text', name='about_doc', placeholder='Описание')
+					
+
+	button.btn.btn-primary.btn-custom.w-md.waves-effect.waves-light(type='submit') Загрузить
