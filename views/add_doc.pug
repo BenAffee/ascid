@@ -1,37 +1,54 @@
+//ul
+	each val in DL
+		li=val.username
+		li=val.post_short
+
+//p тут напрямую #{DL}
+
 form#uploadForm(ref='uploadForm', action='/upload', method='post', enctype='multipart/form-data')
-	h4.m-t-0.header-title Форма ввода документа
+	h4.m-t-0.header-title Форма ввода документа 
 	table.table
 		tbody
 			tr
-				td(style='vertical-align: middle') Файл для загрузки:
-				td 
-					input.form-control#file_doc(type='file', name='file_doc')
+				td.p-0.m-b-5(style='vertical-align: middle') Файл для загрузки:
+				td.p-0
+					input.m-b-5.form-control#file_doc(type='file', name='file_doc')
 					
 			tr
-				td(style='vertical-align: middle') Тип документа:
-				td
-					select#type_doc.custom-select.form-control(type='text', name='type_doc')
+				td.p-0.m-b-5(style='vertical-align: middle') Тип документа:
+				td.p-0
+					select.m-b-5#type_doc.custom-select.form-control(type='text', name='type_doc')
 						option(selected='') Выберите тип
-						option(value='1') Приказание
-						option(value='2') Приказ
-						option(value='3') Входящий
-			
+						each val, index in docs
+							option(value=index,
+								label=val)
 			tr
-				td(style='vertical-align: middle') Номер документа:
-				td
-					input#num_doc.form-control(type='text', name='num_doc', placeholder='Описание')
+				td.p-0.m-b-5(style='vertical-align: middle') Номер документа:
+				td.p-0
+					input.m-b-5#num_doc.form-control(type='text', name='num_doc', placeholder='Описание')
 				
 				
 			tr
-				td(style='vertical-align: middle') Дата документа:
-				td
-					input#date_doc.form-control(type='date', name='date_doc')
-			
-			
+				td.p-0.m-b-5(style='vertical-align: middle') Дата документа:
+				td.p-0
+					input.m-b-5#date_doc.form-control(type='date', name='date_doc')
+					
 			tr
-				td(style='vertical-align: middle') Описание документа:
-				td
-					input#about_doc.form-control(type='text', name='about_doc', placeholder='Описание')
+				td.p-0.m-b-5(style='vertical-align: middle') Руководитель:
+				td.p-0
+					select.m-b-5#ruc_doc.custom-select.form-control(type='text', name='ruc_doc')
+						option(selected='') Выберите руководителя
+						each val in DL
+							option(value = val.username,
+							label = val.post_short)
+							
+			tr
+				td.p-0.m-b-5(style='vertical-align: middle') Описание документа:
+				td.p-0
+					input.m-b-5#about_doc.form-control(type='text', name='about_doc', placeholder='Описание')
 					
 
-	button.btn.btn-primary.btn-custom.w-md.waves-effect.waves-light(type='submit') Загрузить
+
+					
+
+	button.btn.btn-primary.btn-custom.w-md.waves-effect.waves-light(type='button' onclick="console.log($('#uploadForm').serialize())") Загрузить

@@ -1,0 +1,126 @@
+//====================================================
+//основное окно
+//=====================================================
+.content-page
+	// Start content
+	.content
+		.container-fluid
+			.row#main_content.col-10
+			
+			
+				#accordion.m-b-20(role='tablist', aria-multiselectable='true')
+					.card
+						#headingOne.card-header(role='tab')
+							h5.mb-0.mt-0.font-16
+								a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseOne', aria-expanded='false', aria-controls='collapseOne')
+									| Таблица тестовых имён пользователей
+						#collapseOne.collapse(role='tabpanel', aria-labelledby='headingOne', style='')
+							.card-body
+								table.table.table-bordered
+									thead
+										tr
+											th UserName
+											th Наименование должности
+											th Аббревиатура должности
+									tbody
+										tr
+											td admin
+											td Администратор
+											td Админ
+										tr
+											td moder
+											td Модератор
+											td модер
+
+										tr
+											td N-A
+											td Начальник академии
+											td НА
+
+										tr
+											td ZNA
+											td Заместитель начальника академии
+											td ЗНА
+
+										tr
+											td ZNA-UNR
+											td Заместитель начальника академии по учебной и научной работе
+											td ЗНА-УНР
+
+										tr
+											td ZNA-RLS
+											td Заместитель начальника академии по работе с личным составом
+											td ЗНА-РЛС
+
+										tr
+											td NF-1
+											td Начальник 1 факультета
+											td НФ-1
+
+										tr
+											td NF-2
+											td Начальник 2 факультета
+											td НФ-2
+
+										tr
+											td NF-3
+											td Начальник 3 факультета
+											td НФ-3
+
+										tr
+											td OAK-101
+											td Начальник 101 кафедры
+											td НОАК-101
+
+										tr
+											td OAK-102
+											td Начальник 102 кафедры
+											td НОАК-102
+
+										tr
+											td OAK-103
+											td Начальник 103 кафедры
+											td НОАК-103
+
+
+										tr
+											td NUMO
+											td Начальник учебно-методического отдела
+											td НУМО
+
+										tr
+											td NONR
+											td Начальник отдела (организации научной работы и подготовки научно-педагогических кадров)	
+											td НОНР													
+					
+					
+					.card
+						#headingTwo.card-header(role='tab')
+							h5.mb-0.mt-0.font-16
+								a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
+									| Использованное программное обеспечение
+						#collapseTwo.collapse(role='tabpanel', aria-labelledby='headingTwo', style='')
+							.card-body
+								| Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+
+
+
+								
+								
+					select#my_multi_select1.multi-select(multiple='multiple', name='my_multi_select1[]', data-plugin='multiselect', style='position: absolute; left: -9999px;')
+						option Dallas Cowboys
+						option New York Giants
+						option(selected='') Philadelphia Eagles
+						option(selected='') Washington Redskins
+						option Chicago Bears
+						option Detroit Lions
+						option Green Bay Packers
+						option Minnesota Vikings
+						option(selected='') Atlanta Falcons
+						option Carolina Panthers
+						option New Orleans Saints
+						option Tampa Bay Buccaneers
+						option Arizona Cardinals
+						option St. Louis Rams
+						option San Francisco 49ers
+						option Seattle Seahawks

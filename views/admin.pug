@@ -1,33 +1,47 @@
+
 //Форма нового пользователя
-h4.m-t-0.header-title Регистрация нового пользователя
+//.row.col-4
+	h4.m-t-0.header-title Регистрация нового пользователя
 
 form#form_reg(name='form_reg', action='/reg', method='post')
 	.form-group.row.m-b-5
-		label.col-3.col-form-label Имя пользователя:
-		.col-4
+		label.col-6.col-form-label Имя пользователя:
+		.col-6
 			input#new_username.form-control(type='text', name='new_username', placeholder='пользователь')
 
 	.form-group.row.m-b-5
-		label.col-3.col-form-label Должность:
-		.col-4
+		label.col-6.col-form-label Должность:
+		.col-6
 			input#new_post_long.form-control(type='text', name='new_post_long', placeholder='должность')
 
 	.form-group.row.m-b-5
-		label.col-3.col-form-label Аббревиатура должнсти:
-		.col-4
+		label.col-6.col-form-label Аббревиатура должнсти:
+		.col-6
 			input#new_post_short.form-control(type='text', name='new_post_short', placeholder='аббревиатура')
 
 	.form-group.row.m-b-5
-		label.col-3.col-form-label Пароль:
-		.col-4
-			input#new_password_1.form-control(type='password', name='new_password_1', value='password')
+		label.col-6.col-form-label Уровень руководства:
+		.col-6
+			select#new_ruk_level.custom-select.form-control(type='text', name='new_ruk_level')
+				option(selected='') Выберите уровень
+				option(value='1') Уровень 1
+				option(value='2') Уровень 2
+				option(value='3') Уровень 3
+				option(value='4') Уровень 4
 
 	.form-group.row.m-b-5
-		label.col-3.col-form-label Пароль ещё раз:
-		.col-4
-			input#new_password_2.form-control(type='password', name='new_password_2', value='password')
+		label.col-6.col-form-label Пароль:
+		.col-6
+			input#new_password_1.form-control(type='password', name='new_password_1', value='123456')
 
-	button.m-b-5.row.btn.btn-primary.btn-custom.w-md.waves-effect.waves-light.col-7#reg_button(name='reg_button', type='button') Регистрация
-
-#reg_message.row.m-b-5.text-danger
-	//здесь сообщения от сервера
+	.form-group.row.m-b-5
+		label.col-6.col-form-label Пароль ещё раз:
+		.col-6
+			input#new_password_2.form-control(type='password', name='new_password_2', value='123456')
+			
+		button.m-b-5.row.btn.btn-primary.btn-custom.w-md.waves-effect.waves-light.col-7#reg_button(type='button') Регистрация
+	
+	//button.m-b-5.row.btn.btn-primary.btn-custom.w-md.waves-effect.waves-light.col-7#reg_button1(type='button') RY1
+.row.m-b-5.text-danger.col-6#reg_message
+		
+			//здесь сообщения от сервера

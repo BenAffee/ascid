@@ -1,28 +1,25 @@
 var express = require('express');
 var router = express.Router();
-
 var bodyParser = require('body-parser');
-
 var urlencodedParser = bodyParser.urlencoded({extended: false});
-
 var db = require('../config/mongoose');
 var users    = require('../config/mongoose');
-
 var crypto = require('crypto');
-
+var config = require('../config/index');
 var multer  = require('multer')
 var upload = multer({ dest: 'files/' })
-
+var flow = require('nimble');
 var msg='';
+var dbo=[];
+//var moder_users=[];
 
+/*var resultsDB = function(fields){
+	users.findOne(fields, function(err, docs){
+	if (!err) return docs;
+	else console.log('ошибка доступа к базе'.red.bold)
 
-var resultsDB = function(collect, field){
-	collect.findOne(field, function(err, docs){
-		if (!err) return docs;
-		else console.log('ошибка доступа к бзе'.red.bold)
-	});
-};
-
+});
+}*/
 
 //--------------------------------------------------------------------------------------------GET home page.
 router.get('/', function(req, res, next) {
@@ -30,7 +27,7 @@ router.get('/', function(req, res, next) {
 	console.log(msg.magenta.bold);
 	
 	//var db = resultsDB('users',{username: 'admin'});
-	console.log(db);
+	console.log(config.type_of_docs);
 	
 	res.render('index', { 
 		username: req.session.username,
@@ -48,15 +45,18 @@ router.get('/', function(req, res, next) {
 router.get('/control/:page', function(req, res, next) {
 	var control = req.params.page;	
 	
-	msg = req.session.username + ': сработал путь control/'+ control;
-	console.log(msg.magenta.bold);
+
 	
 	if (control==1) {
-		if(req.session.isAdministrator) 
+		if(req.session.isAdministrator) {
+			msg = req.session.username + ': вход в админ-панель';
+			console.log(msg.magenta.bold);
 			res.render('admin');
+		}
+			
 		else{
 			res.send('а ты жулик))) попробуй что-нибудь по-сложней');
-			
+		
 			msg = req.session.username + ': неудачная попытка входа в админку';
 			console.log(msg.bgRed.white);
 		}
@@ -65,8 +65,67 @@ router.get('/control/:page', function(req, res, next) {
 	
 	
 	if (control==2) {
-		if(req.session.isModerator) 
-			res.render('add_doc');
+		if(req.session.isModerator) {
+			msg = req.session.username + ': вход в панель добавления документов';
+			console.log(msg.magenta.bold);
+			var moder_users=[];
+			//последовательное выполнение. сначала запрос в базу потом обработка результата
+			flow.series([
+				function(callback){
+					users.find({ruk_level: {$in:[1,2]}}, function(err, results){
+    					if(err) 
+							console.log(err);
+						else {
+							//delete results["salt"];
+							console.log('запрос в базу обрабатывается');
+							//next();
+							//console.log(results);
+							dbo = results;
+							//return results;
+						}
+						callback();
+					});
+					
+				},
+				
+				function (callback) {
+					
+					dbo.forEach(function(item, i, arr) {
+						//var pushed={username: item.username,
+								 //  post_short: item.post_short
+								 //  };
+						
+						var pushed=[];
+						pushed.username = item.username;
+						pushed.post_short = item.post_short;
+						moder_users.push(pushed);
+					});
+					//console.log(moder_users);
+					callback();
+				},
+				
+				function (callback) {
+					console.log(moder_users);
+					res.render('add_doc', {
+						DL: moder_users,
+						docs: config.type_of_docs
+					}, function(err,html){
+						if(err){
+							msg = req.session.username + ': ошибка рендеринга шаблона формы ввода документа';
+							console.log(msg.bgRed.white);
+							console.log(err);
+						}
+						else res.send(html);
+					});
+					callback();
+				},
+			]);
+
+			
+
+		
+		}
+			
 		else{
 			res.send('а ты жулик))) попробуй что-нибудь по-сложней');
 			
@@ -146,12 +205,13 @@ router.post("/reg", urlencodedParser, function (req, res) {
 	
 	msg = req.session.username + ': сработал путь reg';
 	console.log(msg.magenta.bold);
-	if(isAdministrator){
+	if(req.session.isAdministrator){
 			var add_user = new users({
 				username: req.body.new_username,
 				password: req.body.new_password_1,
 				post_long: req.body.new_post_long,
-				post_short: req.body.new_post_short
+				post_short: req.body.new_post_short,
+				ruk_level: req.body.new_ruk_level
 			});
 
     		add_user.save(function (err) {

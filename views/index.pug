@@ -1,6 +1,7 @@
 doctype html
 html
 	head
+		meta(http-equiv='Cache-Control', content='no-cache')
 		meta(charset='utf-8')
 		meta(name='viewport', content='width=device-width,initial-scale=1')
 		meta(name='description', content='Автоматизированная система контроля исполнения документов')
@@ -9,6 +10,8 @@ html
 		title АСКИД
 		link(href='plugins/switchery/switchery.min.css', rel='stylesheet')
 		link(href='plugins/jquery-circliful/css/jquery.circliful.css', rel='stylesheet', type='text/css')
+		link(href='plugins/multiselect/css/multi-select.css', rel='stylesheet', type='text/css')
+
 		link(href='css/bootstrap.min.css', rel='stylesheet', type='text/css')
 		link(href='css/icons.css', rel='stylesheet', type='text/css')
 		link(href='css/style.css', rel='stylesheet', type='text/css')
@@ -16,19 +19,19 @@ html
 	body.fixed-left
 	
 		//подключаем файл с модальными окнами
-		include modals
+		include index_parts/modals
 		
 		//подключаем файл с хидером
-		include wrapper
+		include index_parts/wrapper
 		
 		//подключаем левое меню
-		include left_menu
+		include index_parts/left_menu
 		
 		//подключаем главное окно
-		include main_window
+		include index_parts/main_window
 				
 		//подключаем футер
-		include footer
+		include index_parts/footer
 
 
 		// END wrapper
@@ -49,6 +52,8 @@ html
 		script(src='js/jquery.scrollTo.min.js')
 		script(src='plugins/switchery/switchery.min.js')
 		script(src='plugins/custombox/src/js/custombox.js')
+		script(type='text/javascript', src='plugins/multiselect/js/jquery.multi-select.js')
+
 		// Counter Up
 		script(src='plugins/waypoints/lib/jquery.waypoints.min.js')
 		script(src='plugins/counterup/jquery.counterup.min.js')
