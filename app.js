@@ -7,20 +7,12 @@ var redis   = require('redis');
 var session = require('express-session');
 var redisStore = require('connect-redis')(session);
 
-
 var colors = require('colors');
 
 var crypto = require('crypto');
 
-
-
-
-
 var config = require('./config/index');
 
-
-
-//var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var client  = redis.createClient();
@@ -31,17 +23,12 @@ var db = require('./config/mongoose');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
-//console.log(process.env);
-
-
-
 var app = express();
 
 var rand_hash = crypto.randomBytes(32).toString("hex"); //случайный хэш для ключа сессии
 
 app.use(session({
     secret: rand_hash,
-    // create new redis store.
     store: new redisStore({ host: config.redis.url, port: 6379, client: client,ttl :  260}),
     saveUninitialized: false,
     resave: false

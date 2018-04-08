@@ -38,7 +38,8 @@ $(document).on('click','#reg_button', function(){
 $(document).ready(function(){
 
 //обработка кликов по ссылкам
-	$('.control_href').click(function(e) {
+	//$('.control_href').click(function(e) {
+	$(document).on('click','.control_href', function(e){
 	
 		e.preventDefault();
 		var page = '/control/' + $(this).attr('href');
@@ -50,6 +51,8 @@ $(document).ready(function(){
 	
 		.done(function(msg) {
 				$('#main_content').html(msg);
+				$('.multi-select').multiSelect('refresh');
+
 				//$("#ModalEnter").modal('hide');
 		})
 		
@@ -58,6 +61,44 @@ $(document).ready(function(){
 		});
 		//console.log(page);
 	});
+	
+	
+//обработка кликов по ссылкам закрытия пунктов добавления документов
+	$(document).on('click','.close_card', function(e){
+		e.preventDefault();
+		var name = '#card_' + $(this).attr('href');
+		//console.log(name);
+		$(name).remove();
+	});
+	
+//добавить пункт в форме ввода документов
+	$(document).on('click','#add-punkt', function(){
+	
+		//e.preventDefault();
+		//присваиваеваем новое значение счётчика
+		var i = Number($('#punkts_count').val())+1;
+		$('#punkts_count').val(i);
+
+		console.log('отдаём счётчик: ' + i);
+		var link = '/numer/' + i;
+		$.ajax({
+			type: 'get',
+			url: link
+		})
+	
+		.done(function(msg) {
+				$('#accordion').append(msg);
+				$('#ispolniteli_'+i).multiSelect('refresh');
+				$('#controllers_'+i).multiSelect('refresh');
+				//$("#ModalEnter").modal('hide');
+			//ispolniteli_#{count_punkt}
+		})
+		
+		.fail(function() {
+			$('#main_content').html('Что-то пошло не так... Обратитесь к администратору');
+		});
+		//console.log(page);
+	});	
 });
 
 

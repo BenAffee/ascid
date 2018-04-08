@@ -11,15 +11,10 @@ var upload = multer({ dest: 'files/' })
 var flow = require('nimble');
 var msg='';
 var dbo=[];
-//var moder_users=[];
 
-/*var resultsDB = function(fields){
-	users.findOne(fields, function(err, docs){
-	if (!err) return docs;
-	else console.log('ошибка доступа к базе'.red.bold)
+var moder_users=[];
+var moder_users_all=[];
 
-});
-}*/
 
 //--------------------------------------------------------------------------------------------GET home page.
 router.get('/', function(req, res, next) {
@@ -28,7 +23,7 @@ router.get('/', function(req, res, next) {
 	
 	//var db = resultsDB('users',{username: 'admin'});
 	console.log(config.type_of_docs);
-	
+	//console.log(req.session.moder_users);
 	res.render('index', { 
 		username: req.session.username,
 		isAdministrator: req.session.isAdministrator,
@@ -37,8 +32,6 @@ router.get('/', function(req, res, next) {
 		post_long: req.session.post_long
 	  
 	});
-	
-	//console.log(req.session);
 });
 
 //--------------------------------------------------------------------------------------------GET home page.
@@ -68,46 +61,80 @@ router.get('/control/:page', function(req, res, next) {
 		if(req.session.isModerator) {
 			msg = req.session.username + ': вход в панель добавления документов';
 			console.log(msg.magenta.bold);
-			var moder_users=[];
+			
+			
 			//последовательное выполнение. сначала запрос в базу потом обработка результата
 			flow.series([
+				
+				//достаём из базы рукоаводителей 1 и 2 уровня, чтобы передать массив в форму добавления документов
 				function(callback){
-					users.find({ruk_level: {$in:[1,2]}}, function(err, results){
-    					if(err) 
-							console.log(err);
-						else {
-							//delete results["salt"];
-							console.log('запрос в базу обрабатывается');
-							//next();
-							//console.log(results);
-							dbo = results;
-							//return results;
-						}
+					if(moder_users.length == 0){ //если в этой сессии уже есть массив с именами руководителей, то в базу больше не лезем
+						users.find({ruk_level: {$in:[1,2]}}, function(err, results){
+							msg = req.session.username + ': достаём из базы имена руководителей 1 и 2 уровня';
+							console.log(msg.green.bold);
+							if(err) 
+								console.log(err);
+							else {
+								console.log('запрос в базу обрабатывается');
+								
+								results.forEach(function(item, i, arr) {
+									var pushed=[];
+									pushed.username = item.username;
+									pushed.post_short = item.post_short;
+									moder_users.push(pushed);
+								});
+
+							}
+							callback();
+						});
+					}
+					else {
+						//console.log(req.session.moder_users);
+						msg = req.session.username + ': в сессии уже есть массив руководителей 1,2 уровня';
+							
+						console.log(msg.blue.bold);
 						callback();
-					});
-					
+					}
 				},
 				
-				function (callback) {
-					
-					dbo.forEach(function(item, i, arr) {
-						//var pushed={username: item.username,
-								 //  post_short: item.post_short
-								 //  };
-						
-						var pushed=[];
-						pushed.username = item.username;
-						pushed.post_short = item.post_short;
-						moder_users.push(pushed);
-					});
-					//console.log(moder_users);
-					callback();
+				
+				//достаём из всех должностных лиц, кроме модераторов и администраторов чтобы передать массив в форму добавления документов
+				function(callback){
+					if(moder_users_all.length == 0){ //если в этой сессии уже есть массив с именами руководителей, то в базу больше не лезем
+						users.find({ruk_level: {$in:[2,3,4]}}, function(err, results){
+							msg = req.session.username + ': достаём из базы всех должностных лиц';
+							console.log(msg.green.bold);
+							if(err) 
+								console.log(err);
+							else {
+								console.log('запрос в базу обрабатывается');
+								
+								results.forEach(function(item, i, arr) {
+									var pushed=[];
+									pushed.username = item.username;
+									pushed.post_short = item.post_short;
+									moder_users_all.push(pushed);
+								});
+
+							}
+							callback();
+						});
+					}
+					else {
+						msg = req.session.username + ': в сессии уже есть массив всех должностных лиц';
+							
+						console.log(msg.blue.bold);
+						callback();
+					}
 				},
 				
+				//отдаём переменные и рендерим шаблон
 				function (callback) {
-					console.log(moder_users);
+					//console.log(moder_users_all);
+					
 					res.render('add_doc', {
-						DL: moder_users,
+						DL12: moder_users,
+						DLall: moder_users_all,
 						docs: config.type_of_docs
 					}, function(err,html){
 						if(err){
@@ -115,13 +142,20 @@ router.get('/control/:page', function(req, res, next) {
 							console.log(msg.bgRed.white);
 							console.log(err);
 						}
-						else res.send(html);
+						else{ 
+							
+							res.send(html);
+							
+						}
 					});
+					
 					callback();
+					
 				},
+				
 			]);
-
 			
+			//console.log(req.session.moder_users);
 
 		
 		}
@@ -134,11 +168,28 @@ router.get('/control/:page', function(req, res, next) {
 		}
 	
 	}
-		
-		
-		
+});
 
+
+router.get('/numer/:count', function(req, res, next) {
+	msg = req.session.username + ': пытаемся добавить пункт со счётчиком:' + req.params.count;
+	console.log(msg.magenta.bold);
 	
+	res.render('add_docs_puncts', {
+		DLall: moder_users_all,
+		count_punkt: req.params.count
+	}, function(err,html){
+		if(err){
+			msg = req.session.username + ': ошибка рендеринга шаблона добавления пункта';
+			console.log(msg.bgRed.white);
+			console.log(err);
+		}
+		else{ 
+
+			res.send(html);
+
+		}
+	});
 });
 
 
@@ -171,15 +222,18 @@ router.post("/auth", urlencodedParser, function (req, res) {
 			
 			if(docs.username == req.body.username && docs.hashedPassword == current_hash){
 					
-				msg = req.session.username + ': доступ разрешён';
-				console.log(msg.green);
+
 				
 				//пишем в сессию записи из базы
 				req.session.username = docs.username;
 				req.session.isAdministrator = docs.isAdministrator;
 				req.session.isModerator = docs.isModerator;
 				req.session.post_short = docs.post_short;
-				req.session.post_long = docs.post_long;				
+				req.session.post_long = docs.post_long;
+				//req.session.moder_users = [];
+				
+				msg = req.session.username + ': доступ разрешён';
+				console.log(msg.green);
 				
 				res.redirect('/');
 			}
