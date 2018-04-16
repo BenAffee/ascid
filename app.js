@@ -14,6 +14,9 @@ var crypto = require('crypto');
 var config = require('./config/index');
 
 var bodyParser = require('body-parser');
+var urlencodedParser = bodyParser.urlencoded({extended: false});
+
+var flow = require('nimble');//для последовательного выполнения операций
 
 var client  = redis.createClient();
 
@@ -22,6 +25,9 @@ var db = require('./config/mongoose');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var auth = require('./routes/auth');
+var control = require('./routes/control');
+var upload_doc = require('./routes/upload_doc');
 
 var app = express();
 
@@ -46,6 +52,7 @@ app.use(logger('dev'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser({uploadDir:'/public/tmp'}));
 
 app.use(express.query());
 //app.use(cookieParser());
@@ -53,9 +60,14 @@ app.use(express.query());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+//app.set('photos', __dirname + '/public/photos');
+
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/auth', auth);
+app.use('/control', control);
+app.use('/upload_doc', upload_doc);
 
 /*req.session.test='test';
 if (req.session.test=='test') console.log('сессии запущены'.bgGreen.white);

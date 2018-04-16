@@ -11,6 +11,13 @@ html
 		link(href='plugins/switchery/switchery.min.css', rel='stylesheet')
 		link(href='plugins/jquery-circliful/css/jquery.circliful.css', rel='stylesheet', type='text/css')
 		link(href='plugins/multiselect/css/multi-select.css', rel='stylesheet', type='text/css')
+		
+		// DataTables
+		link(href='plugins/datatables/dataTables.bootstrap4.min.css', rel='stylesheet', type='text/css')
+		link(href='plugins/datatables/buttons.bootstrap4.min.css', rel='stylesheet', type='text/css')
+		// Responsive datatable examples
+		link(href='plugins/datatables/responsive.bootstrap4.min.css', rel='stylesheet', type='text/css')
+		
 
 		link(href='css/bootstrap.min.css', rel='stylesheet', type='text/css')
 		link(href='css/icons.css', rel='stylesheet', type='text/css')
@@ -64,11 +71,38 @@ html
 		script(src='plugins/skyicons/skycons.min.js', type='text/javascript')
 		// Page js
 		script(src='pages/jquery.dashboard.js')
+		
+		// Required datatable js
+		script(src='plugins/datatables/jquery.dataTables.min.js')
+		script(src='plugins/datatables/dataTables.bootstrap4.min.js')
+		// Buttons examples
+		script(src='plugins/datatables/dataTables.buttons.min.js')
+		script(src='plugins/datatables/buttons.bootstrap4.min.js')
+		script(src='plugins/datatables/jszip.min.js')
+		script(src='plugins/datatables/pdfmake.min.js')
+		script(src='plugins/datatables/vfs_fonts.js')
+		script(src='plugins/datatables/buttons.html5.min.js')
+		script(src='plugins/datatables/buttons.print.min.js')
+		script(src='plugins/datatables/buttons.colVis.min.js')
+		// Responsive examples
+		script(src='plugins/datatables/dataTables.responsive.min.js')
+		script(src='plugins/datatables/responsive.bootstrap4.min.js')
+
+
 		// Custom main Js
 		script(src='js/jquery.core.js')
 		script(src='js/jquery.app.js')
 		
 		script(src='js/noejs.js')
+		script(src='js/jquery.form.js')
+
+
+		script(type='text/javascript').
+			$(document).ready(function() {
+				$('#datatable').DataTable();
+			});
+
+
 		script(type='text/javascript').
 			jQuery(document).ready(function($) {
 			$('.counter').counterUp({

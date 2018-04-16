@@ -43,13 +43,8 @@ var userSchema = new mongoose.Schema({
     // Шифрованный пароль
     hashedPassword:{
         type:String, // тип String
-        // В дальнейшем мы добавим сюда хеширование
-
         required:[true,'Введите пароль!']
-        // Думаю здесь все уже очевидно
     },
-
-
 	//соль
 	salt: {
         type: String,
@@ -58,13 +53,10 @@ var userSchema = new mongoose.Schema({
     // Полное наименование должности
 	post_long:{
 		type:String, // тип String
-
         maxlength:[256,'Слишком длинное наименование должности (не более 256 символов)'],
- 
         match:[/^[А-Яа-я0-9\s\-\(\)]+$/,'Не допустимые символы в наименование должности (допускается кириллица и цыфры)'],
         required:[true,'Введите наименование должности!']
 	},
-	
 	//Аббревиатура должности
 	post_short:{
 		type:String, // тип String
@@ -74,27 +66,21 @@ var userSchema = new mongoose.Schema({
         match:[/^[\-А-Яа-я0-9]+$/,'Не допустимые символы в аббревиатуре должности (допускается кириллица и цыфры)'],
         required:[true,'Введите аббревиатуру должности!']
 	},
-	
-	
-	
 	//Уровень руководства
 	ruk_level:{
 		type:Number, // тип String
         match:[/^[\1\2\3\4]+$/,'Не допустимый уровень руководителя']
 	},
-	
 	//дата создания пользователя
 	created: {
         type: Date,
         default: Date.now
     },
-	
 	//признак администратора
 	isAdministrator: {
 		type: Boolean,
 		default: false
 	},
-	
 	//признак модератора
 	isModerator: {
 		type: Boolean,
@@ -124,10 +110,72 @@ userSchema.methods.checkPassword = function (password) {
     return this.encryptPassword(password) === this.hashedPassword;
 };
 
+var users = mongoose.model('users', userSchema);
+
+
+//схема модели документа
+var docsSchema = new mongoose.Schema({
+    // Имя файла на сервере
+    filename:{
+        type:String, // тип: String
+        required:[true,'Возникли проблемы с файлом. Возможно, Вы его не выбрали.'],
+        unique:[true,'Файл с таким именем на сервере уже существует. убедитесь что Вы ранее не загружали документ с такими же реквезитами.']
+    },
+    // Тип документа
+    doc_type:{
+        type:Number, // тип String
+        required:[true,'Вы не указали тип документа!']
+    },
+	//Номер документа
+	doc_num:{
+        type:Number, // тип String
+        required:[true,'Вы не указали номер документа!']
+    },
+	//Дата утвердения документа
+	doc_date:{
+        type:Date, // тип String
+        required:[true,'Необходимо указать дату утвержедния документа']
+    },
+    // Имя пользователя, утвердившего документ
+    doc_ruc:{
+        type:String, // тип: String
+        required:[true,'Убедитесь, что указали руководителя']
+    },	
+    // Описание документа
+    doc_about:{
+        type:String, // тип: String
+        required:[true,'Введите краткое описание документа']
+    },		
+	//дата добавления документа
+	doc_created: {
+        type: Date,
+        default: Date.now
+    },
+	
+	//массив пунктов документа
+	doc_punkts: {
+        type: Array,
+        required:[true,'Опишите хотя бы один пункт']
+    }
+});
+
+var docs = mongoose.model('docs', docsSchema);
+
+module.exports = {
+    users: users,
+    docs: docs
+};
 
 
 
-module.exports = mongoose;
-module.exports = mongoose.model('users', userSchema);
+
+//module.exports = mongoose;
+//var my_schemas = {'users' : userSchema, 'docs': docsSchema};
+//var my_schemas = {'users' : userSchema};
+//module.exports = my_schemas;
+
+//module.exports = mongoose.model('docs', docsSchema);
+//module.exports = docs;
+//module.exports = users;
 
 

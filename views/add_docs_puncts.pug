@@ -8,28 +8,28 @@
 			a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseOne_' + count_punkt, aria-expanded='false', aria-controls='collapseOne_' + count_punkt)
 				| Настройте пункты документа  
 			a.close_card(href=count_punkt)
-				i.ti-close
+				i.ti-close.text-danger
 	.collapse(role='tabpanel', aria-labelledby='headingOne_' + count_punkt, style='', id='collapseOne_' + count_punkt)
 		.card-body
 			.row
 				.div.col-6(style="border: solid 1px #DCDCDC;")
 					.form-group
 						label.form-label Номер пункта:
-						input.form-control(type='text', placeholder='Пункт', id='num_punkt_' + count_punkt)
+						input.form-control(type='text', placeholder='Пункт', id='num_punkt_' + count_punkt, name='num_punkt_' + count_punkt)
 				.div.col-6(style="border: solid 1px #DCDCDC;")
 					.form-group
 						label.form-label Дата исполнения:							
-						input.form-control(type='date', id='date_punkt_' + count_punkt)
+						input.form-control(type='date', id='date_punkt_' + count_punkt, name='date_punkt_' + count_punkt)
 			.row
 				.div.col-6(style="border: solid 1px #DCDCDC;")
 					.form-group
 						label.form-label Исполнители:
-						select.multi-select(multiple='multiple', name='ispolniteli_' + count_punkt + '[]', data-plugin='multiselect', id='ispolniteli_' + count_punkt)
+						select.multi-select(multiple='multiple', name='ispolniteli_' + count_punkt, data-plugin='multiselect', id='ispolniteli_' + count_punkt)
 							each val in DLall
 								option(value=val.username)!= val.post_short
 				.div.col-6(style="border: solid 1px #DCDCDC;")
 					.form-group
 						label.form-label Контролирующие:
-						select.multi-select(multiple='multiple', name='controllers_' + count_punkt + '[]', data-plugin='multiselect', id='controllers_' + count_punkt)
+						select.multi-select(multiple='multiple', name='controllers_' + count_punkt, data-plugin='multiselect', id='controllers_' + count_punkt)
 							each val in DLall
 								option(value=val.username)!= val.post_short	
