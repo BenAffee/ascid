@@ -1,10 +1,63 @@
 mixin mixin_li_add_doc
-
 	li
 		a.waves-effect.waves-primary.control_href(href='2')
 			i.ti-save
-			span  Добавить документ		
+			span  Добавить документ
 
+mixin mixin_li_all_doc
+	li
+		a.waves-effect.waves-primary.control_href(href='3')
+			i.ti-server
+			span Все документы
+
+mixin mixin_li_ispoln
+	li.has_sub
+		a.waves-effect.waves-primary(href='javascript:void(0);')
+			i.ti-files
+			span  Исполнение 
+			span.badge.badge-pink.pull-right 1
+			span.menu-arrow
+		ul.list-unstyled
+			li
+				a(href='ui-buttons.html') Новые
+			li
+				a(href='ui-buttons.html') Все
+			li
+				a(href='ui-cards.html') Не отработанные
+			li
+				a(href='ui-portlets.html') Просроченные
+			li
+				a(href='ui-checkbox-radio.html') Истекают сегодня
+			li
+				a(href='ui-tabs.html') Истекают завтра
+
+mixin mixin_li_kontrol
+	li.has_sub
+		a.waves-effect.waves-primary(href='javascript:void(0);')
+			i.ti-eye
+			span  Контроль 
+			span.badge.badge-pink.pull-right 1
+			span.menu-arrow
+		ul.list-unstyled
+			li
+				a(href='ui-buttons.html') Новые
+			li
+				a(href='ui-buttons.html') Все
+			li
+				a(href='ui-cards.html') Не отработанные
+			li
+				a(href='ui-portlets.html') Просроченные
+			li
+				a(href='ui-checkbox-radio.html') Истекают сегодня
+			li
+				a(href='ui-tabs.html') Истекают завтра
+
+mixin mixin_li_archive
+	li
+		a.waves-effect.waves-primary(href='typography.html')
+			i.ti-archive
+			span  Архив 
+			
 // ========== Left Sidebar Start ==========
 .left.side-menu
 	.sidebar-inner.slimscrollleft
@@ -19,45 +72,18 @@ mixin mixin_li_add_doc
 				if (isModerator)
 					+ mixin_li_add_doc
 					
-				li.has_sub
-					a.waves-effect.waves-primary(href='javascript:void(0);')
-						i.ti-files
-						span  Исполнение 
-						span.badge.badge-pink.pull-right 1
-						span.menu-arrow
-					ul.list-unstyled
-						li
-							a(href='ui-buttons.html') Новые
-						li
-							a(href='ui-cards.html') Не отработанные
-						li
-							a(href='ui-portlets.html') Просроченные
-						li
-							a(href='ui-checkbox-radio.html') Истекают сегодня
-						li
-							a(href='ui-tabs.html') Истекают завтра
-							
-				li.has_sub
-					a.waves-effect.waves-primary(href='javascript:void(0);')
-						i.ti-eye
-						span  Контроль 
-						span.badge.badge-pink.pull-right 1
-						span.menu-arrow
-					ul.list-unstyled
-						li
-							a(href='ui-buttons.html') Новые
-						li
-							a(href='ui-cards.html') Не отработанные
-						li
-							a(href='ui-portlets.html') Просроченные
-						li
-							a(href='ui-checkbox-radio.html') Истекают сегодня
-						li
-							a(href='ui-tabs.html') Истекают завтра
-				li
-					a.waves-effect.waves-primary(href='typography.html')
-						i.ti-archive
-						span  Архив 
+				- if (isModerator || isAdministrator)
+					+ mixin_li_all_doc
+					
+				- if(!isAdministrator && !isModerator && username)
+					+ mixin_li_ispoln
+
+				- if(!isAdministrator && !isModerator && username)
+					+ mixin_li_kontrol
+
+				- if (isModerator || isAdministrator)
+					+ mixin_li_archive
+
 														
 			.clearfix
 		.clearfix

@@ -89,13 +89,13 @@ $(document).ready(function(){
 function showRequest(formData, jqForm, options) { 
     // formData is an array; here we use $.param to convert it to a string to display it 
     // but the form plugin does this for you automatically when it submits the data 
-    var queryString = $.param(formData); 
+    //var queryString = $.param(formData); 
  
     // jqForm is a jQuery object encapsulating the form element.  To access the 
     // DOM element for the form do this: 
     // var formElement = jqForm[0]; 
  
-    alert('About to submit: \n\n' + queryString); 
+    //alert('About to submit: \n\n' + queryString); 
  
     // here we could return false to prevent the form from being submitted; 
     // returning anything other than false will allow the form submit to continue 
@@ -114,8 +114,8 @@ function showResponse(responseText, statusText, xhr, $form)  {
     // property set to 'json' then the first argument to the success callback 
     // is the json data object returned by the server 
  
-    alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
-        '\n\nThe output div should have already been updated with the responseText.'); 
+    //alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
+        //'\n\nThe output div should have already been updated with the responseText.'); 
 } 	
 
 	
@@ -193,7 +193,7 @@ function showResponse(responseText, statusText, xhr, $form)  {
 		$('#punkts_count').val(i);
 
 		console.log('отдаём счётчик: ' + i);
-		var link = '/numer/' + i;
+		var link = '/control/numer/' + i;
 		$.ajax({
 			type: 'get',
 			url: link

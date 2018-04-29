@@ -20,51 +20,51 @@ var upload_file_doc = multer({ dest: upload_file_doc_dest }).single('file_doc');
 
 var msg='';
 
-//var moder_users=[];
-//var moder_users_all=[];
+var moder_users=[];
+var moder_users_all=[];
 
 
 
 //--------------------------------------------------------------------------------------------GET home page.
 router.get('/', function(req, res, next) {
 	
-	msg = req.session.username + ': сработал корневой путь';
-	console.log(msg.magenta.bold);
+	req.session.docs_ispoln = ["5ae61b19ebfce0317860388d","5ae61b60ebfce0317860388e"];
+	//выбираем из базы документы в которых пользователь указан как исполнитель
+	models.users.find(function(err, results){
+		res.render('index', { 
+			//отсюда то, что по умолчанию
+			username: req.session.username,
+			isAdministrator: req.session.isAdministrator,
+			isModerator: req.session.isModerator,
+			post_short: req.session.post_short,
+			post_long: req.session.post_long
+			//дальше для теста
+		});		
+	)};
+	
+	
+	
 
-	res.render('index', { 
+
+	
+	
+	
+
+	/*res.render('index', { 
+		//отсюда то, что по умолчанию
 		username: req.session.username,
 		isAdministrator: req.session.isAdministrator,
 		isModerator: req.session.isModerator,
 		post_short: req.session.post_short,
 		post_long: req.session.post_long
-	  
-	});
+		//дальше для теста
+
+	});*/
 });
 
 
 
-//тут всякие аяксовые штуки
 
-router.get('/numer/:count', function(req, res, next) {
-	msg = req.session.username + ': пытаемся добавить пункт со счётчиком:' + req.params.count;
-	console.log(msg.yellow.bold);
-	
-	res.render('add_docs_puncts', {
-		DLall: moder_users_all,
-		count_punkt: req.params.count
-	}, function(err,html){
-		if(err){
-			msg = req.session.username + ': ошибка рендеринга шаблона добавления пункта';
-			console.log(msg.bgRed.white);
-			console.log(err);
-		}
-		else{ 
-
-			res.send(html);
-
-		}
-	});
-});
 
 
 

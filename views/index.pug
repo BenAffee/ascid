@@ -8,15 +8,16 @@ html
 		meta(name='author', content='Nesterenko_Oleg')
 		//link(rel='shortcut icon', href='images/favicon.ico')
 		title АСКИД
-		link(href='plugins/switchery/switchery.min.css', rel='stylesheet')
-		link(href='plugins/jquery-circliful/css/jquery.circliful.css', rel='stylesheet', type='text/css')
+		//link(href='plugins/switchery/switchery.min.css', rel='stylesheet')
+		//link(href='plugins/jquery-circliful/css/jquery.circliful.css', rel='stylesheet', type='text/css')
 		link(href='plugins/multiselect/css/multi-select.css', rel='stylesheet', type='text/css')
 		
 		// DataTables
-		link(href='plugins/datatables/dataTables.bootstrap4.min.css', rel='stylesheet', type='text/css')
+		//link(href='plugins/datatables/dataTables.bootstrap4.min.css', rel='stylesheet', type='text/css')
 		link(href='plugins/datatables/buttons.bootstrap4.min.css', rel='stylesheet', type='text/css')
 		// Responsive datatable examples
-		link(href='plugins/datatables/responsive.bootstrap4.min.css', rel='stylesheet', type='text/css')
+		//link(href='plugins/datatables/responsive.bootstrap4.min.css', rel='stylesheet', type='text/css')
+		//link(href='js/datatables_rowspan.js')
 		
 
 		link(href='css/bootstrap.min.css', rel='stylesheet', type='text/css')
@@ -39,6 +40,17 @@ html
 				
 		//подключаем футер
 		include index_parts/footer
+
+
+		// circliful Chart - анимированные круговые диаграммы
+		//multiselect - кастомизированное окно ввода типа мультиселект
+		//custombox - кастомизированные модальные окна
+		//datatables- супер таблицы с сортировко, поиском и другими вкусняхами (но не работают с colspan, rowspan)
+		//sparkline - графики на сайтах
+		//switchery - чекбоксы в стиле iOS
+		//dashboard - панельки drag'n'drop
+		//jquery.form - собирает и отправляет поля формы типа multipart
+
 
 
 		// END wrapper
@@ -64,29 +76,29 @@ html
 		// Counter Up
 		script(src='plugins/waypoints/lib/jquery.waypoints.min.js')
 		script(src='plugins/counterup/jquery.counterup.min.js')
-		// circliful Chart
-		script(src='plugins/jquery-circliful/js/jquery.circliful.min.js')
-		script(src='plugins/jquery-sparkline/jquery.sparkline.min.js')
+
+		//script(src='plugins/jquery-circliful/js/jquery.circliful.min.js')
+		//script(src='plugins/jquery-sparkline/jquery.sparkline.min.js')
 		// skycons
 		script(src='plugins/skyicons/skycons.min.js', type='text/javascript')
 		// Page js
-		script(src='pages/jquery.dashboard.js')
+		//script(src='pages/jquery.dashboard.js')
 		
 		// Required datatable js
-		script(src='plugins/datatables/jquery.dataTables.min.js')
-		script(src='plugins/datatables/dataTables.bootstrap4.min.js')
+		//script(src='plugins/datatables/jquery.dataTables.min.js')
+		//script(src='plugins/datatables/dataTables.bootstrap4.min.js')
 		// Buttons examples
-		script(src='plugins/datatables/dataTables.buttons.min.js')
-		script(src='plugins/datatables/buttons.bootstrap4.min.js')
-		script(src='plugins/datatables/jszip.min.js')
-		script(src='plugins/datatables/pdfmake.min.js')
-		script(src='plugins/datatables/vfs_fonts.js')
-		script(src='plugins/datatables/buttons.html5.min.js')
-		script(src='plugins/datatables/buttons.print.min.js')
-		script(src='plugins/datatables/buttons.colVis.min.js')
+		//script(src='plugins/datatables/dataTables.buttons.min.js')
+		//script(src='plugins/datatables/buttons.bootstrap4.min.js')
+		//script(src='plugins/datatables/jszip.min.js')
+		//script(src='plugins/datatables/pdfmake.min.js')
+		//script(src='plugins/datatables/vfs_fonts.js')
+		//script(src='plugins/datatables/buttons.html5.min.js')
+		//script(src='plugins/datatables/buttons.print.min.js')
+		//script(src='plugins/datatables/buttons.colVis.min.js')
 		// Responsive examples
-		script(src='plugins/datatables/dataTables.responsive.min.js')
-		script(src='plugins/datatables/responsive.bootstrap4.min.js')
+		//script(src='plugins/datatables/dataTables.responsive.min.js')
+		//script(src='plugins/datatables/responsive.bootstrap4.min.js')
 
 
 		// Custom main Js
@@ -97,13 +109,14 @@ html
 		script(src='js/jquery.form.js')
 
 
-		script(type='text/javascript').
+		//script(type='text/javascript').
 			$(document).ready(function() {
-				$('#datatable').DataTable();
+				$('#datatable').DataTable({
+					language: {url: './json/russian_datatables.json'}
+				});
 			});
-
-
-		script(type='text/javascript').
+			
+		//script(type='text/javascript').
 			jQuery(document).ready(function($) {
 			$('.counter').counterUp({
 			delay: 100,

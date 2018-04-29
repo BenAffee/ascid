@@ -46,7 +46,7 @@ router.post('/', upload_file_doc, function (req, res) {
 
 		
 		//формируем имя файла
-		var filename_doc = config.type_of_docs[req.body.type_doc] + '_'+ req.body.num_doc + '_от_' + req.body.date_doc;
+		var filename_doc = config.type_of_docs[req.body.type_doc] + '_'+ req.body.num_doc + '_от_' + req.body.date_doc + '.pdf';
 		
 	
 		//сначала проверка файла и полей, если всё нормально, то пишем файл и записываемв базу
@@ -54,6 +54,8 @@ router.post('/', upload_file_doc, function (req, res) {
 			//собираем массив с пунктами
 			var punkts=[];//массив со всеми пунктами, который будем добавлять в базу
 			var pushed=[];//массив в котором хранится один пункт
+			var ispoln=[];
+			var kontrols=[];
 			//начинаем перибирать значения... старт с 0, конечное знаение ханится в punkts_count
 			var i;
 			for (i = 0; i <= req.body.punkts_count; i++) {
@@ -76,20 +78,33 @@ router.post('/', upload_file_doc, function (req, res) {
 					//добавляем в массив исполнителей
 					name = 'ispolniteli_' + i;
 					pushed.push(req.body[name]);
+					ispoln = ispoln.concat(req.body[name]);
+					
+					//ispoln.push(req.body[name]);
+					//console.log('------------------исполнители');
+					//console.log(req.body[name]);
+					
+
 
 					//добавляем в массив контроллирующих
 					name = 'controllers_' + i;
 					pushed.push(req.body[name]);
+					//kontrols.push(req.body[name]);
+					kontrols = kontrols.concat(req.body[name]);
+					
 
 					//добавляем всё в массив который уйдёт в базу
 					punkts.push(pushed);
 				}
 			}			
 			
-			
+					//console.log('------------------контроллирующие all до');
+					//console.log(kontrols);
+					//console.log('------------------исполнители all до');
+					//console.log(ispoln);
 			
 			var old_name = req.file.path;
-			var new_name = 'public/files/' + filename_doc + '.pdf';
+			var new_name = 'public/files/' + filename_doc;
 			
 			fs.rename(
 				old_name,
@@ -113,9 +128,47 @@ router.post('/', upload_file_doc, function (req, res) {
 
 			add_doc.save(function (err) {
 				if (!err) {
-
-					msg = 'документ: ' + filename_doc + ' добавлен!'
+					var this_doc_id = add_doc._id;
+					//var ispoln = add_doc.doc_punkts[2];
+					msg = 'документ: ' + filename_doc + ' добавлен! id-->' + this_doc_id;
 					console.log(msg.red);
+					//оставляем в массивах контроллирующих и исполнителей только уникальные значения
+					ispoln = unique_item_in_arr(ispoln);
+					kontrols = unique_item_in_arr(kontrols);
+
+					//console.log('массив исполнителей: ');
+					//console.log(ispoln);
+					//console.log('массив контроллирующих: ');
+					//console.log(kontrols);
+					
+					//пишем исполнителям сведения об этом документе
+					models.users.update({"username": {$in: ispoln}}, {$push: {docs_ispoln: this_doc_id}}, {multi: true}, function(err, doc){
+							if(err) {
+								var msg = req.session.username + ' --> ВНИМАНИЕ! ошибки базы данных:'
+								console.log(msg.bgRed.white);
+								console.log(err);
+							}
+							else {
+								var msg = req.session.username + ' --> Норма. Запросы в базу прошли. Ответ базы:'
+								console.log(msg.green);
+								console.log(doc);
+							}
+					});
+					
+					//пишем контроллирующим сведения об этом документе
+					models.users.update({"username": {$in: kontrols}}, {$push: {docs_kontrols: this_doc_id}}, {multi: true}, function(err, doc){
+							if(err) {
+								var msg = req.session.username + ' --> ВНИМАНИЕ! ошибки базы данных:'
+								console.log(msg.bgRed.white);
+								console.log(err);
+							}
+							else {
+								var msg = req.session.username + ' --> Норма. Запросы в базу прошли. Ответ базы:'
+								console.log(msg.green);
+								console.log(doc);
+							}
+					});					
+
 					return res.send(msg);
 				} 
 
@@ -156,7 +209,7 @@ router.post('/', upload_file_doc, function (req, res) {
 
 	}
 	else{
-		res.send('а ты жулик)))');
+		res.send('Попытка нарушения прав доступа. Ошибка добавлена в лог');
 		msg = req.session.username + ': попытка добавления файла не модератором';
         console.log(msg.bgRed.white);
 	}
@@ -186,5 +239,20 @@ var file_doc_delete = function(file){
 		return true;
 		}); 
 }
+
+//функция которая оставляет в массиве только уникальные значения
+var unique_item_in_arr = function(arr){
+	var obj = [];
+	for (var i = 0; i < arr.length; i++) {
+		var str = arr[i];
+		obj[str] = true; // запомнить строку в виде свойства объекта
+	}
+	//console.log('уникальная функция выполнена');
+return Object.keys(obj); // или собрать ключи перебором для IE8-
+}
+
+
+
+
 
 module.exports = router;

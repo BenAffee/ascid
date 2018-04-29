@@ -38,7 +38,7 @@ router.get('/:page', function(req, res, next) {
 		}
 			
 		else{
-			res.send('а ты жулик))) попробуй что-нибудь по-сложней');
+			res.send('Попытка нарушения прав доступа. Ошибка добавлена в лог');
 		
 			msg = req.session.username + ': неудачная попытка входа в админку';
 			console.log(msg.bgRed.white);
@@ -155,13 +155,97 @@ router.get('/:page', function(req, res, next) {
 		}
 			
 		else{
-			res.send('а ты жулик))) попробуй что-нибудь по-сложней');
+			res.send('Попытка нарушения прав доступа. Ошибка добавлена в лог');
 			
 			msg = req.session.username + ': неудачная попытка загрузки формы нового документа';
 			console.log(msg.bgRed.white);
 		}
 	
 	}
+//================================================================================================
+//тут отображаем все документы
+//================================================================================================	
+	if (control==3) {
+		if(req.session.isModerator) {
+			msg = req.session.username + ': показываем список всех документов';
+			console.log(msg.magenta.bold);
+
+			//выбираем из базы ВСЕ документы
+			models.docs.find(function(err, results){
+				if(err){
+					console.log(err);
+					return;
+				} 
+
+				if(!results) {
+					msg = 'В базе ничего нет? или что-то пошло не так....';
+					console.log(msg.bgRed.white);
+					console.log(results);
+				}
+
+
+				else {
+					/*if(!req.session.all_users_short) {
+					var tmp=[];
+								tmp.admin = 'АДМИН';
+					req.session.all_users_short = tmp;
+					req.session.all_users_long = tmp;
+					console.log('пусто');
+					}*/
+					console.log(results);
+
+					res.render('all_doc_for_moder', { 
+						//отсюда то, что по умолчанию
+						//username: req.session.username,
+						//isAdministrator: req.session.isAdministrator,
+						//isModerator: req.session.isModerator,
+						//post_short: req.session.post_short,
+						//post_long: req.session.post_long,
+						//дальше для теста
+						all_docs: results,
+						type_docs: config.type_of_docs,
+						all_users_short: req.session.all_users_short,
+						all_users_long: req.session.all_users_long
+
+					});
+				} 
+			});	
+		}
+		
+		else{
+			res.send('Попытка нарушения прав доступа. Ошибка добавлена в лог');
+			
+			msg = req.session.username + ': неудачная попытка показать ВСЕ документы';
+			console.log(msg.bgRed.white);
+		}
+	}
+	//req.session.moder_users_all = moder_users_all;
+});
+
+
+
+//================================================================================================
+//тут всякие аяксовые штуки
+//================================================================================================
+router.get('/numer/:count', function(req, res, next) {
+	msg = req.session.username + ': пытаемся добавить пункт со счётчиком:' + req.params.count;
+	console.log(msg.yellow.bold);
+	
+	res.render('add_docs_puncts', {
+		DLall: moder_users_all,
+		count_punkt: req.params.count
+	}, function(err,html){
+		if(err){
+			msg = req.session.username + ': ошибка рендеринга шаблона добавления пункта';
+			console.log(msg.bgRed.white);
+			console.log(err);
+		}
+		else{ 
+
+			res.send(html);
+
+		}
+	});
 });
 
 module.exports = router;

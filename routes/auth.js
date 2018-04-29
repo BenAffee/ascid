@@ -20,7 +20,7 @@ var models    = require('../config/mongoose');
 var crypto = require('crypto');
 
 var msg='';
-
+//var global_pull;
 
 
 //--------------------------------------------------------------------------------------------Авторизация 
@@ -51,21 +51,50 @@ router.post('/', function (req, res) {
 			var current_hash = crypto.pbkdf2Sync(req.body.password, results.salt, 10000, 512, 'sha512').toString('hex')
 			
 			if(results.username == req.body.username && results.hashedPassword == current_hash){
-					
+				//разу получаем из базы список пользователей - он нам постоянно будет нужен
+				
+				models.users.find(function(err, results1){
+					if(err){
+						msg = req.body.username + ': при попытке получения списка пользователей из базы, произошла ошибка';
+						console.log(msg.bgRed.white);						
+						console.log(err);
+						return;
+					}
+					var tmp_arr_1={};
+					var tmp_arr_2={};
+					//var i =0;
+					results1.forEach(function(item, i, arr) {
+						var user = item.username;
+						tmp_arr_1[user] = item.post_long;;
+						tmp_arr_2[user] = item.post_short;
+					});
+					//console.log(tmp_arr_1);
+					//console.log(tmp_arr_2);
+					req.session.all_users_short = tmp_arr_2;
+					req.session.all_users_long = tmp_arr_1;
+					//пишем в сессию записи из базы
+					req.session.username = results.username;
+					req.session.isAdministrator = results.isAdministrator;
+					req.session.isModerator = results.isModerator;
+					req.session.post_short = results.post_short;
+					req.session.post_long = results.post_long;
+					req.session.docs_ispoln = results.docs_ispoln;
+					req.session.docs_kontrols = results.docs_kontrols;
+					console.log('список документов гдепользователь исполнитель:');
+					console.log(req.session.docs_ispoln);
 
+
+					msg = req.session.username + ': доступ разрешён';
+					console.log(msg.green);
+
+					//console.log('массив пользователей --> ' + req.session.all_users_short);
+					//console.log('массив пользователей --> ' + req.session.all_users_long);
+					console.log(req.session.all_users_short);
+					console.log(req.session.all_users_long);
+					res.redirect('/');
+				});
 				
-				//пишем в сессию записи из базы
-				req.session.username = results.username;
-				req.session.isAdministrator = results.isAdministrator;
-				req.session.isModerator = results.isModerator;
-				req.session.post_short = results.post_short;
-				req.session.post_long = results.post_long;
-				//req.session.moder_users = [];
-				
-				msg = req.session.username + ': доступ разрешён';
-				console.log(msg.green);
-				
-				res.redirect('/');
+
 			}
 		
 			else{

@@ -31,6 +31,12 @@ var upload_doc = require('./routes/upload_doc');
 
 var app = express();
 
+
+//var moder_users=[];
+//var moder_users_all=[];
+
+
+
 var rand_hash = crypto.randomBytes(32).toString("hex"); //случайный хэш для ключа сессии
 
 app.use(session({
