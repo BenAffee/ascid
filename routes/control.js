@@ -219,10 +219,67 @@ router.get('/:page', function(req, res, next) {
 			console.log(msg.bgRed.white);
 		}
 	}
-	//req.session.moder_users_all = moder_users_all;
+	
+//================================================================================================
+//здесь отображаем документы в которых пользователь является исплнителем
+//================================================================================================	
+	if (control==4) {
+		//выбираем из базы документы в которых пользователь указан как исполнитель
+		var lengths_of_punkts = [];//здесь хранятся количество пунктов в которых указан пользователь
+		models.docs.find({'_id': {$in: req.session.docs_ispoln}}, function(err, results){
+			if(err){
+				msg = req.body.username + ': при попытке получения документов, в которых пользователь является исполнителем произошла ошибка:';
+				console.log(msg.bgRed.white);
+				console.log(err);
+			}
+
+			if(!results) {
+				msg = req.body.username + ': в базе нет документов, в которых пользователь является исполнителем';
+				console.log(msg.yellow);
+				res.send('Документы не найдены...');
+			}
+			else{
+				//console.log('----------тут результаты до обрезки'.red);
+				//console.log(results);
+
+			//нам нужно оставить только пункты "в части касающейся" пользователя
+			//для этого перебираем выборку и просматриваем элементы массива puncts, если в элементе нет имени пользователя, то удаляем этот элемент
+			results.forEach(function(item, i, arr) {
+				var cur_puncts = item.doc_punkts;
+				//console.log('пункты-->'.red);
+				//console.log(cur_puncts);
+				cur_puncts.forEach(function(item1, i1, arr1) {
+					//console.log('пункт-->'.red);
+					//console.log(item1[2]);
+					//var arr = item1[2];
+					if(!(req.session.username in item1[2]))
+					//if(item1[2].indexOf(req.session.username) == -1)//это для простого массива
+						//если пользователь в пунктах не найден, то сплайсим из выборки этот пункт
+						results[i].doc_punkts.splice(i1, 1);
+
+				});
+				//results[i].push({num_of_punkts: results[i].doc_punkts.length})
+				//results[i]['lengrrrr'] = results[i].doc_punkts.length;
+				lengths_of_punkts.push(results[i].doc_punkts.length);
+				//console.log(results[i]['num_of_punkts']);
+
+			});
+
+				console.log('результат после обрезки -->'.red);
+				console.log(results);
+				//console.log(results[0]['num_of_punkts']);
+				//console.log(lengths_of_punkts);
+				res.render('ispoln_user', { 
+					docs: results,
+					all_users_short: req.session.all_users_short,
+					all_users_long: req.session.all_users_long,
+					type_docs: config.type_of_docs,
+					lengths: lengths_of_punkts
+				});	
+			}
+		});
+	}
 });
-
-
 
 //================================================================================================
 //тут всякие аяксовые штуки

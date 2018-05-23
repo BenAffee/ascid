@@ -1,0 +1,93 @@
+p= docs
+//p= lengths
+p
+table.table.table-bordered.noe-table
+	thead.thead-default
+		tr
+			th Тип документа
+			th Номер документа
+			th Дата документа
+			th Руководитель
+			th Описание
+			th Файл
+			th Пункт
+			th Дата исполнения
+			//th Исполнители
+			th Контроль
+
+	tbody
+		each val, index in docs
+			tr
+				//тип документа
+				td(rowspan=lengths[index])
+					= type_docs[val.doc_type]
+					
+				//номер документа
+				td(rowspan=lengths[index])
+					= val.doc_num
+					
+				//дата документа
+				td(rowspan=lengths[index], id="data_" + val._id)
+					= val.doc_date
+
+
+				//руководитель
+				td.text-center(rowspan=lengths[index] style = 'vertical-align: middle;')
+					span.badge.badge-warning(title= all_users_long[val.doc_ruc])
+						= all_users_short[val.doc_ruc]
+
+				//описание
+				td(rowspan=lengths[index])
+					= val.doc_about
+
+				//Файл
+				td(rowspan=lengths[index], style="font-size: 1.2rem;")
+					a.m-r-10(href='files/' + val.filename download='')
+						i.mdi.mdi-download.text-success
+					a(href='files/' + val.filename)
+						i.mdi.mdi-eye.text-success
+				
+				//Пункт
+				td.text-center
+					= val.doc_punkts[0][0]
+				
+				//Дата пункта
+				td
+					= val.doc_punkts[0][1]
+				
+				//Исполнители
+				//td
+					each val2, index2 in val.doc_punkts[0][2]
+						= all_users_short[val2] + ', '
+				
+				//Контроль
+				td
+					each val2, index2 in val.doc_punkts[0][3]
+						span.badge.badge-success.m-r-5(title= all_users_long[val2])
+							= all_users_short[val2]
+							
+						//= all_users_short[val2] + ', '
+
+			//здесь дорисовываем ещё строки, по количеству пунктов
+			- for(var i = 1; i < lengths[index]; i++)
+				tr
+					//Пункт
+					td.text-center
+						= val.doc_punkts[i][0]
+					
+					//Дата пункта
+					td
+						= val.doc_punkts[i][1]
+					
+					//Исполнители
+					//td
+						each val2, index2 in val.doc_punkts[i][2]
+							= all_users_short[val2] + ', '
+
+					
+					//Контроль
+					td
+						each val2, index2 in val.doc_punkts[i][3]
+							span.badge.badge-success.m-r-5(title= all_users_long[val2])
+								= all_users_short[val2]
+

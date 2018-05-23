@@ -41,10 +41,7 @@ router.post('/', upload_file_doc, function (req, res) {
 
 		//console.log(req.body);
 		//console.log(req.file);
-		
 
-
-		
 		//формируем имя файла
 		var filename_doc = config.type_of_docs[req.body.type_doc] + '_'+ req.body.num_doc + '_от_' + req.body.date_doc + '.pdf';
 		
@@ -54,8 +51,9 @@ router.post('/', upload_file_doc, function (req, res) {
 			//собираем массив с пунктами
 			var punkts=[];//массив со всеми пунктами, который будем добавлять в базу
 			var pushed=[];//массив в котором хранится один пункт
-			var ispoln=[];
-			var kontrols=[];
+			var ispoln=[];//массив с исполлнителями одного пункта
+			var kontrols=[];//массив с контроллирующими одного пункта
+			var push1 = {};//массив с именем исполнителя и полями исполнено и ознакомлен
 			//начинаем перибирать значения... старт с 0, конечное знаение ханится в punkts_count
 			var i;
 			for (i = 0; i <= req.body.punkts_count; i++) {
@@ -66,19 +64,35 @@ router.post('/', upload_file_doc, function (req, res) {
 
 					//console.log('----------------------------------------------'.green);
 					//console.log(name);
-					//console.log(req.body[name]);
+					console.log(req.body[name]);
 
 					//добавляем в массив номер пункта
 					pushed.push(req.body[name]);
 
 					//добавляем в массив дату исполнения
 					name = 'date_punkt_' + i;
-					pushed.push(req.body[name]);
+					var str = req.body[name];
+					var date_to_base = str[8] + str[9] + '.' + str[5] + str[6] + '.' + str[0] + str[1] + str[2] + str[3] + ' г.'
+					pushed.push(date_to_base);
 
 					//добавляем в массив исполнителей
 					name = 'ispolniteli_' + i;
-					pushed.push(req.body[name]);
-					ispoln = ispoln.concat(req.body[name]);
+					
+					//распарсим массив и добавим поля исполнено и ознакомлен
+					var massiv = req.body[name];
+					massiv.forEach(function(item, i, arr) {
+						push1[item] = {'ispolneno':false, 'oznokomlen':false};
+					});
+					
+					
+					
+					
+					//push1[req.body[name]]={'ispolneno':false, 'oznokomlen':false};
+					//console.log('------------------исполнители');
+					//console.log(push1);
+					
+					pushed.push(push1);
+					ispoln = ispoln.concat(req.body[name]);//это массив в котором все исполнители из всех пунктов
 					
 					//ispoln.push(req.body[name]);
 					//console.log('------------------исполнители');
@@ -88,9 +102,14 @@ router.post('/', upload_file_doc, function (req, res) {
 
 					//добавляем в массив контроллирующих
 					name = 'controllers_' + i;
+					
 					pushed.push(req.body[name]);
 					//kontrols.push(req.body[name]);
-					kontrols = kontrols.concat(req.body[name]);
+					
+					//console.log('------------------длина');
+					//console.log(req.body[name].isArray());
+					
+					kontrols = kontrols.concat(req.body[name]);//это массив в котором все контроллирующие из всех пунктов
 					
 
 					//добавляем всё в массив который уйдёт в базу
@@ -114,13 +133,16 @@ router.post('/', upload_file_doc, function (req, res) {
 				else console.log('файл успешно переименован!')
 				}
 			)
+			//делаем красивую дату
+			var str = req.body.date_doc;
+			var date_to_base = str[8] + str[9] + '.' + str[5] + str[6] + '.' + str[0] + str[1] + str[2] + str[3] + ' г.'			
 			
 			//пишем в базу документ...
 			var add_doc = new models.docs({
 				filename: filename_doc,
 				doc_type: req.body.type_doc,
 				doc_num: req.body.num_doc,
-				doc_date: req.body.date_doc,
+				doc_date: date_to_base,
 				doc_ruc: req.body.ruc_doc,
 				doc_about: req.body.about_doc,
 				doc_punkts: punkts

@@ -24,12 +24,12 @@
 				.div.col-6(style="border: solid 1px #DCDCDC;")
 					.form-group
 						label.form-label Исполнители:
-						select.multi-select(multiple='multiple', name='ispolniteli_' + count_punkt, data-plugin='multiselect', id='ispolniteli_' + count_punkt)
+						select.multi-select(multiple='multiple', name='ispolniteli_' + count_punkt + '[]', data-plugin='multiselect', id='ispolniteli_' + count_punkt)
 							each val in DLall
 								option(value=val.username)!= val.post_short
 				.div.col-6(style="border: solid 1px #DCDCDC;")
 					.form-group
 						label.form-label Контролирующие:
-						select.multi-select(multiple='multiple', name='controllers_' + count_punkt, data-plugin='multiselect', id='controllers_' + count_punkt)
+						select.multi-select(multiple='multiple', name='controllers_' + count_punkt + '[]', data-plugin='multiselect', id='controllers_' + count_punkt)
 							each val in DLall
 								option(value=val.username)!= val.post_short	

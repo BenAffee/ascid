@@ -64,13 +64,13 @@ form#uploadForm(name='uploadForm', action='/upload_doc', method='post', enctype=
 							.div.col-6(style="border: solid 1px #DCDCDC;")
 								.form-group
 									label.form-label Исполнители:
-									select#ispolniteli_0.multi-select(multiple='multiple', name='ispolniteli_0', data-plugin='multiselect')
+									select#ispolniteli_0.multi-select(multiple='multiple', name= "ispolniteli_0[]", data-plugin='multiselect')
 										each val in DLall
 											option(value=val.username)!= val.post_short
 							.div.col-6(style="border: solid 1px #DCDCDC;")
 								.form-group
 									label.form-label Контролирующие:
-									select#controllers_0.multi-select(multiple='multiple', name='controllers_0', data-plugin='multiselect')
+									select#controllers_0.multi-select(multiple='multiple', name="controllers_0[]", data-plugin='multiselect')
 										each val in DLall
 											option(value=val.username)!= val.post_short
 											

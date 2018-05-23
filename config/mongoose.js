@@ -141,7 +141,7 @@ var docsSchema = new mongoose.Schema({
     },
 	//Дата утвердения документа
 	doc_date:{
-        type:Date, // тип String
+        type:String, // тип String
         required:[true,'Необходимо указать дату утвержедния документа']
     },
     // Имя пользователя, утвердившего документ

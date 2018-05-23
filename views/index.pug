@@ -23,6 +23,7 @@ html
 		link(href='css/bootstrap.min.css', rel='stylesheet', type='text/css')
 		link(href='css/icons.css', rel='stylesheet', type='text/css')
 		link(href='css/style.css', rel='stylesheet', type='text/css')
+		link(href='css/noe_style.css', rel='stylesheet', type='text/css')
 		script(src='js/modernizr.min.js')
 	body.fixed-left
 	
@@ -107,7 +108,10 @@ html
 		
 		script(src='js/noejs.js')
 		script(src='js/jquery.form.js')
-
+		//script(type='text/javascript').
+			$(function () {
+				$("[data-toggle='tooltip']").tooltip();
+			});
 
 		//script(type='text/javascript').
 			$(document).ready(function() {
