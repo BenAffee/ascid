@@ -2,3 +2,5 @@ config/index.js
 node_modules/
 public/files/
 users.json
+delete_all_docs
+delete_all_docs_js.js

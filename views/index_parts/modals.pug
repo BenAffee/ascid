@@ -6,32 +6,32 @@
 				.modal-header
 					h4#myModalLabel.modal-title Авторизация
 				.modal-body.col-12
-					.text-center
+					//.text-center
 						a.logo-lg(href='index.html')
 							i.mdi.mdi-radio
 							span АСКИД
 					form.form-horizontal.m-t-20(id='form_auth', name='form_auth', action='/auth', method='post')
 						.form-group.row
-							.col-11
+							.col-12
 								.input-group
 									span.input-group-addon
 										i.mdi.mdi-account
 									input.form-control(type='text', required='', placeholder='Имя пользователя', id='username', name='username')
 						.form-group.row
-							.col-11
+							.col-12
 								.input-group
 									span.input-group-addon
 										i.mdi.mdi-key
 									input.form-control(type='password', required='', placeholder='Пароль', id='password', name='password')
 						.form-group.row.col-12.m-0.p-0
-							.col-6.m-0.p-0.m-t-10
+							.col-6.m-t-10
 								.checkbox.checkbox-primary
 									input#checkbox-signup(type='checkbox')
 									label(for='checkbox-signup') Запомнить меня
 							.col-6.m-0.p-0.text-right
 								button.btn.btn-primary.btn-custom.w-md.waves-effect.waves-light(type='submit') Войти
 						.form-group.row.col-12.m-0.p-0.m-t-15
-							.col-6.m-0.p-0
+							.col-6
 								a.text-muted(href='pages-recoverpw.html')
 									i.fa.fa-lock.m-r-5
 									|  Забыли пароль?

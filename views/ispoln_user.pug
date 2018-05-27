@@ -1,4 +1,4 @@
-p= docs
+//p= docs
 //p= lengths
 p
 table.table.table-bordered.noe-table
@@ -33,7 +33,7 @@ table.table.table-bordered.noe-table
 
 				//руководитель
 				td.text-center(rowspan=lengths[index] style = 'vertical-align: middle;')
-					span.badge.badge-warning(title= all_users_long[val.doc_ruc])
+					span.badge.badge-success(title= all_users_long[val.doc_ruc])
 						= all_users_short[val.doc_ruc]
 
 				//описание
@@ -42,9 +42,11 @@ table.table.table-bordered.noe-table
 
 				//Файл
 				td(rowspan=lengths[index], style="font-size: 1.2rem;")
-					a.m-r-10(href='files/' + val.filename download='')
+					input(type='hidden', id='username_' + val._id, name='username_' + val._id, value= username)
+
+					a.ref_download.m-r-10(href='files/' + val.filename download='' title='Скачать' name='d_' + val._id)
 						i.mdi.mdi-download.text-success
-					a(href='files/' + val.filename)
+					a.ref_download(href='files/' + val.filename title='Просмотреть' name='e_' + val._id)
 						i.mdi.mdi-eye.text-success
 				
 				//Пункт
@@ -54,11 +56,6 @@ table.table.table-bordered.noe-table
 				//Дата пункта
 				td
 					= val.doc_punkts[0][1]
-				
-				//Исполнители
-				//td
-					each val2, index2 in val.doc_punkts[0][2]
-						= all_users_short[val2] + ', '
 				
 				//Контроль
 				td
@@ -79,15 +76,9 @@ table.table.table-bordered.noe-table
 					td
 						= val.doc_punkts[i][1]
 					
-					//Исполнители
-					//td
-						each val2, index2 in val.doc_punkts[i][2]
-							= all_users_short[val2] + ', '
-
-					
 					//Контроль
 					td
 						each val2, index2 in val.doc_punkts[i][3]
 							span.badge.badge-success.m-r-5(title= all_users_long[val2])
 								= all_users_short[val2]
-
+.row#message1

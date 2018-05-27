@@ -11,17 +11,12 @@
 var express = require('express');
 var router = express.Router();
 
-//var bodyParser = require('body-parser');
-//var urlencodedParser = bodyParser.urlencoded({extended: false});
-
 //импоритруем модели монгуса
 var models    = require('../config/mongoose');
 
 var crypto = require('crypto');
 
 var msg='';
-//var global_pull;
-
 
 //--------------------------------------------------------------------------------------------Авторизация 
 router.post('/', function (req, res) {
@@ -68,8 +63,7 @@ router.post('/', function (req, res) {
 						tmp_arr_1[user] = item.post_long;;
 						tmp_arr_2[user] = item.post_short;
 					});
-					//console.log(tmp_arr_1);
-					//console.log(tmp_arr_2);
+
 					req.session.all_users_short = tmp_arr_2;
 					req.session.all_users_long = tmp_arr_1;
 					//пишем в сессию записи из базы
@@ -87,8 +81,6 @@ router.post('/', function (req, res) {
 					msg = req.session.username + ': доступ разрешён';
 					console.log(msg.green);
 
-					//console.log('массив пользователей --> ' + req.session.all_users_short);
-					//console.log('массив пользователей --> ' + req.session.all_users_long);
 					console.log(req.session.all_users_short);
 					console.log(req.session.all_users_long);
 					res.redirect('/');
@@ -98,7 +90,7 @@ router.post('/', function (req, res) {
 			}
 		
 			else{
-				//req.session.isAuth=false;
+
 				msg = req.body.username + ': доступ запрещён';
 				console.log(msg.red);
 				

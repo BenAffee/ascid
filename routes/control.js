@@ -83,9 +83,7 @@ router.get('/:page', function(req, res, next) {
 						});
 					}
 					else {
-						//console.log(req.session.moder_users);
 						msg = req.session.username + ': в сессии уже есть массив руководителей 1,2 уровня';
-							
 						console.log(msg.blue.bold);
 						callback();
 					}
@@ -124,8 +122,6 @@ router.get('/:page', function(req, res, next) {
 				
 				//отдаём переменные и рендерим шаблон
 				function (callback) {
-					//console.log(moder_users_all);
-					
 					res.render('add_doc', {
 						DL12: moder_users,
 						DLall: moder_users_all,
@@ -148,9 +144,6 @@ router.get('/:page', function(req, res, next) {
 				},
 				
 			]);
-			
-			//console.log(req.session.moder_users);
-
 		
 		}
 			
@@ -164,6 +157,7 @@ router.get('/:page', function(req, res, next) {
 	}
 //================================================================================================
 //тут отображаем все документы
+//ТОЛЬКО ДЛЯ МОДЕРАТОРА!!!
 //================================================================================================	
 	if (control==3) {
 		if(req.session.isModerator) {
@@ -172,6 +166,7 @@ router.get('/:page', function(req, res, next) {
 
 			//выбираем из базы ВСЕ документы
 			models.docs.find(function(err, results){
+				var lengths_of_punkts = [];
 				if(err){
 					console.log(err);
 					return;
@@ -185,27 +180,21 @@ router.get('/:page', function(req, res, next) {
 
 
 				else {
-					/*if(!req.session.all_users_short) {
-					var tmp=[];
-								tmp.admin = 'АДМИН';
-					req.session.all_users_short = tmp;
-					req.session.all_users_long = tmp;
-					console.log('пусто');
-					}*/
-					console.log(results);
-
+					//пишем в массив количество пнктов в каждом документе
+					results.forEach(function(item, i, arr) {
+						lengths_of_punkts.push(item.doc_punkts.length);
+					});
+					
+					
+					
+					//console.log(results);
+					//var lengths_of_punkts = [3, 3];
 					res.render('all_doc_for_moder', { 
-						//отсюда то, что по умолчанию
-						//username: req.session.username,
-						//isAdministrator: req.session.isAdministrator,
-						//isModerator: req.session.isModerator,
-						//post_short: req.session.post_short,
-						//post_long: req.session.post_long,
-						//дальше для теста
-						all_docs: results,
+						docs: results,
 						type_docs: config.type_of_docs,
 						all_users_short: req.session.all_users_short,
-						all_users_long: req.session.all_users_long
+						all_users_long: req.session.all_users_long,
+						lengths: lengths_of_punkts
 
 					});
 				} 
@@ -221,9 +210,12 @@ router.get('/:page', function(req, res, next) {
 	}
 	
 //================================================================================================
-//здесь отображаем документы в которых пользователь является исплнителем
+//здесь отображаем ВСЕ документы в которых пользователь является ИСПОЛНИТЕЛЕМ
 //================================================================================================	
 	if (control==4) {
+		msg = req.session.username + ': ВСЕ документы в которых пользователь является ИСПОЛНИТЕЛЕМ';
+		console.log(msg.magenta.bold);
+		
 		//выбираем из базы документы в которых пользователь указан как исполнитель
 		var lengths_of_punkts = [];//здесь хранятся количество пунктов в которых указан пользователь
 		models.docs.find({'_id': {$in: req.session.docs_ispoln}}, function(err, results){
@@ -239,37 +231,84 @@ router.get('/:page', function(req, res, next) {
 				res.send('Документы не найдены...');
 			}
 			else{
-				//console.log('----------тут результаты до обрезки'.red);
-				//console.log(results);
 
 			//нам нужно оставить только пункты "в части касающейся" пользователя
 			//для этого перебираем выборку и просматриваем элементы массива puncts, если в элементе нет имени пользователя, то удаляем этот элемент
-			results.forEach(function(item, i, arr) {
-				var cur_puncts = item.doc_punkts;
-				//console.log('пункты-->'.red);
-				//console.log(cur_puncts);
-				cur_puncts.forEach(function(item1, i1, arr1) {
-					//console.log('пункт-->'.red);
-					//console.log(item1[2]);
-					//var arr = item1[2];
-					if(!(req.session.username in item1[2]))
-					//if(item1[2].indexOf(req.session.username) == -1)//это для простого массива
-						//если пользователь в пунктах не найден, то сплайсим из выборки этот пункт
-						results[i].doc_punkts.splice(i1, 1);
+				results.forEach(function(item, i, arr) {
+					var cur_puncts = item.doc_punkts;
+					cur_puncts.forEach(function(item1, i1, arr1) {
+						//используем in, потому-что ищем в Object
+						if(!(req.session.username in item1[2]))
+							//если пользователь в пунктах не найден, то сплайсим из выборки этот пункт
+							results[i].doc_punkts.splice(i1, 1);
 
+					});
+					lengths_of_punkts.push(results[i].doc_punkts.length);
 				});
-				//results[i].push({num_of_punkts: results[i].doc_punkts.length})
-				//results[i]['lengrrrr'] = results[i].doc_punkts.length;
-				lengths_of_punkts.push(results[i].doc_punkts.length);
-				//console.log(results[i]['num_of_punkts']);
 
-			});
-
-				console.log('результат после обрезки -->'.red);
-				console.log(results);
-				//console.log(results[0]['num_of_punkts']);
-				//console.log(lengths_of_punkts);
+				//console.log('результат после обрезки -->'.red);
+				//console.log(results);
 				res.render('ispoln_user', { 
+					docs: results,
+					username: req.session.username,
+					all_users_short: req.session.all_users_short,
+					all_users_long: req.session.all_users_long,
+					type_docs: config.type_of_docs,
+					lengths: lengths_of_punkts
+				});	
+			}
+		});
+	}
+	
+//================================================================================================
+//здесь отображаем ВСЕ документы в которых пользователь является КОНТРОЛЛИРУЮЩИМ
+//================================================================================================	
+	if (control==5) {
+		msg = req.session.username + ': ВСЕ документы в которых пользователь является КОНТРОЛЛИРУЮЩИМ';
+		console.log(msg.magenta.bold);
+		
+		//выбираем из базы документы в которых пользователь указан как КОНТРОЛЛИРУЮЩИЙ
+		var massiv =[];
+		var lengths_of_punkts = [];//здесь хранятся количество пунктов в которых указан пользователь
+		models.docs.find({'_id': {$in: req.session.docs_kontrols}}, function(err, results){
+			if(err){
+				msg = req.body.username + ': при попытке получения документов, в которых пользователь является КОНТРОЛЛИРУЮЩИМ произошла ошибка:';
+				console.log(msg.bgRed.white);
+				console.log(err);
+			}
+
+			if(!results) {
+				msg = req.body.username + ': в базе нет документов, в которых пользователь является КОНТРОЛЛИРУЮЩИМ';
+				console.log(msg.yellow);
+				res.send('Документы не найдены...');
+			}
+			else{
+
+			//нам нужно оставить только пункты "в части касающейся" пользователя
+			//для этого перебираем выборку и просматриваем элементы массива puncts, если в элементе нет имени пользователя, то удаляем этот элемент
+				results.forEach(function(item, i, arr) {
+					var cur_puncts = item.doc_punkts;
+					cur_puncts.forEach(function(item1, i1, arr1) {
+							//console.log(item1[0]);
+							//console.log("контроллирующие->");
+							//console.log(item1[3]);
+							massiv = item1[3];
+							//используем indexOf потому-что ищем в простом массиве
+							if(massiv.indexOf(req.session.username) == -1){
+								//если пользователь в пунктах не найден, то сплайсим из выборки этот пункт
+								//console.log("НЕ НАШЁЛ");
+								results[i].doc_punkts.splice(i1, 1);
+							}
+						
+						/*else
+							console.log("НАШЁЛ");*/
+					});
+					lengths_of_punkts.push(results[i].doc_punkts.length);
+				});
+
+				//console.log('результат после обрезки -->'.red);
+				//console.log(results);
+				res.render('kontrol_user', { 
 					docs: results,
 					all_users_short: req.session.all_users_short,
 					all_users_long: req.session.all_users_long,

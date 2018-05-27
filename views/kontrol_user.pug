@@ -1,3 +1,6 @@
+//p= docs
+//p= lengths
+p
 table.table.table-bordered.noe-table
 	thead.thead-default
 		tr
@@ -10,7 +13,7 @@ table.table.table-bordered.noe-table
 			th Пункт
 			th Дата исполнения
 			th Исполнители
-			th Контроль
+			//th Контроль
 
 	tbody
 		each val, index in docs
@@ -39,11 +42,9 @@ table.table.table-bordered.noe-table
 
 				//Файл
 				td(rowspan=lengths[index], style="font-size: 1.2rem;")
-					input(type='hidden', id='username_' + val._id, name='username_' + val._id, value= username)
-
-					a.ref_download.m-r-10(href='files/' + val.filename download='' title='Скачать' name='d_' + val._id)
+					a.m-r-10(href='files/' + val.filename download='' title='Скачать')
 						i.mdi.mdi-download.text-success
-					a.ref_download(href='files/' + val.filename title='Просмотреть' name='e_' + val._id)
+					a(href='files/' + val.filename title='Просмотреть')
 						i.mdi.mdi-eye.text-success
 				
 				//Пункт
@@ -53,7 +54,7 @@ table.table.table-bordered.noe-table
 				//Дата пункта
 				td
 					= val.doc_punkts[0][1]
-					
+				
 				//Исполнители
 				td
 					each val2, index2 in val.doc_punkts[0][2]
@@ -63,14 +64,6 @@ table.table.table-bordered.noe-table
 						else
 							span.badge.badge-danger.m-r-5(title= all_users_long[index2] + ': не ознакомлен')
 								= all_users_short[index2]
-								
-				//Контроль
-				td
-					each val2, index2 in val.doc_punkts[0][3]
-						span.badge.badge-success.m-r-5(title= all_users_long[val2])
-							= all_users_short[val2]
-							
-						//= all_users_short[val2] + ', '
 
 			//здесь дорисовываем ещё строки, по количеству пунктов
 			- for(var i = 1; i < lengths[index]; i++)
@@ -82,10 +75,10 @@ table.table.table-bordered.noe-table
 					//Дата пункта
 					td
 						= val.doc_punkts[i][1]
-
+					
 					//Исполнители
 					td
-						each val2, index2 in val.doc_punkts[i][2]
+						each val2, index2 in val.doc_punkts[0][2]
 							if(val2['oznakomlen'] == true)
 								span.badge.badge-warning.m-r-5(title= all_users_long[index2] + ': ознакомлен')
 									= all_users_short[index2]
@@ -93,8 +86,3 @@ table.table.table-bordered.noe-table
 								span.badge.badge-danger.m-r-5(title= all_users_long[index2] + ': не ознакомлен')
 									= all_users_short[index2]
 
-					//Контроль
-					td
-						each val2, index2 in val.doc_punkts[i][3]
-							span.badge.badge-success.m-r-5(title= all_users_long[val2])
-								= all_users_short[val2]

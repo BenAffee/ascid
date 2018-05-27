@@ -29,8 +29,6 @@ var upload_file_doc = multer({ dest: upload_file_doc_dest }).single('file_doc');
 
 
 router.post('/', upload_file_doc, function (req, res) {
-	//var file = req.files.file_doc;
-	
 	msg = req.session.username + ': сработал путь upload_doc';
 	console.log(msg.magenta.bold);
 	
@@ -39,13 +37,9 @@ router.post('/', upload_file_doc, function (req, res) {
 	//====================================================
 	if(req.session.isModerator){
 
-		//console.log(req.body);
-		//console.log(req.file);
-
 		//формируем имя файла
 		var filename_doc = config.type_of_docs[req.body.type_doc] + '_'+ req.body.num_doc + '_от_' + req.body.date_doc + '.pdf';
-		
-	
+
 		//сначала проверка файла и полей, если всё нормально, то пишем файл и записываемв базу
 		if(file_doc_valid(req.file)){
 			//собираем массив с пунктами
@@ -53,7 +47,8 @@ router.post('/', upload_file_doc, function (req, res) {
 			var pushed=[];//массив в котором хранится один пункт
 			var ispoln=[];//массив с исполлнителями одного пункта
 			var kontrols=[];//массив с контроллирующими одного пункта
-			var push1 = {};//массив с именем исполнителя и полями исполнено и ознакомлен
+			//var push1 = {};//массив с именем исполнителя и полями исполнено и ознакомлен
+			
 			//начинаем перибирать значения... старт с 0, конечное знаение ханится в punkts_count
 			var i;
 			for (i = 0; i <= req.body.punkts_count; i++) {
@@ -61,9 +56,6 @@ router.post('/', upload_file_doc, function (req, res) {
 				if(req.body[name]){
 					var pushed=[];//массив в котором хранится один пункт
 
-
-					//console.log('----------------------------------------------'.green);
-					//console.log(name);
 					console.log(req.body[name]);
 
 					//добавляем в массив номер пункта
@@ -80,48 +72,28 @@ router.post('/', upload_file_doc, function (req, res) {
 					
 					//распарсим массив и добавим поля исполнено и ознакомлен
 					var massiv = req.body[name];
+					var push1={};//массив с именем исполнителя и полями исполнено и ознакомлен
 					massiv.forEach(function(item, i, arr) {
-						push1[item] = {'ispolneno':false, 'oznokomlen':false};
+						push1[item] = {'ispolneno':false, 'oznakomlen':false};
 					});
-					
-					
-					
-					
-					//push1[req.body[name]]={'ispolneno':false, 'oznokomlen':false};
-					//console.log('------------------исполнители');
-					//console.log(push1);
-					
+			//console.log('Пункты->');
+			//console.log(push1);
 					pushed.push(push1);
+					
 					ispoln = ispoln.concat(req.body[name]);//это массив в котором все исполнители из всех пунктов
-					
-					//ispoln.push(req.body[name]);
-					//console.log('------------------исполнители');
-					//console.log(req.body[name]);
-					
-
 
 					//добавляем в массив контроллирующих
 					name = 'controllers_' + i;
 					
 					pushed.push(req.body[name]);
-					//kontrols.push(req.body[name]);
-					
-					//console.log('------------------длина');
-					//console.log(req.body[name].isArray());
 					
 					kontrols = kontrols.concat(req.body[name]);//это массив в котором все контроллирующие из всех пунктов
-					
 
-					//добавляем всё в массив который уйдёт в базу
 					punkts.push(pushed);
 				}
 			}			
-			
-					//console.log('------------------контроллирующие all до');
-					//console.log(kontrols);
-					//console.log('------------------исполнители all до');
-					//console.log(ispoln);
-			
+			//console.log('Пункты->');
+			//console.log(punkts);
 			var old_name = req.file.path;
 			var new_name = 'public/files/' + filename_doc;
 			
@@ -157,11 +129,6 @@ router.post('/', upload_file_doc, function (req, res) {
 					//оставляем в массивах контроллирующих и исполнителей только уникальные значения
 					ispoln = unique_item_in_arr(ispoln);
 					kontrols = unique_item_in_arr(kontrols);
-
-					//console.log('массив исполнителей: ');
-					//console.log(ispoln);
-					//console.log('массив контроллирующих: ');
-					//console.log(kontrols);
 					
 					//пишем исполнителям сведения об этом документе
 					models.users.update({"username": {$in: ispoln}}, {$push: {docs_ispoln: this_doc_id}}, {multi: true}, function(err, doc){
@@ -204,7 +171,6 @@ router.post('/', upload_file_doc, function (req, res) {
 					} 
 
 					else {
-						//res.statusCode = 500;
 						msg = 'Статус 500 при добавлении документа. Получена форма:' + req.body;
 						res.send(msg);
 						console.log(msg.bgRed.white);
@@ -269,8 +235,7 @@ var unique_item_in_arr = function(arr){
 		var str = arr[i];
 		obj[str] = true; // запомнить строку в виде свойства объекта
 	}
-	//console.log('уникальная функция выполнена');
-return Object.keys(obj); // или собрать ключи перебором для IE8-
+	return Object.keys(obj); // или собрать ключи перебором для IE8-
 }
 
 
