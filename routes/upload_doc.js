@@ -42,6 +42,7 @@ router.post('/', upload_file_doc, function (req, res) {
 
 		//сначала проверка файла и полей, если всё нормально, то пишем файл и записываемв базу
 		if(file_doc_valid(req.file)){
+			
 			//собираем массив с пунктами
 			var punkts=[];//массив со всеми пунктами, который будем добавлять в базу
 			var pushed=[];//массив в котором хранится один пункт
@@ -76,22 +77,76 @@ router.post('/', upload_file_doc, function (req, res) {
 					massiv.forEach(function(item, i, arr) {
 						push1[item] = {'ispolneno':false, 'oznakomlen':false};
 					});
-			//console.log('Пункты->');
-			//console.log(push1);
 					pushed.push(push1);
-					
 					ispoln = ispoln.concat(req.body[name]);//это массив в котором все исполнители из всех пунктов
 
 					//добавляем в массив контроллирующих
 					name = 'controllers_' + i;
-					
-					pushed.push(req.body[name]);
-					
+					//распарсим массив и добавим поле ознакомлен
+					massiv = req.body[name];
+					push1={};
+					massiv.forEach(function(item, i, arr) {
+						push1[item] = {'oznakomlen':false};
+					});
+					pushed.push(push1);
 					kontrols = kontrols.concat(req.body[name]);//это массив в котором все контроллирующие из всех пунктов
 
 					punkts.push(pushed);
 				}
-			}			
+			}
+			
+			/*
+			//собираем АССОЦИАТИВНЫЙ массив с пунктами
+			var punkts={};//массив со всеми пунктами, который будем добавлять в базу
+			var ispoln=[];//массив с исполлнителями одного пункта
+			var kontrols=[];//массив с контроллирующими одного пункта
+			var status = {};//массив с именем исполнителя и полями исполнено и ознакомлен
+			
+			for (var i = 0; i <= req.body.punkts_count; i++) {
+				//var pushed=[];//массив в котором хранится один пункт
+				//var one_punkt={};//массив в котором хранится один пункт
+				
+				//добавляем в массив номер пункта
+				var name = 'num_punkt_' + i;
+				var number_punkt = req.body[name];
+				
+				//делаем красивую дату
+				name = 'date_punkt_' + i;
+				var str = req.body[name];
+				var date_to_base = str[8] + str[9] + '.' + str[5] + str[6] + '.' + str[0] + str[1] + str[2] + str[3] + ' г.'
+				
+				//добавляем в массив исполнителей
+				name = 'ispolniteli_' + i;
+				//распарсим массив и добавим поля исполнено и ознакомлен
+				var massiv = req.body[name];
+				var isp_with_status={};//массив с именем исполнителя и полями исполнено и ознакомлен
+				massiv.forEach(function(item, i, arr) {
+					isp_with_status[item] = {'ispolneno':false, 'oznakomlen':false};
+				});
+				ispoln = ispoln.concat(massiv);//это массив в котором все исполнители из всех пунктов
+				
+				//добавляем в массив контроллирующих
+				name = 'controllers_' + i;
+				//распарсим массив и добавим поле ознакомлен
+				massiv = req.body[name];
+				var cont_with_status={};
+				massiv.forEach(function(item, i, arr) {
+					cont_with_status[item] = {'oznakomlen':false};
+				});
+				kontrols = kontrols.concat(req.body[name]);//это массив в котором все контроллирующие из всех пунктов
+				
+				
+				punkts[number_punkt] = {'date': date_to_base,
+										'ispoln': isp_with_status,
+										'kontrols': cont_with_status};
+			}*/
+			
+			
+			
+			
+			
+			
+			
 			//console.log('Пункты->');
 			//console.log(punkts);
 			var old_name = req.file.path;
@@ -131,7 +186,7 @@ router.post('/', upload_file_doc, function (req, res) {
 					kontrols = unique_item_in_arr(kontrols);
 					
 					//пишем исполнителям сведения об этом документе
-					models.users.update({"username": {$in: ispoln}}, {$push: {docs_ispoln: this_doc_id}}, {multi: true}, function(err, doc){
+					models.users.update({"username": {$in: ispoln}}, {$push: {docs_ispoln: this_doc_id, new_docs_ispoln: this_doc_id}}, {multi: true}, function(err, doc){
 							if(err) {
 								var msg = req.session.username + ' --> ВНИМАНИЕ! ошибки базы данных:'
 								console.log(msg.bgRed.white);
@@ -145,7 +200,7 @@ router.post('/', upload_file_doc, function (req, res) {
 					});
 					
 					//пишем контроллирующим сведения об этом документе
-					models.users.update({"username": {$in: kontrols}}, {$push: {docs_kontrols: this_doc_id}}, {multi: true}, function(err, doc){
+					models.users.update({"username": {$in: kontrols}}, {$push: {docs_kontrols: this_doc_id, new_docs_kontrols: this_doc_id}}, {multi: true}, function(err, doc){
 							if(err) {
 								var msg = req.session.username + ' --> ВНИМАНИЕ! ошибки базы данных:'
 								console.log(msg.bgRed.white);

@@ -57,13 +57,18 @@ table.table.table-bordered.noe-table
 				//Исполнители
 				td
 					each val2, index2 in val.doc_punkts[0][2]
-						if(val2['oznakomlen'] == true)
+						if(val2['oznakomlen'] == true && val2['ispolneno'] == false)
 							span.badge.badge-warning.m-r-5(title= all_users_long[index2] + ': ознакомлен')
 								= all_users_short[index2]
-						else
+		
+						if(val2['oznakomlen'] == false && val2['ispolneno'] == false)
 							span.badge.badge-danger.m-r-5(title= all_users_long[index2] + ': не ознакомлен')
 								= all_users_short[index2]
 								
+						if((val2['oznakomlen'] == false && val2['ispolneno'] == true) || (val2['oznakomlen'] == true && val2['ispolneno'] == true))
+							span.badge.badge-success.m-r-5(title= all_users_long[index2] + ': исполнено')
+								= all_users_short[index2]
+
 				//Контроль
 				td
 					each val2, index2 in val.doc_punkts[0][3]
@@ -86,11 +91,16 @@ table.table.table-bordered.noe-table
 					//Исполнители
 					td
 						each val2, index2 in val.doc_punkts[i][2]
-							if(val2['oznakomlen'] == true)
+							if(val2['oznakomlen'] == true && val2['ispolneno'] == false)
 								span.badge.badge-warning.m-r-5(title= all_users_long[index2] + ': ознакомлен')
 									= all_users_short[index2]
-							else
+
+							if(val2['oznakomlen'] == false && val2['ispolneno'] == false)
 								span.badge.badge-danger.m-r-5(title= all_users_long[index2] + ': не ознакомлен')
+									= all_users_short[index2]
+
+							if((val2['oznakomlen'] == false && val2['ispolneno'] == true) || (val2['oznakomlen'] == true && val2['ispolneno'] == true))
+								span.badge.badge-success.m-r-5(title= all_users_long[index2] + ': исполнено')
 									= all_users_short[index2]
 
 					//Контроль

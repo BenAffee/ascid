@@ -74,8 +74,13 @@ router.post('/', function (req, res) {
 					req.session.post_long = results.post_long;
 					req.session.docs_ispoln = results.docs_ispoln;
 					req.session.docs_kontrols = results.docs_kontrols;
-					console.log('список документов гдепользователь исполнитель:');
-					console.log(req.session.docs_ispoln);
+					req.session.new_docs_ispoln = results.new_docs_ispoln;
+					req.session.new_docs_kontrols = results.docs_kontrols;
+					req.session.len_new_docs_kontrols = results.new_docs_kontrols.length;
+					req.session.len_new_docs_ispoln = results.new_docs_ispoln.length;
+					
+					//console.log('список документов гдепользователь исполнитель:');
+					//console.log(req.session.docs_ispoln);
 
 
 					msg = req.session.username + ': доступ разрешён';

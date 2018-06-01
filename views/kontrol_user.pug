@@ -2,7 +2,7 @@
 //p= lengths
 p
 table.table.table-bordered.noe-table
-	thead.thead-default
+	thead
 		tr
 			th Тип документа
 			th Номер документа
@@ -13,7 +13,7 @@ table.table.table-bordered.noe-table
 			th Пункт
 			th Дата исполнения
 			th Исполнители
-			//th Контроль
+			th Статус
 
 	tbody
 		each val, index in docs
@@ -42,10 +42,13 @@ table.table.table-bordered.noe-table
 
 				//Файл
 				td(rowspan=lengths[index], style="font-size: 1.2rem;")
-					a.m-r-10(href='files/' + val.filename download='' title='Скачать')
+					input(type='hidden', id='username_' + val._id, name='username_' + val._id, value= username)
+
+					a.ref_download.m-r-10(href='files/' + val.filename download='' title='Скачать' name='d_' + val._id)
 						i.mdi.mdi-download.text-success
-					a(href='files/' + val.filename title='Просмотреть')
+					a.ref_download(href='files/' + val.filename title='Просмотреть' name='e_' + val._id)
 						i.mdi.mdi-eye.text-success
+
 				
 				//Пункт
 				td.text-center
@@ -58,12 +61,30 @@ table.table.table-bordered.noe-table
 				//Исполнители
 				td
 					each val2, index2 in val.doc_punkts[0][2]
-						if(val2['oznakomlen'] == true)
-							span.badge.badge-warning.m-r-5(title= all_users_long[index2] + ': ознакомлен')
+						if(val2['oznakomlen'] == true && val2['ispolneno'] == false)
+							span.badge.badge-warning.m-r-5(id='badge_' + val._id + '-' + val.doc_punkts[0][0] + '-' + index2 + '-' + username title= all_users_long[index2] + ': ознакомлен')
 								= all_users_short[index2]
-						else
+								a.ref_ispolneno.m-l-10(href='#' id=val._id + '-' + val.doc_punkts[0][0] + '-' + index2 + '-' + username title='Исполнено')
+									i.mdi.mdi-check
+								
+						if(val2['oznakomlen'] == false && val2['ispolneno'] == false)
 							span.badge.badge-danger.m-r-5(title= all_users_long[index2] + ': не ознакомлен')
 								= all_users_short[index2]
+								
+						if((val2['oznakomlen'] == false && val2['ispolneno'] == true) || (val2['oznakomlen'] == true && val2['ispolneno'] == true))
+							span.badge.badge-success.m-r-5(title= all_users_long[index2] + ': исполнено')
+								= all_users_short[index2]
+								
+				//Статус
+				td.text-center
+						//= val.doc_punkts[0][2][username]['oznakomlen']
+						if(val.doc_punkts[0][3][username]['oznakomlen'] == true)
+							span.badge.badge-success.m-r-5
+								= 'ознакомлен'
+						else
+							span.badge.badge-danger.m-r-5
+								= 'не ознакомлен'
+
 
 			//здесь дорисовываем ещё строки, по количеству пунктов
 			- for(var i = 1; i < lengths[index]; i++)
@@ -78,11 +99,28 @@ table.table.table-bordered.noe-table
 					
 					//Исполнители
 					td
-						each val2, index2 in val.doc_punkts[0][2]
-							if(val2['oznakomlen'] == true)
-								span.badge.badge-warning.m-r-5(title= all_users_long[index2] + ': ознакомлен')
+						each val2, index2 in val.doc_punkts[i][2]
+							if(val2['oznakomlen'] == true && val2['ispolneno'] == false)
+								span.badge.badge-warning.m-r-5(id='badge_' + val._id + '-' + val.doc_punkts[i][0] + '-' + index2 + '-' + username title= all_users_long[index2] + ': ознакомлен')
 									= all_users_short[index2]
-							else
+									a.ref_ispolneno.m-l-10(href='#' id=val._id + '-' + val.doc_punkts[i][0] + '-' + index2 + '-' + username title='Исполнено')
+										i.mdi.mdi-check
+
+							if(val2['oznakomlen'] == false && val2['ispolneno'] == false)
 								span.badge.badge-danger.m-r-5(title= all_users_long[index2] + ': не ознакомлен')
 									= all_users_short[index2]
+
+							if((val2['oznakomlen'] == false && val2['ispolneno'] == true) || (val2['oznakomlen'] == true && val2['ispolneno'] == true))
+								span.badge.badge-success.m-r-5(title= all_users_long[index2] + ': исполнено')
+									= all_users_short[index2]
+
+					//Статус
+					td.text-center
+							//= val.doc_punkts[0][2][username]['oznakomlen']
+							if(val.doc_punkts[i][3][username]['oznakomlen'] == true)
+								span.badge.badge-success.m-r-5
+									= 'ознакомлен'
+							else
+								span.badge.badge-danger.m-r-5
+									= 'не ознакомлен'
 

@@ -15,13 +15,17 @@ mixin mixin_li_ispoln
 		a.waves-effect.waves-primary(href='javascript:void(0);')
 			i.ti-files
 			span  Исполнение 
-			span.badge.badge-pink.pull-right 1
 			span.menu-arrow
 		ul.list-unstyled
 			li
-				a(href='ui-buttons.html') Новые
+				a.control_href(href='6') Новые
+					//тсли количество новых документовв больше нуля, то показываем мадж с количеством
+					if(len_new_docs_ispoln > 0)
+						span.badge.badge-pink.pull-right 
+							= len_new_docs_ispoln
 			li
 				a.control_href(href='4') Все
+
 			li
 				a(href='ui-cards.html') Не отработанные
 			li
@@ -36,11 +40,14 @@ mixin mixin_li_kontrol
 		a.waves-effect.waves-primary(href='javascript:void(0);')
 			i.ti-eye
 			span  Контроль 
-			span.badge.badge-pink.pull-right 1
 			span.menu-arrow
 		ul.list-unstyled
 			li
-				a(href='ui-buttons.html') Новые
+				a.control_href(href='7') Новые
+					//если количество новых документовв больше нуля, то показываем мадж с количеством
+					if(len_new_docs_kontrols > 0)
+						span.badge.badge-pink.pull-right 
+							= len_new_docs_kontrols
 			li
 				a.control_href(href='5') Все
 			li
