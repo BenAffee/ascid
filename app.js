@@ -41,8 +41,10 @@ var rand_hash = crypto.randomBytes(32).toString("hex"); //случайный х�
 
 app.use(session({
     secret: rand_hash,
+	cookie: { maxAge: 24*60*60*1000},
     store: new redisStore({ host: config.redis.url, port: 6379, client: client,ttl :  260}),
     saveUninitialized: false,
+	
     resave: false
 }));
 

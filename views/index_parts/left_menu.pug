@@ -21,7 +21,7 @@ mixin mixin_li_ispoln
 				a.control_href(href='6') Новые
 					//тсли количество новых документовв больше нуля, то показываем мадж с количеством
 					if(len_new_docs_ispoln > 0)
-						span.badge.badge-pink.pull-right 
+						span.badge.badge-pink.pull-right#span_num_of_new_ispoln
 							= len_new_docs_ispoln
 			li
 				a.control_href(href='4') Все
@@ -46,7 +46,7 @@ mixin mixin_li_kontrol
 				a.control_href(href='7') Новые
 					//если количество новых документовв больше нуля, то показываем мадж с количеством
 					if(len_new_docs_kontrols > 0)
-						span.badge.badge-pink.pull-right 
+						span.badge.badge-pink.pull-right#span_num_of_new_kontrol
 							= len_new_docs_kontrols
 			li
 				a.control_href(href='5') Все

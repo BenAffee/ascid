@@ -219,46 +219,36 @@ router.get('/:page', function(req, res, next) {
 		//выбираем из базы документы в которых пользователь указан как исполнитель
 		var lengths_of_punkts = [];//здесь хранятся количество пунктов в которых указан пользователь
 		models.docs.find({'_id': {$in: req.session.docs_ispoln}}, function(err, results){
-			if(err){
-				msg = req.body.username + ': при попытке получения документов, в которых пользователь является исполнителем произошла ошибка:';
-				console.log(msg.bgRed.white);
-				console.log(err);
-			}
-
-			if(!results) {
-				msg = req.body.username + ': в базе нет документов, в которых пользователь является исполнителем';
-				console.log(msg.yellow);
-				res.send('Документы не найдены...');
-			}
-			else{
-
-			//нам нужно оставить только пункты "в части касающейся" пользователя
-			//для этого перебираем выборку и просматриваем элементы массива puncts, если в элементе нет имени пользователя, то удаляем этот элемент
+			//обрабатываем ошибки, если ошибки есть, то логируем все-все-все
+			if(models.err_handler(err, req.session.username)) return;
+			//если из базы что-то получили, то обрабатываем ответ, иначе отвечаем в браузер что ничего не найдено
+			if(results.length > 0){
+				var all_num_punkt_in_base = [];
+				//нам нужно оставить только пункты "в части касающейся" пользователя
+				//для этого перебираем выборку и просматриваем элементы массива puncts, если в элементе нет имени пользователя, то удаляем этот элемент
 				results.forEach(function(item, i, arr) {
 					var cur_puncts = item.doc_punkts;
 					cur_puncts.forEach(function(item1, i1, arr1) {
 						//используем in, потому-что ищем в Object
-						if(!(req.session.username in item1[2]))
-							//если пользователь в пунктах не найден, то сплайсим из выборки этот пункт
+						if(!(req.session.username in item1['ispoln'])){//если пользователь в пунктах не найден, то сплайсим из выборки этот пункт
 							results[i].doc_punkts.splice(i1, 1);
-
+						}
 					});
 					lengths_of_punkts.push(results[i].doc_punkts.length);
+
 				});
 
-				if(results.length > 0){
-					res.render('ispoln_user', { 
-						docs: results,
-						username: req.session.username,
-						all_users_short: req.session.all_users_short,
-						all_users_long: req.session.all_users_long,
-						type_docs: config.type_of_docs,
-						lengths: lengths_of_punkts
-					});
-				}
-				else
-					res.send("НЕТ ДОКУМЕНТОВ");
+				res.render('ispoln_user', { 
+					docs: results,
+					username: req.session.username,
+					all_users_short: req.session.all_users_short,
+					all_users_long: req.session.all_users_long,
+					type_docs: config.type_of_docs,
+					lengths: lengths_of_punkts,
+					number_of_punkt_in_base: all_num_punkt_in_base
+				});
 			}
+			else res.send("НЕТ ДОКУМЕНТОВ");
 		});
 	}
 	
@@ -270,59 +260,37 @@ router.get('/:page', function(req, res, next) {
 		console.log(msg.magenta.bold);
 		
 		//выбираем из базы документы в которых пользователь указан как КОНТРОЛЛИРУЮЩИЙ
-		var massiv =[];
 		var lengths_of_punkts = [];//здесь хранятся количество пунктов в которых указан пользователь
 		models.docs.find({'_id': {$in: req.session.docs_kontrols}}, function(err, results){
-			if(err){
-				msg = req.body.username + ': при попытке получения документов, в которых пользователь является КОНТРОЛЛИРУЮЩИМ произошла ошибка:';
-				console.log(msg.bgRed.white);
-				console.log(err);
-			}
-
-			if(!results) {
-				msg = req.body.username + ': в базе нет документов, в которых пользователь является КОНТРОЛЛИРУЮЩИМ';
-				console.log(msg.yellow);
-				res.send('Документы не найдены...');
-			}
-			else{
-
+			//обрабатываем ошибки, если ошибки есть, то логируем все-все-все
+			if(models.err_handler(err, req.session.username)) return;
+			
+			if(results.length > 0){
 			//нам нужно оставить только пункты "в части касающейся" пользователя
 			//для этого перебираем выборку и просматриваем элементы массива puncts, если в элементе нет имени пользователя, то удаляем этот элемент
 				results.forEach(function(item, i, arr) {
 					var cur_puncts = item.doc_punkts;
 					cur_puncts.forEach(function(item1, i1, arr1) {
-							//console.log(item1[0]);
-							//console.log("контроллирующие->");
-							//console.log(item1[3]);
-							massiv = item1[3];
 							//используем indexOf потому-что ищем в простом массиве
 							//if(massiv.indexOf(req.session.username) == -1){
 							//используем in, потому-что ищем в Object
-							if(!(req.session.username in item1[3])){
-								//если пользователь в пунктах не найден, то сплайсим из выборки этот пункт
-								//console.log("НЕ НАШЁЛ");
+							if(!(req.session.username in item1['kontrols'])){
 								results[i].doc_punkts.splice(i1, 1);
 							}
-						
-						/*else
-							console.log("НАШЁЛ");*/
 					});
 					lengths_of_punkts.push(results[i].doc_punkts.length);
 				});
 
-				if(results.length > 0){
-					res.render('kontrol_user', { 
-						docs: results,
-						all_users_short: req.session.all_users_short,
-						all_users_long: req.session.all_users_long,
-						type_docs: config.type_of_docs,
-						username: req.session.username,
-						lengths: lengths_of_punkts
-					});
-				}
-				else
-					res.send("НЕТ ДОКУМЕНТОВ");
+				res.render('kontrol_user', { 
+					docs: results,
+					all_users_short: req.session.all_users_short,
+					all_users_long: req.session.all_users_long,
+					type_docs: config.type_of_docs,
+					username: req.session.username,
+					lengths: lengths_of_punkts
+				});
 			}
+			else res.send("НЕТ ДОКУМЕНТОВ");
 		});
 	}
 	
@@ -333,51 +301,49 @@ router.get('/:page', function(req, res, next) {
 		msg = req.session.username + ': прказываем НОВЫЕ документы в которых пользователь является ИСПОЛНИТЕЛЕМ';
 		console.log(msg.magenta.bold);
 		
-		//выбираем из базы НОВЫЕ документы в которых пользователь указан как исполнитель
-		var lengths_of_punkts = [];//здесь хранятся количество пунктов в которых указан пользователь
-		models.docs.find({'_id': {$in: req.session.new_docs_ispoln}}, function(err, results){
-			if(err){
-				msg = req.body.username + ': при попытке получения документов, в которых пользователь является исполнителем произошла ошибка:';
-				console.log(msg.bgRed.white);
-				console.log(err);
-			}
+		//ищем в базе пользователя и выбираем списоа ид НОВЫХ документов
+		models.users.findOne({'username': req.session.username}, function(err1, docs){
+			//обрабатываем ошибки, если ошибки есть, то логируем все-все-все
+			if(models.err_handler(err1, req.session.username)) return;
+			if(!docs) return;
+			var news = docs.new_docs_ispoln;
+			req.session.len_new_docs_ispoln = news.length;
+			//выбираем из базы НОВЫЕ документы в которых пользователь указан как исполнитель
+			var lengths_of_punkts = [];//здесь хранятся количество пунктов в которых указан пользователь
+			models.docs.find({'_id': {$in: news}}, function(err, results){
+				//обрабатываем ошибки, если ошибки есть, то логируем все-все-все
+				if(models.err_handler(err, req.session.username)) return;
 
-			if(!results) {
-				msg = req.body.username + ': в базе нет документов, в которых пользователь является исполнителем';
-				console.log(msg.yellow);
-				res.send('Документы не найдены...');
-			}
-			else{
+				if(results.length > 0){
+				//нам нужно оставить только пункты "в части касающейся" пользователя
+				//для этого перебираем выборку и просматриваем элементы массива puncts, если в элементе нет имени пользователя, то удаляем этот элемент
+					results.forEach(function(item, i, arr) {
+						var cur_puncts = item.doc_punkts;
+						cur_puncts.forEach(function(item1, i1, arr1) {
+							//используем in, потому-что ищем в Object
+							if(!(req.session.username in item1['ispoln']))
+								//если пользователь в пунктах не найден, то сплайсим из выборки этот пункт
+								results[i].doc_punkts.splice(i1, 1);
 
-			//нам нужно оставить только пункты "в части касающейся" пользователя
-			//для этого перебираем выборку и просматриваем элементы массива puncts, если в элементе нет имени пользователя, то удаляем этот элемент
-				results.forEach(function(item, i, arr) {
-					var cur_puncts = item.doc_punkts;
-					cur_puncts.forEach(function(item1, i1, arr1) {
-						//используем in, потому-что ищем в Object
-						if(!(req.session.username in item1[2]))
-							//если пользователь в пунктах не найден, то сплайсим из выборки этот пункт
-							results[i].doc_punkts.splice(i1, 1);
-
+						});
+						lengths_of_punkts.push(results[i].doc_punkts.length);
 					});
-					lengths_of_punkts.push(results[i].doc_punkts.length);
-				});
-				//если в массиве нет новых документов то показываем сообщение
-				if(req.session.len_new_docs_ispoln > 0){
+
 					res.render('ispoln_user', { 
 						docs: results,
 						username: req.session.username,
 						all_users_short: req.session.all_users_short,
 						all_users_long: req.session.all_users_long,
 						type_docs: config.type_of_docs,
+						num_of_new_ispoln: results.length,
 						lengths: lengths_of_punkts
 					});
 				}
-				else
-					res.send("НЕТ НОВЫХ ДОКУМЕНТОВ");
-			}
+				else res.send("НЕТ НОВЫХ ДОКУМЕНТОВ. <input type=hidden id=num_of_new_ispoln value=0>");
+			});
 		});
 	}
+	
 	
 	
 //================================================================================================
@@ -387,50 +353,82 @@ router.get('/:page', function(req, res, next) {
 		msg = req.session.username + ': прказываем НОВЫЕ документы в которых пользователь является КОНТРОЛЛИРУЩИМ';
 		console.log(msg.magenta.bold);
 		
+		//ищем в базе пользователя и выбираем списоа ид НОВЫХ документов
+		models.users.findOne({'username': req.session.username}, function(err1, docs){
+			//обрабатываем ошибки, если ошибки есть, то логируем все-все-все
+			if(models.err_handler(err1, req.session.username)) return;
+			if(!docs) return;
+			var news = docs.new_docs_kontrols;
+			req.session.len_new_docs_kontrols = news.length;
+			//выбираем из базы НОВЫЕ документы в которых пользователь указан как исполнитель
+			var lengths_of_punkts = [];//здесь хранятся количество пунктов в которых указан пользователь
+			models.docs.find({'_id': {$in: news}}, function(err, results){
+				//обрабатываем ошибки, если ошибки есть, то логируем все-все-все
+				if(models.err_handler(err, req.session.username)) return;
+
+				if(results.length > 0){
+				//нам нужно оставить только пункты "в части касающейся" пользователя
+				//для этого перебираем выборку и просматриваем элементы массива puncts, если в элементе нет имени пользователя, то удаляем этот элемент
+					results.forEach(function(item, i, arr) {
+						var cur_puncts = item.doc_punkts;
+						cur_puncts.forEach(function(item1, i1, arr1) {
+							//используем in, потому-что ищем в Object
+							if(!(req.session.username in item1['kontrols']))
+								//если пользователь в пунктах не найден, то сплайсим из выборки этот пункт
+								results[i].doc_punkts.splice(i1, 1);
+
+						});
+						lengths_of_punkts.push(results[i].doc_punkts.length);
+					});
+
+					res.render('kontrol_user', { 
+						docs: results,
+						username: req.session.username,
+						all_users_short: req.session.all_users_short,
+						all_users_long: req.session.all_users_long,
+						type_docs: config.type_of_docs,
+						num_of_new_kontrol: results.length,
+						lengths: lengths_of_punkts
+					});
+				}
+				else res.send("НЕТ НОВЫХ ДОКУМЕНТОВ. <input type=hidden id=num_of_new_kontrol value=0>");
+			});
+		});
+		
+		
+		/*
 		//выбираем из базы НОВЫЕ документы в которых пользователь указан как контроллирующий
 		var lengths_of_punkts = [];//здесь хранятся количество пунктов в которых указан пользователь
 		models.docs.find({'_id': {$in: req.session.new_docs_kontrols}}, function(err, results){
-			if(err){
-				msg = req.body.username + ': при попытке получения документов, в которых пользователь является исполнителем произошла ошибка:';
-				console.log(msg.bgRed.white);
-				console.log(err);
-			}
-
-			if(!results) {
-				msg = req.body.username + ': в базе нет документов, в которых пользователь является исполнителем';
-				console.log(msg.yellow);
-				res.send('Документы не найдены...');
-			}
-			else{
-
+			//обрабатываем ошибки, если ошибки есть, то логируем все-все-все
+			if(models.err_handler(err, req.session.username)) return;
+			
+			if(results.length > 0){
 			//нам нужно оставить только пункты "в части касающейся" пользователя
 			//для этого перебираем выборку и просматриваем элементы массива puncts, если в элементе нет имени пользователя, то удаляем этот элемент
 				results.forEach(function(item, i, arr) {
 					var cur_puncts = item.doc_punkts;
 					cur_puncts.forEach(function(item1, i1, arr1) {
 						//используем in, потому-что ищем в Object
-						if(!(req.session.username in item1[3]))
+						if(!(req.session.username in item1['kontrols']))
 							//если пользователь в пунктах не найден, то сплайсим из выборки этот пункт
 							results[i].doc_punkts.splice(i1, 1);
-
 					});
 					lengths_of_punkts.push(results[i].doc_punkts.length);
 				});
 				//если в массиве нет новых документов то показываем сообщение
-				if(req.session.len_new_docs_kontrols > 0){
-					res.render('kontrol_user', { 
-						docs: results,
-						all_users_short: req.session.all_users_short,
-						all_users_long: req.session.all_users_long,
-						type_docs: config.type_of_docs,
-						username: req.session.username,
-						lengths: lengths_of_punkts
-					});
-				}
-				else
-					res.send("НЕТ НОВЫХ ДОКУМЕНТОВ");
+
+				res.render('kontrol_user', { 
+					docs: results,
+					all_users_short: req.session.all_users_short,
+					all_users_long: req.session.all_users_long,
+					type_docs: config.type_of_docs,
+					username: req.session.username,
+					lengths: lengths_of_punkts
+				});
 			}
-		});
+			else res.send("НЕТ НОВЫХ ДОКУМЕНТОВ");
+		});*/
 	}
 });
 

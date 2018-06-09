@@ -42,7 +42,7 @@ router.post('/', upload_file_doc, function (req, res) {
 
 		//сначала проверка файла и полей, если всё нормально, то пишем файл и записываемв базу
 		if(file_doc_valid(req.file)){
-			
+			/*
 			//собираем массив с пунктами
 			var punkts=[];//массив со всеми пунктами, который будем добавлять в базу
 			var pushed=[];//массив в котором хранится один пункт
@@ -93,11 +93,11 @@ router.post('/', upload_file_doc, function (req, res) {
 
 					punkts.push(pushed);
 				}
-			}
+			}*/
 			
-			/*
+			
 			//собираем АССОЦИАТИВНЫЙ массив с пунктами
-			var punkts={};//массив со всеми пунктами, который будем добавлять в базу
+			var punkts=[];//массив со всеми пунктами, который будем добавлять в базу
 			var ispoln=[];//массив с исполлнителями одного пункта
 			var kontrols=[];//массив с контроллирующими одного пункта
 			var status = {};//массив с именем исполнителя и полями исполнено и ознакомлен
@@ -136,10 +136,13 @@ router.post('/', upload_file_doc, function (req, res) {
 				kontrols = kontrols.concat(req.body[name]);//это массив в котором все контроллирующие из всех пунктов
 				
 				
-				punkts[number_punkt] = {'date': date_to_base,
-										'ispoln': isp_with_status,
-										'kontrols': cont_with_status};
-			}*/
+				punkts.push({
+					'num_punkt':number_punkt,
+					'date': date_to_base,
+					'ispoln': isp_with_status,
+					'kontrols': cont_with_status
+				});
+			}
 			
 			
 			
@@ -147,8 +150,8 @@ router.post('/', upload_file_doc, function (req, res) {
 			
 			
 			
-			//console.log('Пункты->');
-			//console.log(punkts);
+			console.log('Пункты->');
+			console.log(punkts);
 			var old_name = req.file.path;
 			var new_name = 'public/files/' + filename_doc;
 			
@@ -181,36 +184,26 @@ router.post('/', upload_file_doc, function (req, res) {
 					//var ispoln = add_doc.doc_punkts[2];
 					msg = 'документ: ' + filename_doc + ' добавлен! id-->' + this_doc_id;
 					console.log(msg.red);
+					
+					
 					//оставляем в массивах контроллирующих и исполнителей только уникальные значения
 					ispoln = unique_item_in_arr(ispoln);
 					kontrols = unique_item_in_arr(kontrols);
 					
 					//пишем исполнителям сведения об этом документе
-					models.users.update({"username": {$in: ispoln}}, {$push: {docs_ispoln: this_doc_id, new_docs_ispoln: this_doc_id}}, {multi: true}, function(err, doc){
-							if(err) {
-								var msg = req.session.username + ' --> ВНИМАНИЕ! ошибки базы данных:'
-								console.log(msg.bgRed.white);
-								console.log(err);
-							}
-							else {
-								var msg = req.session.username + ' --> Норма. Запросы в базу прошли. Ответ базы:'
-								console.log(msg.green);
-								console.log(doc);
-							}
+					models.users.update({"username": {$in: ispoln}}, 
+										{$push: {docs_ispoln: this_doc_id, new_docs_ispoln: this_doc_id}}, 
+										{multi: true}, 
+										function(err, doc){
+						if(models.err_handler(err, req.session.username)) return;
 					});
 					
 					//пишем контроллирующим сведения об этом документе
-					models.users.update({"username": {$in: kontrols}}, {$push: {docs_kontrols: this_doc_id, new_docs_kontrols: this_doc_id}}, {multi: true}, function(err, doc){
-							if(err) {
-								var msg = req.session.username + ' --> ВНИМАНИЕ! ошибки базы данных:'
-								console.log(msg.bgRed.white);
-								console.log(err);
-							}
-							else {
-								var msg = req.session.username + ' --> Норма. Запросы в базу прошли. Ответ базы:'
-								console.log(msg.green);
-								console.log(doc);
-							}
+					models.users.update({"username": {$in: kontrols}}, 
+										{$push: {docs_kontrols: this_doc_id, new_docs_kontrols: this_doc_id}}, 
+										{multi: true}, 
+										function(err, doc){
+						if(models.err_handler(err, req.session.username)) return;
 					});					
 
 					return res.send(msg);

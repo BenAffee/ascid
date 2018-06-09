@@ -1,5 +1,6 @@
 //p= docs
 //p= lengths
+input#num_of_new_kontrol(type='hidden', name='num_of_new_kontrol', value= num_of_new_kontrol)
 p
 table.table.table-bordered.noe-table
 	thead
@@ -44,27 +45,27 @@ table.table.table-bordered.noe-table
 				td(rowspan=lengths[index], style="font-size: 1.2rem;")
 					input(type='hidden', id='username_' + val._id, name='username_' + val._id, value= username)
 
-					a.ref_download.m-r-10(href='files/' + val.filename download='' title='Скачать' name='d_' + val._id)
+					a.ref_download_kontrol.m-r-10(href='files/' + val.filename download='' title='Скачать' name='d_' + val._id)
 						i.mdi.mdi-download.text-success
-					a.ref_download(href='files/' + val.filename title='Просмотреть' name='e_' + val._id)
+					a.ref_download_kontrol(href='files/' + val.filename title='Просмотреть' name='e_' + val._id)
 						i.mdi.mdi-eye.text-success
 
 				
 				//Пункт
 				td.text-center
-					= val.doc_punkts[0][0]
+					= val.doc_punkts[0]['num_punkt']
 				
 				//Дата пункта
 				td
-					= val.doc_punkts[0][1]
-				
+					= val.doc_punkts[0]['date']
+			
 				//Исполнители
 				td
-					each val2, index2 in val.doc_punkts[0][2]
+					each val2, index2 in val.doc_punkts[0]['ispoln']
 						if(val2['oznakomlen'] == true && val2['ispolneno'] == false)
-							span.badge.badge-warning.m-r-5(id='badge_' + val._id + '-' + val.doc_punkts[0][0] + '-' + index2 + '-' + username title= all_users_long[index2] + ': ознакомлен')
+							span.badge.badge-warning.m-r-5(id='badge_' + val._id + '-' + val.doc_punkts[0]['num_punkt'] + '-' + index2 + '-' + username title= all_users_long[index2] + ': ознакомлен')
 								= all_users_short[index2]
-								a.ref_ispolneno.m-l-10(href='#' id=val._id + '-' + val.doc_punkts[0][0] + '-' + index2 + '-' + username title='Исполнено')
+								a.ref_ispolneno.m-l-10(href='#' id=val._id + '-' + val.doc_punkts[0]['num_punkt'] + '-' + index2 + '-' + username title='Исполнено')
 									i.mdi.mdi-check
 								
 						if(val2['oznakomlen'] == false && val2['ispolneno'] == false)
@@ -78,32 +79,31 @@ table.table.table-bordered.noe-table
 				//Статус
 				td.text-center
 						//= val.doc_punkts[0][2][username]['oznakomlen']
-						if(val.doc_punkts[0][3][username]['oznakomlen'] == true)
+						if(val.doc_punkts[0]['kontrols'][username]['oznakomlen'] == true)
 							span.badge.badge-success.m-r-5
 								= 'ознакомлен'
 						else
 							span.badge.badge-danger.m-r-5
 								= 'не ознакомлен'
 
-
 			//здесь дорисовываем ещё строки, по количеству пунктов
 			- for(var i = 1; i < lengths[index]; i++)
 				tr
 					//Пункт
 					td.text-center
-						= val.doc_punkts[i][0]
+						= val.doc_punkts[i]['num_punkt']
 					
 					//Дата пункта
 					td
-						= val.doc_punkts[i][1]
+						= val.doc_punkts[i]['date']
 					
 					//Исполнители
 					td
-						each val2, index2 in val.doc_punkts[i][2]
+						each val2, index2 in val.doc_punkts[i]['ispoln']
 							if(val2['oznakomlen'] == true && val2['ispolneno'] == false)
-								span.badge.badge-warning.m-r-5(id='badge_' + val._id + '-' + val.doc_punkts[i][0] + '-' + index2 + '-' + username title= all_users_long[index2] + ': ознакомлен')
+								span.badge.badge-warning.m-r-5(id='badge_' + val._id + '-' + val.doc_punkts[i]['num_punkt'] + '-' + index2 + '-' + username title= all_users_long[index2] + ': ознакомлен')
 									= all_users_short[index2]
-									a.ref_ispolneno.m-l-10(href='#' id=val._id + '-' + val.doc_punkts[i][0] + '-' + index2 + '-' + username title='Исполнено')
+									a.ref_ispolneno.m-l-10(href='#' id=val._id + '-' + val.doc_punkts[i]['num_punkt'] + '-' + index2 + '-' + username title='Исполнено')
 										i.mdi.mdi-check
 
 							if(val2['oznakomlen'] == false && val2['ispolneno'] == false)
@@ -117,7 +117,7 @@ table.table.table-bordered.noe-table
 					//Статус
 					td.text-center
 							//= val.doc_punkts[0][2][username]['oznakomlen']
-							if(val.doc_punkts[i][3][username]['oznakomlen'] == true)
+							if(val.doc_punkts[i]['kontrols'][username]['oznakomlen'] == true)
 								span.badge.badge-success.m-r-5
 									= 'ознакомлен'
 							else

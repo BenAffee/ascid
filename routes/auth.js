@@ -17,8 +17,11 @@ var models    = require('../config/mongoose');
 var crypto = require('crypto');
 
 var msg='';
-
-//--------------------------------------------------------------------------------------------Авторизация 
+//================================================================================================
+//================================================================================================
+//-------------Авторизация===================================== 
+//================================================================================================
+//================================================================================================
 router.post('/', function (req, res) {
 
 	msg = req.session.username + ': сработал путь auth';
@@ -39,6 +42,7 @@ router.post('/', function (req, res) {
 			msg = 'при попытке авторизации пользователя >>>' + req.body.username + '<<< база вернула пустой результат';
 			console.log(msg.bgRed.white);
 			console.log(results);
+			res.send('неправильное имя пользователя/пароль');
 		}
 
 		else {
@@ -57,7 +61,7 @@ router.post('/', function (req, res) {
 					}
 					var tmp_arr_1={};
 					var tmp_arr_2={};
-					//var i =0;
+					//получаем два массива со всеми имена пользователей (сокращёнными и полными)
 					results1.forEach(function(item, i, arr) {
 						var user = item.username;
 						tmp_arr_1[user] = item.post_long;;
@@ -74,21 +78,40 @@ router.post('/', function (req, res) {
 					req.session.post_long = results.post_long;
 					req.session.docs_ispoln = results.docs_ispoln;
 					req.session.docs_kontrols = results.docs_kontrols;
-					req.session.new_docs_ispoln = results.new_docs_ispoln;
-					req.session.new_docs_kontrols = results.docs_kontrols;
+					//req.session.new_docs_ispoln = results.new_docs_ispoln;
+					//req.session.new_docs_kontrols = results.docs_kontrols;
 					req.session.len_new_docs_kontrols = results.new_docs_kontrols.length;
 					req.session.len_new_docs_ispoln = results.new_docs_ispoln.length;
 					
 					//console.log('список документов гдепользователь исполнитель:');
-					//console.log(req.session.docs_ispoln);
+					//console.log(req.body);
+					/*
+					//если установлен чекбокс "запомнить меня", то пишем куку и запись в базу со случайным ключом
+					if(req.body.checkbox_remember_me){
+						var rand_value = crypto.randomBytes(32).toString("hex");//получаем случайный ключ
+						//птшем куку
+						res.cookie('logintoken', rand_value, {
+									expires: new Date(Date.now() + 2 * 604800000),
+									path: '/'
+						});
+						//пишем в базу
+						var add_rememberme = new models.rememberme({
+							username: req.session.username,
+							value: rand_value
+						});
+						add_rememberme.save(function (err) {
+							if(models.err_handler(err, req.session.username)) return;
+						});
+					}*/
+					
 
 
 					msg = req.session.username + ': доступ разрешён';
 					console.log(msg.green);
 
-					console.log(req.session.all_users_short);
-					console.log(req.session.all_users_long);
-					res.redirect('/');
+					//console.log(req.session.all_users_short);
+					//console.log(req.session.all_users_long);
+					res.send('');
 				});
 				
 
@@ -101,7 +124,7 @@ router.post('/', function (req, res) {
 				
 				console.log(results);
 		
-				res.redirect('/');
+				res.send('неправильное имя пользователя/пароль');
 			}
 
 		} 
@@ -109,8 +132,11 @@ router.post('/', function (req, res) {
 	   
 });
 
-
-//===============================================================Регистрация нового пользователя
+//================================================================================================
+//================================================================================================
+//===================Регистрация нового пользователя============================
+//================================================================================================
+//================================================================================================
 router.post('/reg', function (req, res) {
 	
 	msg = req.session.username + ': сработал путь reg';
@@ -160,14 +186,19 @@ router.post('/reg', function (req, res) {
 		console.log(msg.bgRed.white);
 	}
 });
-
-//--------------------------------------------------------------------------------------------Выход пользователя
+//================================================================================================
+//================================================================================================
+//--------------------------------------------------Выход пользователя
+//================================================================================================
+//================================================================================================
 router.get('/logout', function(req, res, next) {
 	msg = req.session.username + ': сработал путь logout';
 	console.log(msg.magenta.bold);
 	
 	// Удалить сессию
 	if (req.session) {
+		//models.rememberme.remove({ 'username': req.session.username }, function() {});
+		//res.clearCookie('logintoken');
 		req.session.destroy(function() {});
 	}
 	res.redirect('/');

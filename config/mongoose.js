@@ -137,51 +137,77 @@ var users = mongoose.model('users', userSchema);
 
 //схема модели документа
 var docsSchema = new mongoose.Schema({
-    // Имя файла на сервере
-    filename:{
-        type:String, // тип: String
-        required:[true,'Возникли проблемы с файлом. Возможно, Вы его не выбрали.'],
-        unique:[true,'Файл с таким именем на сервере уже существует. убедитесь что Вы ранее не загружали документ с такими же реквезитами.']
-    },
-    // Тип документа
-    doc_type:{
-        type:Number, // тип String
-        required:[true,'Вы не указали тип документа!']
-    },
+	// Имя файла на сервере
+	filename:{
+		type:String, // тип: String
+		required:[true,'Возникли проблемы с файлом. Возможно, Вы его не выбрали.'],
+		unique:[true,'Файл с таким именем на сервере уже существует. убедитесь что Вы ранее не загружали документ с такими же реквезитами.']
+	},
+	// Тип документа
+	doc_type:{
+		type:Number, // тип String
+		required:[true,'Вы не указали тип документа!']
+	},
 	//Номер документа
 	doc_num:{
-        type:Number, // тип String
-        required:[true,'Вы не указали номер документа!']
-    },
+		type:Number, // тип String
+		required:[true,'Вы не указали номер документа!']
+	},
 	//Дата утвердения документа
 	doc_date:{
-        type:String, // тип String
-        required:[true,'Необходимо указать дату утвержедния документа']
-    },
-    // Имя пользователя, утвердившего документ
-    doc_ruc:{
-        type:String, // тип: String
-        required:[true,'Убедитесь, что указали руководителя']
-    },	
-    // Описание документа
-    doc_about:{
-        type:String, // тип: String
-        required:[true,'Введите краткое описание документа']
-    },		
+		type:String, // тип String
+		required:[true,'Необходимо указать дату утвержедния документа']
+	},
+	// Имя пользователя, утвердившего документ
+	doc_ruc:{
+		type:String, // тип: String
+		required:[true,'Убедитесь, что указали руководителя']
+	},	
+	// Описание документа
+	doc_about:{
+		type:String, // тип: String
+		required:[true,'Введите краткое описание документа']
+	},		
 	//дата добавления документа
 	doc_created: {
-        type: Date,
-        default: Date.now
-    },
+		type: Date,
+		default: Date.now
+	},
 	
 	//массив пунктов документа
 	doc_punkts: {
-        type: Array,
-        required:[true,'Опишите хотя бы один пункт']
-    }
+		type: Array,
+		required:[true,'Опишите хотя бы один пункт']
+	}
+
+	/*//массив пунктов документа
+	doc_punkts: [
+			{
+			num_punkt: Number,
+			date: String,
+			ispoln: [],
+			kontrols: [String]
+			}
+		]*/
 });
 
 var docs = mongoose.model('docs', docsSchema);
+/*
+//схема для кнопки Запомнить меня
+var remembermeSchema = new mongoose.Schema({
+	//имя пользователя
+	username: {
+		type: String,
+	},
+	//ключ сессии
+	value: {
+		type: String,
+	}
+});
+
+var rememberme = mongoose.model('rememberme', remembermeSchema);*/
+
+
 
 module.exports = {
     users: users,

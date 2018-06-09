@@ -1,5 +1,6 @@
 //p= docs
 //p= lengths
+input#num_of_new_ispoln(type='hidden', name='num_of_new_ispoln', value= num_of_new_ispoln)
 p
 table.table.table-bordered.noe-table
 	thead.thead-default
@@ -43,39 +44,39 @@ table.table.table-bordered.noe-table
 				//Файл
 				td(rowspan=lengths[index], style="font-size: 1.2rem;")
 					input(type='hidden', id='username_' + val._id, name='username_' + val._id, value= username)
-
-					a.ref_download.m-r-10(href='files/' + val.filename download='' title='Скачать' name='d_' + val._id)
+					//input(type='hidden', id='punkts_' + val._id, name='punkts_' + val._id + '[]', value= number_of_punkt_in_base[index])
+					a.ref_download_ispoln.m-r-10(href='files/' + val.filename download='' title='Скачать' name='d_' + val._id)
 						i.mdi.mdi-download.text-success
-					a.ref_download(href='files/' + val.filename title='Просмотреть' name='e_' + val._id)
+					a.ref_download_ispoln(href='files/' + val.filename title='Просмотреть' name='e_' + val._id)
 						i.mdi.mdi-eye.text-success
-				
+
 				//Пункт
 				td.text-center
-					= val.doc_punkts[0][0]
-				
+					= val.doc_punkts[0]['num_punkt']
+					//= 'jjjj' + number_of_punkt_in_base[0]
+
 				//Дата пункта
 				td
-					= val.doc_punkts[0][1]
-				
+					= val.doc_punkts[0]['date']
+
 				//Контроль
 				td
-					each val2, index2 in val.doc_punkts[0][3]
-						span.badge.badge-success.m-r-5(title= all_users_long[val2])
-							= all_users_short[val2]
+					each val2, index2 in val.doc_punkts[0]['kontrols']
+						span.badge.badge-success.m-r-5(title= all_users_long[index2])
+							= all_users_short[index2]
 
 				//Статус
 				td.text-center
-						//= val.doc_punkts[0][2][username]['oznakomlen']
-						if(val.doc_punkts[0][2][username]['oznakomlen'] == true && val.doc_punkts[0][2][username]['ispolneno'] == false)
+
+						if(val.doc_punkts[0]['ispoln'][username]['oznakomlen'] == true && val.doc_punkts[0]['ispoln'][username]['ispolneno'] == false)
 							span.badge.badge-warning.m-r-5
 								= 'ознакомлен'
 
-								
-						if(val.doc_punkts[0][2][username]['oznakomlen'] == false && val.doc_punkts[0][2][username]['ispolneno'] == false)
+						if(val.doc_punkts[0]['ispoln'][username]['oznakomlen'] == false && val.doc_punkts[0]['ispoln'][username]['ispolneno'] == false)
 							span.badge.badge-danger.m-r-5
 								= 'не ознакомлен'
 								
-						if((val.doc_punkts[0][2][username]['oznakomlen'] == false && val.doc_punkts[0][2][username]['ispolneno'] == true) || (val.doc_punkts[0][2][username]['oznakomlen'] == true && val.doc_punkts[0][2][username]['ispolneno'] == true))
+						if((val.doc_punkts[0]['ispoln'][username]['oznakomlen'] == false && val.doc_punkts[0]['ispoln'][username]['ispolneno'] == true) || (val.doc_punkts[0]['ispoln'][username]['oznakomlen'] == true && val.doc_punkts[0]['ispoln'][username]['ispolneno'] == true))
 							span.badge.badge-success.m-r-5
 								= 'исполнено'
 
@@ -84,29 +85,26 @@ table.table.table-bordered.noe-table
 				tr
 					//Пункт
 					td.text-center
-						= val.doc_punkts[i][0]
+						= val.doc_punkts[i]['num_punkt']
 					
 					//Дата пункта
 					td
-						= val.doc_punkts[i][1]
+						= val.doc_punkts[i]['date']
 					
 					//Контроль
 					td
-						each val2, index2 in val.doc_punkts[i][3]
-							span.badge.badge-success.m-r-5(title= all_users_long[val2])
-								= all_users_short[val2]
+						each val2, index2 in val.doc_punkts[i]['kontrols']
+							span.badge.badge-success.m-r-5(title= all_users_long[index2])
+								= all_users_short[index2]
 					//Статус
 					td.text-center
-							if(val.doc_punkts[i][2][username]['oznakomlen'] == true && val.doc_punkts[i][2][username]['ispolneno'] == false)
+							if(val.doc_punkts[i]['ispoln'][username]['oznakomlen'] == true && val.doc_punkts[i]['ispoln'][username]['ispolneno'] == false)
 								span.badge.badge-warning.m-r-5
 									= 'ознакомлен'
-
-
-							if(val.doc_punkts[i][2][username]['oznakomlen'] == false && val.doc_punkts[i][2][username]['ispolneno'] == false)
+							if(val.doc_punkts[i]['ispoln'][username]['oznakomlen'] == false && val.doc_punkts[i]['ispoln'][username]['ispolneno'] == false)
 								span.badge.badge-danger.m-r-5
 									= 'не ознакомлен'
-
-							if((val.doc_punkts[i][2][username]['oznakomlen'] == false && val.doc_punkts[i][2][username]['ispolneno'] == true) || (val.doc_punkts[i][2][username]['oznakomlen'] == true && val.doc_punkts[i][2][username]['ispolneno'] == true))
+							if((val.doc_punkts[i]['ispoln'][username]['oznakomlen'] == false && val.doc_punkts[i]['ispoln'][username]['ispolneno'] == true) || (val.doc_punkts[i]['ispoln'][username]['oznakomlen'] == true && val.doc_punkts[i]['ispoln'][username]['ispolneno'] == true))
 								span.badge.badge-success.m-r-5
 									= 'исполнено'
 .row#message1
