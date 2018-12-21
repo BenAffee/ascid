@@ -1,7 +1,9 @@
 doctype html
 html
 	head
-		meta(http-equiv='Cache-Control', content='no-cache')
+		//в среде выполнения "production" включаем режим кеширования страниц
+        if (node_environment != 'production')
+			meta(http-equiv='Cache-Control', content='no-cache')
 		meta(charset='utf-8')
 		meta(name='viewport', content='width=device-width,initial-scale=1')
 		meta(name='description', content='Автоматизированная система контроля исполнения документов')

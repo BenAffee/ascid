@@ -1,7 +1,7 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
+//var logger = require('morgan');//расширенное логирование запросов
 
 var redis   = require('redis');
 var session = require('express-session');
@@ -41,8 +41,8 @@ var rand_hash = crypto.randomBytes(32).toString("hex"); //случайный х�
 
 app.use(session({
     secret: rand_hash,
-	cookie: { maxAge: 24*60*60*1000},
-    store: new redisStore({ host: config.redis.url, port: 6379, client: client,ttl :  260}),
+	cookie: { expires: new Date(Date.now() + 86400000)},
+    store: new redisStore({ host: config.redis.url, port: 6379, client: client}),
     saveUninitialized: false,
 	
     resave: false
@@ -56,7 +56,7 @@ app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+//app.use(logger('dev'));//расширенное логирование запросов
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

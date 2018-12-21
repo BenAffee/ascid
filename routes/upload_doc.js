@@ -23,7 +23,7 @@ var models    = require('../config/mongoose');
 
 ////работает...
 var multer  = require('multer');
-var upload_file_doc_dest = './public/files/';
+var upload_file_doc_dest = '../public/files/';
 var upload_file_doc = multer({ dest: upload_file_doc_dest }).single('file_doc');
 
 
@@ -42,58 +42,7 @@ router.post('/', upload_file_doc, function (req, res) {
 
 		//сначала проверка файла и полей, если всё нормально, то пишем файл и записываемв базу
 		if(file_doc_valid(req.file)){
-			/*
-			//собираем массив с пунктами
-			var punkts=[];//массив со всеми пунктами, который будем добавлять в базу
-			var pushed=[];//массив в котором хранится один пункт
-			var ispoln=[];//массив с исполлнителями одного пункта
-			var kontrols=[];//массив с контроллирующими одного пункта
-			//var push1 = {};//массив с именем исполнителя и полями исполнено и ознакомлен
-			
-			//начинаем перибирать значения... старт с 0, конечное знаение ханится в punkts_count
-			var i;
-			for (i = 0; i <= req.body.punkts_count; i++) {
-				var name = 'num_punkt_' + i;
-				if(req.body[name]){
-					var pushed=[];//массив в котором хранится один пункт
 
-					console.log(req.body[name]);
-
-					//добавляем в массив номер пункта
-					pushed.push(req.body[name]);
-
-					//добавляем в массив дату исполнения
-					name = 'date_punkt_' + i;
-					var str = req.body[name];
-					var date_to_base = str[8] + str[9] + '.' + str[5] + str[6] + '.' + str[0] + str[1] + str[2] + str[3] + ' г.'
-					pushed.push(date_to_base);
-
-					//добавляем в массив исполнителей
-					name = 'ispolniteli_' + i;
-					
-					//распарсим массив и добавим поля исполнено и ознакомлен
-					var massiv = req.body[name];
-					var push1={};//массив с именем исполнителя и полями исполнено и ознакомлен
-					massiv.forEach(function(item, i, arr) {
-						push1[item] = {'ispolneno':false, 'oznakomlen':false};
-					});
-					pushed.push(push1);
-					ispoln = ispoln.concat(req.body[name]);//это массив в котором все исполнители из всех пунктов
-
-					//добавляем в массив контроллирующих
-					name = 'controllers_' + i;
-					//распарсим массив и добавим поле ознакомлен
-					massiv = req.body[name];
-					push1={};
-					massiv.forEach(function(item, i, arr) {
-						push1[item] = {'oznakomlen':false};
-					});
-					pushed.push(push1);
-					kontrols = kontrols.concat(req.body[name]);//это массив в котором все контроллирующие из всех пунктов
-
-					punkts.push(pushed);
-				}
-			}*/
 			
 			
 			//собираем АССОЦИАТИВНЫЙ массив с пунктами
@@ -143,17 +92,12 @@ router.post('/', upload_file_doc, function (req, res) {
 					'kontrols': cont_with_status
 				});
 			}
-			
-			
-			
-			
-			
-			
+
 			
 			console.log('Пункты->');
 			console.log(punkts);
 			var old_name = req.file.path;
-			var new_name = 'public/files/' + filename_doc;
+			var new_name = upload_file_doc_dest + filename_doc;
 			
 			fs.rename(
 				old_name,
@@ -253,6 +197,7 @@ router.post('/', upload_file_doc, function (req, res) {
 });
 
 
+
 //функция валидации файла
 var file_doc_valid = function(file){
 	if (file.mimetype == 'application/pdf') {
@@ -285,9 +230,6 @@ var unique_item_in_arr = function(arr){
 	}
 	return Object.keys(obj); // или собрать ключи перебором для IE8-
 }
-
-
-
 
 
 module.exports = router;

@@ -11,6 +11,7 @@ var models = require('../config/mongoose');
 var crypto = require('crypto');
 var config = require('../config/index');
 
+
 var multer  = require('multer');
 
 //работает...
@@ -38,6 +39,8 @@ router.get('/', function(req, res, next) {
 		username: req.session.username,//отдаём в шаблон ИМЯ ПОЛЬЗОВАТЕЛЯ
 		isAdministrator: req.session.isAdministrator,//отдаём в шаблон СТАТУСЫ ПОЛЬЗОВАТЕЛЯ
 		isModerator: req.session.isModerator,
+		node_environment: process.env.NODE_ENV,//отправляем состояние среды исполнения
+						// чтобы включить кеширование страниц на стороне пользователя в режиме продакшн
 		post_short: req.session.post_short,//отдаём в шаблон СИСОК ИМЁН ПОЛЬЗОВАЕЛЕЙ
 		post_long: req.session.post_long,
 		len_new_docs_ispoln: req.session.len_new_docs_ispoln,//отдаём в шаблон количество записей в поле НОВЫЕ
