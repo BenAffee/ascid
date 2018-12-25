@@ -2,102 +2,106 @@
 //основное окно
 //=====================================================
 .content-page
-	// Start content
-	.content
-		.container-fluid
-			.row#main_content.col-12
-				= node_environment
-				#accordion.m-b-20(role='tablist', aria-multiselectable='true')
-					.card
-						#headingOne.card-header(role='tab')
-							h5.mb-0.mt-0.font-16
-								a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseOne', aria-expanded='false', aria-controls='collapseOne')
-									| Таблица тестовых имён пользователей
-						#collapseOne.collapse(role='tabpanel', aria-labelledby='headingOne', style='')
-							.card-body
-								table.table.table-bordered
-									thead
-										tr
-											th UserName
-											th Наименование должности
-											th Аббревиатура должности
-									tbody
-										tr
-											td admin
-											td Администратор
-											td Админ
-										tr
-											td moder
-											td Модератор
-											td модер
+    // Start content
+    .content
+        .container-fluid
+            .row#main_content.col-12
+                = node_environment
+                #accordion.m-b-20(role='tablist', aria-multiselectable='true')
+                    .card
+                        #headingOne.card-header(role='tab')
+                            h5.mb-0.mt-0.font-16
+                                a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseOne', aria-expanded='false', aria-controls='collapseOne')
+                                    | Таблица тестовых имён пользователей
+                        #collapseOne.collapse(role='tabpanel', aria-labelledby='headingOne', style='')
+                            .card-body
+                                table.table.table-bordered
+                                    thead
+                                        tr
+                                            th UserName
+                                            th Наименование должности
+                                            th Аббревиатура должности
+                                    tbody
+                                        tr
+                                            td admin
+                                            td Администратор
+                                            td Админ
+                                        tr
+                                            td moder
+                                            td Модератор
+                                            td модер
 
-										tr
-											td N_A
-											td Начальник академии
-											td НА
+                                        tr
+                                            td N_A
+                                            td Начальник академии
+                                            td НА
 
-										tr
-											td ZNA
-											td Заместитель начальника академии
-											td ЗНА
+                                        tr
+                                            td ZNA
+                                            td Заместитель начальника академии
+                                            td ЗНА
 
-										tr
-											td ZNA_UNR
-											td Заместитель начальника академии по учебной и научной работе
-											td ЗНА-УНР
+                                        tr
+                                            td ZNA_UNR
+                                            td Заместитель начальника академии по учебной и научной работе
+                                            td ЗНА-УНР
 
-										tr
-											td ZNA_RLS
-											td Заместитель начальника академии по работе с личным составом
-											td ЗНА-РЛС
+                                        tr
+                                            td ZNA_RLS
+                                            td Заместитель начальника академии по работе с личным составом
+                                            td ЗНА-РЛС
 
-										tr
-											td NF_1
-											td Начальник 1 факультета
-											td НФ-1
+                                        tr
+                                            td NF_1
+                                            td Начальник 1 факультета
+                                            td НФ-1
 
-										tr
-											td NF_2
-											td Начальник 2 факультета
-											td НФ-2
+                                        tr
+                                            td NF_2
+                                            td Начальник 2 факультета
+                                            td НФ-2
 
-										tr
-											td NF_3
-											td Начальник 3 факультета
-											td НФ-3
+                                        tr
+                                            td NF_3
+                                            td Начальник 3 факультета
+                                            td НФ-3
 
-										tr
-											td OAK_101
-											td Начальник 101 кафедры
-											td НОАК-101
+                                        tr
+                                            td OAK_101
+                                            td Начальник 101 кафедры
+                                            td НОАК-101
 
-										tr
-											td OAK_102
-											td Начальник 102 кафедры
-											td НОАК-102
+                                        tr
+                                            td OAK_102
+                                            td Начальник 102 кафедры
+                                            td НОАК-102
 
-										tr
-											td OAK_103
-											td Начальник 103 кафедры
-											td НОАК-103
+                                        tr
+                                            td OAK_103
+                                            td Начальник 103 кафедры
+                                            td НОАК-103
 
 
-										tr
-											td NUMO
-											td Начальник учебно-методического отдела
-											td НУМО
+                                        tr
+                                            td NUMO
+                                            td Начальник учебно-методического отдела
+                                            td НУМО
 
-										tr
-											td NONR
-											td Начальник отдела (организации научной работы и подготовки научно-педагогических кадров)	
-											td НОНР								
-					
-					p
-					.card
-						#headingTwo.card-header(role='tab')
-							h5.mb-0.mt-0.font-16
-								a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
-									| Использованное программное обеспечение
-						#collapseTwo.collapse(role='tabpanel', aria-labelledby='headingTwo', style='')
-							.card-body
-								| Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                        tr
+                                            td NONR
+                                            td Начальник отдела (организации научной работы и подготовки научно-педагогических кадров)
+                                            td НОНР
+
+                    p
+                    .card
+                        #headingTwo.card-header(role='tab')
+                            h5.mb-0.mt-0.font-16
+                                a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
+                                    | Использованное программное обеспечение
+                        #collapseTwo.collapse(role='tabpanel', aria-labelledby='headingTwo', style='')
+                            .card-body
+                                p Node.JS 8.10.0
+                                p noSQL СУБД MongoDB 3.6.3
+                                p ORM Mongoose 5.0.11
+                                p inMemory СУБД Redis 4.0.9
+                                p IDE WebStorm 2018.2.6

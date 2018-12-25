@@ -23,8 +23,8 @@ var models    = require('../config/mongoose');
 
 ////работает...
 var multer  = require('multer');
-var upload_file_doc_dest = '../public/files/';
-var upload_file_doc = multer({ dest: upload_file_doc_dest }).single('file_doc');
+//var upload_file_doc_dest = '../public/files/';
+var upload_file_doc = multer({ dest: config.path_to_files }).single('file_doc');
 
 
 
@@ -97,7 +97,7 @@ router.post('/', upload_file_doc, function (req, res) {
 			console.log('Пункты->');
 			console.log(punkts);
 			var old_name = req.file.path;
-			var new_name = upload_file_doc_dest + filename_doc;
+			var new_name = config.path_to_files + filename_doc;
 			
 			fs.rename(
 				old_name,

@@ -28,6 +28,7 @@ var users = require('./routes/users');
 var auth = require('./routes/auth');
 var control = require('./routes/control');
 var upload_doc = require('./routes/upload_doc');
+var user_settings = require('./routes/user_settings');
 
 var app = express();
 
@@ -76,6 +77,7 @@ app.use('/users', users);
 app.use('/auth', auth);
 app.use('/control', control);
 app.use('/upload_doc', upload_doc);
+app.use('/user_settings', user_settings);
 
 /*req.session.test='test';
 if (req.session.test=='test') console.log('сессии запущены'.bgGreen.white);
