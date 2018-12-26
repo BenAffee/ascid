@@ -30,7 +30,7 @@
 						.dropdown-menu(x-placement='bottom-start', style='position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;')
 							- if (isAdministrator)
 								a.dropdown-item.control_href(href='1') админ-панель
-							a.dropdown-item(href='/') Сменить пароль
+							a.dropdown-item.control_href(href='/get_form_set_passw') Сменить пароль
 							a.dropdown-item(href='/auth/logout') Выйти
 						
 				- else

@@ -1,0 +1,25 @@
+form.form-horizontal.m-t-20(id='set_passw', name='set_passw', action='/user_settings/set_passw', method='post')
+    .form-group.row
+        .col-12
+            .input-group
+                span.input-group-addon
+                    i.mdi.mdi-key
+                input.form-control.input_set_passw(type='password', required='', placeholder='Старый пароль', id='old_password', name='old_password')
+
+    .form-group.row
+        .col-12
+            .input-group
+                span.input-group-addon
+                    i.mdi.mdi-key
+                input.form-control.input_set_passw(type='password', required='', placeholder='Новый пароль', id='new_password1', name='new_password1')
+
+    .form-group.row
+        .col-12
+            .input-group
+                span.input-group-addon
+                    i.mdi.mdi-key
+                input.form-control.input_set_passw(type='password', required='', placeholder='Новый пароль ещё раз', id='new_password2', name='new_password2')
+    .col-6.m-0.p-0.text-right
+            button#set_passw_but.btn.btn-primary.btn-custom.w-md.waves-effect.waves-light(type='button' disabled) Сменить пароль
+
+    #reg_message_set_passwd.text-danger не все поля заполнены, либо пароли не совпадают

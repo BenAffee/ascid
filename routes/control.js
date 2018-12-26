@@ -23,6 +23,12 @@ var moder_users=[];
 var moder_users_all=[];
 
 
+//Открываем страничку смены пароля
+router.get('/get_form_set_passw', function(req, res, next) {
+    res.render('set_passw', {});
+});
+
+
 router.get('/:page', function(req, res, next) {
 	var control = req.params.page;	
 //--------------------------------------------	
