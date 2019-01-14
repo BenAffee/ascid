@@ -8,18 +8,11 @@ var mongoose = require('mongoose');
 var models = require('../config/mongoose');
 
 
-var crypto = require('crypto');
+//var crypto = require('crypto');
 var config = require('../config/index');
 
 
-var multer  = require('multer');
-
-//работает...
-var upload_file_doc_dest = './public/files/';
-var upload_file_doc = multer({ dest: upload_file_doc_dest }).single('file_doc');
-
-//var flow = require('nimble');//для последовательного выполнения операций
-
+var noe_functions = require('../config/noe_functions');
 var msg='';
 
 var moder_users=[];
@@ -29,10 +22,6 @@ var moder_users_all=[];
 
 //--------------------------------------------------------------------------------------------GET home page.
 router.get('/', function(req, res, next) {
-
-	
-	
-	
 	
 	res.render('index', { 
 		//отсюда то, что по умолчанию
@@ -183,6 +172,103 @@ router.post('/ispolneno', function(req, res) {
 		console.log(msg.bgRed.white);
 	}
 	
+
+});
+
+
+//================================================================================================
+//================================================================================================
+//----УДАЛЯЕМ ДОКУМЕНТ
+//================================================================================================
+//================================================================================================
+router.post('/delete_doc', function(req, res) {
+	if (req.session.isModerator){
+		
+			new Promise (function (resolve, reject){
+                models.docs.findOne({_id: req.body.id}, function(err, results){
+                    if(err) console.log(err);
+
+                    if(!results) {
+                        msg = 'при попытке поиска документа >>>' + req.body.id + '<<< для удаления,  база вернула пустой результат';
+                        console.log(msg.bgRed.white);
+                        console.log(results);
+                        res.send('ошибка поиска документа для удаления');
+                    }
+
+                    else {
+                        //если документ нашёлся,
+                        //то резолвим дальше по цепочке список пользователей в которых этот документ указан для исполнения или контроля
+                        //и имя файла для удаления
+
+                        //сначала выберем все пункты из документа...
+                        var punkts=results.doc_punkts;
+                        var tmp=[];
+
+                        //затем выберем все имена пользователей, которые указаны в этих пунктах
+                        punkts.forEach(function(item, i, arr) {
+                            //сначала исполнители...
+                            var ispoln = item.ispoln;
+                            for (var key in ispoln){
+                                tmp.push(key);
+                            }
+
+                            //...затем контроллирующие
+                            var kontrols = item.kontrols;
+                            for (var key in kontrols){
+                                tmp.push(key);
+                            }
+                        });
+                        //оставляем только уникальные значения в массиве
+                        tmp = noe_functions.unique_item_in_arr(tmp);
+
+                        //и удаляем сам файл
+                        noe_functions.file_doc_delete(config.path_to_files + results.filename);
+
+                        punkts = tmp;
+                        resolve (punkts);
+                     }
+			    })
+            })
+
+			.then((punkts) => {
+					console.log(punkts);
+                    console.log(req.body.id);
+					let ok;
+					//проходим по всем пользователям указанным в документе и удаляем id документа
+                    models.users.update({"username": {$in: punkts}},
+                        {$pull: {"docs_kontrols": mongoose.Types.ObjectId(req.body.id),
+                                "new_docs_kontrols": mongoose.Types.ObjectId(req.body.id),
+                                "docs_ispoln": mongoose.Types.ObjectId(req.body.id),
+                                "new_docs_ispoln": mongoose.Types.ObjectId(req.body.id)}},
+                        {multi: true},
+                        function(err){
+                            if(models.err_handler(err, req.session.username)) return ok;
+                    });
+				})
+		
+			.then((ok) => {
+					let ok1;
+					models.docs.remove({ _id: req.body.id }, function(err) {
+						if (!err) {
+								console.log('запись ' + req.body.id + ' успешно удалена из базы')
+						}
+						else {
+								console.log('ошибка удаления записи ' + req.body.id + ' из базы')
+						}
+						return ok1
+					});
+				})
+
+			.then((ok1) => {
+				//после того как удалили документ из базы и сам файл, снова показывем страницу со всеми документами
+				res.redirect('/control/3');
+				})
+	}
+	
+	else{
+		msg = req.session.username + ': попытка удаления документа НЕ модератором!';
+		console.log(msg.magenta.bold);
+	}
 
 });
 

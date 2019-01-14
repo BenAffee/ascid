@@ -33,7 +33,7 @@ router.post('/set_passw', function(req, res) {
         }
 
         //ищем пользователя в базе
-        models.users.findOne({username: req.body.username}, function(err, results){
+        models.users.findOne({username: req.session.username}, function(err, results){
             if(err) console.log(err);
 
             if(!results) {
@@ -45,96 +45,61 @@ router.post('/set_passw', function(req, res) {
 
             else {
                 //шифруем полученный из формы старый пароль
-                var current_hash = crypto.pbkdf2Sync(req.body.old_password, results.salt, 10000, 512, 'sha512').toString('hex')
+                var current_hash = crypto.pbkdf2Sync(req.body.old_password, results.salt, 10000, 512, 'sha512').toString('hex');
                 //если введённый старый пароль совпадает с тем что в базе, то продолжаем...
                 if(current_hash === results.hashedPassword){
-                    //если новые пароли совпадают, то шифруем пароль
-                }
+                    //если новые пароли совпадают, то шифруем новый пароль и пишем его в базу
+                    if(req.body.new_password1 === req.body.new_password2) {
+                        current_hash = crypto.pbkdf2Sync(req.body.new_password1, results.salt, 10000, 512, 'sha512').toString('hex');
 
+                        //пишем контроллирующим сведения об этом документе
+                        models.users.update({"username": req.session.username},
+                            {"hashedPassword": current_hash},
+                            {multi: true},
+                            function (err, doc) {
+                                if (models.err_handler(err, req.session.username)) {
+                                    res.send('ошибки базы при изменеини пароля');
+                                    return;
+                                }
+                                else{
+                                    res.send('пароль успешно изменён');
+                                }
+                            });
 
-
-                if(results.username == req.body.username && results.hashedPassword == current_hash){
-                    //разу получаем из базы список пользователей - он нам постоянно будет нужен
-
-                    models.users.find(function(err, results1){
-                        if(err){
-                            msg = req.body.username + ': при попытке получения списка пользователей из базы, произошла ошибка';
-                            console.log(msg.bgRed.white);
-                            console.log(err);
-                            return;
-                        }
-                        var tmp_arr_1={};
-                        var tmp_arr_2={};
-                        //получаем два массива со всеми имена пользователей (сокращёнными и полными)
-                        results1.forEach(function(item, i, arr) {
-                            var user = item.username;
-                            tmp_arr_1[user] = item.post_long;;
-                            tmp_arr_2[user] = item.post_short;
+                        /*var set_new_pass = new models.users({
+                            hashedPassword: current_hash
                         });
 
-                        req.session.all_users_short = tmp_arr_2;
-                        req.session.all_users_long = tmp_arr_1;
-                        //пишем в сессию записи из базы
-                        req.session.username = results.username;
-                        req.session.isAdministrator = results.isAdministrator;
-                        req.session.isModerator = results.isModerator;
-                        req.session.post_short = results.post_short;
-                        req.session.post_long = results.post_long;
-                        req.session.docs_ispoln = results.docs_ispoln;
-                        req.session.docs_kontrols = results.docs_kontrols;
-                        //req.session.new_docs_ispoln = results.new_docs_ispoln;
-                        //req.session.new_docs_kontrols = results.docs_kontrols;
-                        req.session.len_new_docs_kontrols = results.new_docs_kontrols.length;
-                        req.session.len_new_docs_ispoln = results.new_docs_ispoln.length;
+                        set_new_pass.save(function (err) {
+                            if (!err) {
+                                return res.send('Пароль изменён!');
+                            }
 
-                        //console.log('список документов гдепользователь исполнитель:');
-                        //console.log(req.body);
-                        /*
-                        //если установлен чекбокс "запомнить меня", то пишем куку и запись в базу со случайным ключом
-                        if(req.body.checkbox_remember_me){
-                            var rand_value = crypto.randomBytes(32).toString("hex");//получаем случайный ключ
-                            //птшем куку
-                            res.cookie('logintoken', rand_value, {
-                                        expires: new Date(Date.now() + 2 * 604800000),
-                                        path: '/'
-                            });
-                            //пишем в базу
-                            var add_rememberme = new models.rememberme({
-                                username: req.session.username,
-                                value: rand_value
-                            });
-                            add_rememberme.save(function (err) {
-                                if(models.err_handler(err, req.session.username)) return;
-                            });
-                        }*/
+                            else {
+                                //console.log(err);
+                                if (err.name == 'ValidationError') {
+                                    //отдаём пользователю все ошибки валидации от монгуса
+                                    console.log('ошибка изменения пароля'.bgRed.white);
+                                    //res.statusCode = 400;
+                                    res.send(err.message);
+                                }
 
-
-
-                        msg = req.session.username + ': доступ разрешён';
-                        console.log(msg.green);
-
-                        //console.log(req.session.all_users_short);
-                        //console.log(req.session.all_users_long);
-                        res.send('');
-                    });
-
-
-                }
-
-                else{
-
-                    msg = req.body.username + ': доступ запрещён';
-                    console.log(msg.red);
-
-                    console.log(results);
-
-                    res.send('неправильное имя пользователя/пароль');
+                                else {
+                                    msg = 'Статус 500 при изменении пароля:' + req.body;
+                                    res.send(msg);
+                                    console.log(msg.bgRed.white);
+                                }
+                            }
+                        })*/
+                    }
                 }
 
             }
         });
-
-        res.send("получил форму");
+        //res.send("получил форму");
+    }
+    else {
+        res.send('ошибка аутентификации при смене пароля');
     }
 });
 

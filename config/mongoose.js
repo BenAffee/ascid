@@ -5,12 +5,11 @@ var crypto = require('crypto');
 var msg = 'версия драйвера mongoose: '+ mongoose.version;
 console.log(msg.bgGreen.white);
 
-var msg = 'среда выполнения: '+ process.env.NODE_ENV;
-console.log(msg.bgGreen.white);
-
 //подключаем файл с конфигом
 var config = require('./index');
 
+var msg = 'среда выполнения: '+ config.node_env_mode;
+console.log(msg.bgGreen.white);
 
 //общий синтаксис метода createConnection выглядит слудеющим образом:
 //mongoose.connect('mongodb://username:password@host:port/database').

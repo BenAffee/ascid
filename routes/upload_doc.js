@@ -21,12 +21,13 @@ var config = require('../config/index');
 //импоритруем модели монгуса
 var models    = require('../config/mongoose');
 
+
 ////работает...
 var multer  = require('multer');
 //var upload_file_doc_dest = '../public/files/';
 var upload_file_doc = multer({ dest: config.path_to_files }).single('file_doc');
 
-
+var noe_functions = require('../config/noe_functions');
 
 router.post('/', upload_file_doc, function (req, res) {
 	msg = req.session.username + ': сработал путь upload_doc';
@@ -131,8 +132,8 @@ router.post('/', upload_file_doc, function (req, res) {
 					
 					
 					//оставляем в массивах контроллирующих и исполнителей только уникальные значения
-					ispoln = unique_item_in_arr(ispoln);
-					kontrols = unique_item_in_arr(kontrols);
+					ispoln = noe_functions.unique_item_in_arr(ispoln);
+					kontrols = noe_functions.unique_item_in_arr(kontrols);
 					
 					//пишем исполнителям сведения об этом документе
 					models.users.update({"username": {$in: ispoln}}, 
@@ -171,7 +172,7 @@ router.post('/', upload_file_doc, function (req, res) {
 					//если есть ошибки добавления записи в базу, то удаляем файл
 					msg = 'есть ошибки добавления записи в базу, поэтому файл удаляем';
 					console.log(msg.red);
-					file_doc_delete(new_name);
+                    noe_functions.file_doc_delete(new_name);
 					
 				}
 			});
@@ -181,7 +182,8 @@ router.post('/', upload_file_doc, function (req, res) {
 			console.log(msg.bgRed.white);
 			res.send(msg);
 			//удаляем файл если он не прошёл валидацию
-			file_doc_delete(req.file.path);
+            noe_functions.file_doc_delete(req.file.path);
+
 
 		}
 
@@ -212,24 +214,7 @@ var file_doc_valid = function(file){
 	}
 }
 
-//функция удаления файла
-var file_doc_delete = function(file){
-	fs.unlink(file, function(err){
-		if(err) console.log(err);
-		else console.log('file deleted successfully');
-		return true;
-		}); 
-}
 
-//функция которая оставляет в массиве только уникальные значения
-var unique_item_in_arr = function(arr){
-	var obj = [];
-	for (var i = 0; i < arr.length; i++) {
-		var str = arr[i];
-		obj[str] = true; // запомнить строку в виде свойства объекта
-	}
-	return Object.keys(obj); // или собрать ключи перебором для IE8-
-}
 
 
 module.exports = router;

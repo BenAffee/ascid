@@ -41,10 +41,13 @@ table.table.table-bordered.noe-table
 				td(rowspan=lengths[index], style="font-size: 1.2rem;")
 					input(type='hidden', id='username_' + val._id, name='username_' + val._id, value= username)
 
+					//эта секция ккнопок просмотр, скачать и удалить. в файле noejs.js описана функции по нажитию этих кнопок
 					a.ref_download.m-r-10(href='files/' + val.filename download='' title='Скачать' name='d_' + val._id)
 						i.mdi.mdi-download.text-success
 					a.ref_download(href='files/' + val.filename title='Просмотреть' name='e_' + val._id)
 						i.mdi.mdi-eye.text-success
+					a.ref_delete_doc(href=val._id title='Удалить' name='delete_' + val._id)
+						i.mdi.mdi-delete-forever.text-danger
 				
 				//Пункт
 				td.text-center

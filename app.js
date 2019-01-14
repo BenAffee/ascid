@@ -13,12 +13,15 @@ var crypto = require('crypto');
 
 var config = require('./config/index');
 
+
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({extended: false});
 
-var flow = require('nimble');//для последовательного выполнения операций
+//var flow = require('nimble');//для последовательного выполнения операций
 
 var client  = redis.createClient();
+
+
 
 var db = require('./config/mongoose');
 
@@ -104,5 +107,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;
