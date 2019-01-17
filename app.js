@@ -17,6 +17,8 @@ var config = require('./config/index');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({extended: false});
 
+var cookieParser = require('cookie-parser')
+
 //var flow = require('nimble');//для последовательного выполнения операций
 
 var client  = redis.createClient();
@@ -70,7 +72,7 @@ app.use(express.query());
 //app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(cookieParser());
 
 //app.set('photos', __dirname + '/public/photos');
 

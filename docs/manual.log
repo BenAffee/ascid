@@ -1,12 +1,12 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2019.1.21)  21 JAN 2019 12:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.1.15)  15 JAN 2019 16:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **manual.tex
 (./manual.tex
-LaTeX2e <2017/01/01> patch level 3
-Babel <3.9r> and hyphenation patterns for 83 language(s) loaded.
-(/usr/share/texlive/texmf-dist/tex/latex/extsizes/extreport.cls
+LaTeX2e <2017-04-15>
+Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
+(/usr/local/share/texmf/tex/latex/extsizes/extreport.cls
 Document Class: extreport 1996/10/08 v1.0 Non Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo
 File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
@@ -34,7 +34,7 @@ LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
 \bibindent=\dimen103
 )
 (/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
-Package: fontenc 2017/02/22 v2.0g Standard LaTeX package
+Package: fontenc 2017/04/05 v2.0i Standard LaTeX package
 
 (/usr/share/texlive/texmf-dist/tex/latex/cyrillic/t2aenc.def
 File: t2aenc.def 2005/09/27 v1.0i Cyrillic encoding definition file
@@ -556,23 +556,30 @@ File: t2aenc.dfu 2017/01/28 v1.1t UTF-8 support for inputenc
    defining Unicode char U+2423 (decimal 9251)
 ))
 (/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
-Package: babel 2016/04/23 3.9r The Babel package
+Package: babel 2018/02/14 3.18 The Babel package
 
+(/usr/share/texlive/texmf-dist/tex/generic/babel/switch.def
+File: switch.def 2018/02/14 3.18 Babel switching mechanism
+)
 (/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
-Language: english 2012/08/20 v3.3p English support from the babel system
+Language: english 2017/06/06 v3.3r English support from the babel system
 
 (/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def
-File: babel.def 2016/04/23 3.9r Babel common definitions
+File: babel.def 2018/02/14 3.18 Babel common definitions
 \babel@savecnt=\count88
 \U@D=\dimen104
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
+\bbl@dirlevel=\count89
 )
 \l@canadian = a dialect from \language\l@american 
 \l@australian = a dialect from \language\l@british 
 \l@newzealand = a dialect from \language\l@british 
 )
 (/usr/share/texlive/texmf-dist/tex/generic/babel-russian/russianb.ldf
-Language: russianb 2017/01/12 1.3i Russian support for the Babel system
-Package babel Info: Making " an active character on input line 111.
+Language: russian 2017/08/12 1.3j Russian support for the Babel system
+Package babel Info: Making " an active character on input line 120.
+Package babel Info: Default for \cyrdash is provided on input line 157.
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/cmap/cmap.sty
 Package: cmap 2008/03/06 v1.0h CMap support: searchable PDF
@@ -599,13 +606,13 @@ Package: array 2016/10/06 v2.4d Tabular extension package (FMi)
 \TX@old@col=\dimen109
 \TX@target=\dimen110
 \TX@delta=\dimen111
-\TX@cols=\count89
+\TX@cols=\count90
 \TX@ftn=\toks17
 )
 (/usr/share/texlive/texmf-dist/tex/latex/tools/indentfirst.sty
 Package: indentfirst 1995/11/23 v1.03 Indent first paragraph (DPC)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty
+(/usr/local/share/texmf/tex/latex/titlesec/titlesec.sty
 Package: titlesec 2016/03/21 v2.10.2 Sectioning titles
 \ttl@box=\box26
 \beforetitleunit=\skip45
@@ -617,7 +624,7 @@ Package: titlesec 2016/03/21 v2.10.2 Sectioning titles
 \titlewidthlast=\dimen115
 \titlewidthfirst=\dimen116
 )
-(/usr/share/texlive/texmf-dist/tex/latex/tocloft/tocloft.sty
+(/usr/local/share/texmf/tex/latex/tocloft/tocloft.sty
 Package: tocloft 2013/05/02 v2.3f parameterised ToC, etc., typesetting
 Package tocloft Info: The document has chapter divisions on input line 44.
 \cftparskip=\skip47
@@ -649,16 +656,15 @@ Package tocloft Info: The document has chapter divisions on input line 44.
 \cftbeforefigskip=\skip73
 \cftfigindent=\skip74
 \cftfignumwidth=\skip75
-\c@lofdepth=\count90
-\c@lotdepth=\count91
+\c@lofdepth=\count91
+\c@lotdepth=\count92
 \cftbeforelottitleskip=\skip76
 \cftafterlottitleskip=\skip77
 \cftbeforetabskip=\skip78
 \cfttabindent=\skip79
 \cfttabnumwidth=\skip80
 )
-(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
-Package: fancyhdr 2016/09/06 3.8 Extensive control of page headers and footers
+(/usr/local/share/texmf/tex/latex/fancyhdr/fancyhdr.sty
 \fancy@headwidth=\skip81
 \f@ncyO@elh=\skip82
 \f@ncyO@erh=\skip83
@@ -705,56 +711,6 @@ File: ot1faq.fd 2001/12/09 Fontinst v1.914 font definitions for OT1/faq.
 )<<ot1.cmap>><<oml.cmap>><<oms.cmap>><<omx.cmap>>
 LaTeX Font Info:    External font `cmex7' loaded for size
 (Font)              <6> on input line 2.
-
-Overfull \hbox (15.81601pt too wide) detected at line 3
-\T2A/faq/m/n/12 2.1 
- []
-
-
-Overfull \hbox (15.81601pt too wide) detected at line 4
-\T2A/faq/m/n/12 2.2 
- []
-
-
-Overfull \hbox (15.81601pt too wide) detected at line 5
-\T2A/faq/m/n/12 2.3 
- []
-
-
-Overfull \hbox (15.81601pt too wide) detected at line 6
-\T2A/faq/m/n/12 2.4 
- []
-
-
-Overfull \hbox (15.81601pt too wide) detected at line 8
-\T2A/faq/m/n/12 3.1 
- []
-
-
-Overfull \hbox (15.81601pt too wide) detected at line 9
-\T2A/faq/m/n/12 3.2 
- []
-
-
-Overfull \hbox (15.81601pt too wide) detected at line 10
-\T2A/faq/m/n/12 3.3 
- []
-
-
-Overfull \hbox (15.81601pt too wide) detected at line 11
-\T2A/faq/m/n/12 3.4 
- []
-
-
-Overfull \hbox (15.81601pt too wide) detected at line 13
-\T2A/faq/m/n/12 4.1 
- []
-
-
-Overfull \hbox (15.81601pt too wide) detected at line 14
-\T2A/faq/m/n/12 4.2 
- []
-
 )
 \tf@toc=\write3
 \openout3 = `manual.toc'.
@@ -774,13 +730,18 @@ Overfull \hbox (15.81601pt too wide) detected at line 14
 ]
 \IeC {\CYRR }\IeC {\cyra }\IeC {\cyrz }\IeC {\cyrd }\IeC {\cyre }\IeC {\cyrl } 
 4.
-(./sources/errors_list.tex)
-Overfull \hbox (26.12146pt too wide) in paragraph at lines 8--108
+(./sources/errors_list.tex
+Overfull \hbox (26.12146pt too wide) in paragraph at lines 22--23
+[][] 
+ []
+
+)
+Overfull \hbox (26.12146pt too wide) in paragraph at lines 30--108
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 8--108
+Underfull \hbox (badness 10000) in paragraph at lines 30--108
 
  []
 
@@ -788,17 +749,17 @@ Underfull \hbox (badness 10000) in paragraph at lines 8--108
 
 ] (./manual.aux) ) 
 Here is how much of TeX's memory you used:
- 2694 strings out of 493013
- 32241 string characters out of 6135682
- 92047 words of memory out of 5000000
- 6190 multiletter control sequences out of 15000+600000
+ 2785 strings out of 492982
+ 33650 string characters out of 6134896
+ 97611 words of memory out of 5000000
+ 6297 multiletter control sequences out of 15000+600000
  20385 words of font info for 36 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 25i,9n,43p,845b,244s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 25i,9n,43p,845b,246s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/pscyr/t2a.enc}</usr/share/t
 exmf/fonts/type1/public/pscyr/antiq4.pfb></usr/share/texmf/fonts/type1/public/p
 scyr/antiq6.pfb></usr/share/texmf/fonts/type1/public/pscyr/antiq7.pfb>
-Output written on manual.pdf (4 pages, 49507 bytes).
+Output written on manual.pdf (4 pages, 51163 bytes).
 PDF statistics:
  35 PDF objects out of 1000 (max. 8388607)
  20 compressed objects within 1 object stream

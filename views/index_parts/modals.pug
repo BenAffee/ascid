@@ -11,6 +11,7 @@
 							i.mdi.mdi-radio
 							span АСКИД
 					form.form-horizontal.m-t-20(id='form_auth', name='form_auth', action='/auth', method='post')
+						input(type='hidden', name='_csrf', value=csrfToken)
 						.form-group.row
 							.col-12
 								.input-group

@@ -8,8 +8,12 @@
 //===================================================================================================
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
 var express = require('express');
 var router = express.Router();
+
+var csrf = require('csurf')
+var csrfProtection = csrf({ cookie: true });
 
 //импоритруем модели монгуса
 var models    = require('../config/mongoose');
@@ -24,23 +28,34 @@ var msg='';
 //-------------Авторизация===================================== 
 //================================================================================================
 //================================================================================================
-router.post('/', function (req, res) {
+router.post('/', csrfProtection, function (req, res) {
 
-	//логируем срабатывание этого роутера
+	//логируем срабатывание этого роута
 	noe_functions.set_log_msg('INFO', //тип сообщения (INFO, WARNING, ERROR)
 							  'undefined', //имя пользователя
 							  '1', //номер сообщения
 							  'сработал путь auth', //сообщение
-                              'пользователь-->'+req.body.username //в тело ошибки запишем имя пользователя
+                              'пользователь ввёл-->'+req.body.username //в тело ошибки запишем имя пользователя
     );
-	
-	//проверка напустую форму
-	if(!req.body) {
-		return res.sendStatus(400);
-		console.log('Пришла пустая форма авторизации'.red);
-		next();
-	}
-	
+
+	//защищаемся от инъекции через поле имя пользователя.
+    //заодно проверяем на пустую форму
+    //проверяем по регулярке...
+    let pattern = /^[a-zA-Z0-9\_]+$/;// такая же регулярка в монгузе
+    if (!req.body.username.match(pattern)){
+        console.log ('имя пользователя не соответствует регулярке');
+
+        //логируем ошибку проверки формата имени пользователя
+        noe_functions.set_log_msg('WARNING', //тип сообщения (INFO, WARNING, ERROR)
+            'undefined', //имя пользователя
+            '2', //номер сообщения
+            'имя пользователя не соответствует регулярному выражению', //сообщение
+            'пользователь ввёл-->'+req.body.username //в тело ошибки запишем имя пользователя
+        );
+
+        res.send('ошибка формата имени пользователя');
+        return;
+    }
 	//ищем пользователя в базе
 	models.users.findOne({username: req.body.username}, function(err, results){
 		if(err) console.log(err);
@@ -89,29 +104,6 @@ router.post('/', function (req, res) {
 					//req.session.new_docs_kontrols = results.docs_kontrols;
 					req.session.len_new_docs_kontrols = results.new_docs_kontrols.length;
 					req.session.len_new_docs_ispoln = results.new_docs_ispoln.length;
-					
-					//console.log('список документов гдепользователь исполнитель:');
-					//console.log(req.body);
-					/*
-					//если установлен чекбокс "запомнить меня", то пишем куку и запись в базу со случайным ключом
-					if(req.body.checkbox_remember_me){
-						var rand_value = crypto.randomBytes(32).toString("hex");//получаем случайный ключ
-						//птшем куку
-						res.cookie('logintoken', rand_value, {
-									expires: new Date(Date.now() + 2 * 604800000),
-									path: '/'
-						});
-						//пишем в базу
-						var add_rememberme = new models.rememberme({
-							username: req.session.username,
-							value: rand_value
-						});
-						add_rememberme.save(function (err) {
-							if(models.err_handler(err, req.session.username)) return;
-						});
-					}*/
-					
-
 
 					msg = req.session.username + ': доступ разрешён';
 					console.log(msg.green);

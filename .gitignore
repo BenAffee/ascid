@@ -1,5 +1,4 @@
 config/index.js
-node_modules/
 public/files/
 users.json
 delete_all_docs

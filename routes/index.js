@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+var csrf = require('csurf')
+
 const mongoose = require('mongoose');
 const models = require('../config/mongoose');
 
@@ -10,12 +12,15 @@ const config = require('../config/index');
 const noe_functions = require('../config/noe_functions');
 var msg = '';
 
+var csrfProtection = csrf({ cookie: true });
+
 
 //--------------------------------------------------------------------------------------------GET home page.
-router.get('/', function(req, res) {
+router.get('/', csrfProtection, function(req, res) {
 	
 	res.render('index', { 
 		//отсюда то, что по умолчанию
+		csrfToken: req.csrfToken(),//отправляем csrf токен для защиты от xss
 		username: req.session.username,//отдаём в шаблон ИМЯ ПОЛЬЗОВАТЕЛЯ
 		isAdministrator: req.session.isAdministrator,//отдаём в шаблон СТАТУСЫ ПОЛЬЗОВАТЕЛЯ
 		isModerator: req.session.isModerator,
