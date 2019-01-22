@@ -171,15 +171,17 @@ router.get('/:page', function(req, res, next) {
 			//выбираем из базы ВСЕ документы
 			models.docs.find(function(err, results){
 				var lengths_of_punkts = [];
+				//console.log(results);
 				if(err){
 					console.log(err);
 					return;
 				} 
 
-				if(!results) {
+				if(results.length===0) {
 					msg = 'В базе ничего нет? или что-то пошло не так....';
 					console.log(msg.bgRed.white);
 					console.log(results);
+					res.send('Нет документов');
 				}
 
 

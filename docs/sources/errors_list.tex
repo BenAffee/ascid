@@ -1,0 +1,18 @@
+\def\errnumber{1}%номер сообщения
+\def\errtype{INFO}%тип сообщения
+\def\errmessage{сработал путь auth}%текст сообщения
+\def\errrequest{/auth}%при каком запросе возникает сообщение
+\def\errtext{Сообщение возникает при нажатии пользователем кнопки ОК в форме ввода имени пользователя и пароля. В поле err записывается имя пользователя, введённое в форму}
+
+\section{Сообщение \errnumber}
+\begin{tabular}{|p{3cm}||p{4cm}||p{4cm}||p{4cm}|}
+	\hline 
+	\begin{center}\textbf{Номер сообщения}\end{center}&\begin{center}\textbf{Тип сообщения}\end{center} &\begin{center}\textbf{Текст сообщения}\end{center} & \begin{center}\textbf{Запрос}\end{center} \\
+
+	\begin{center}\errnumber\end{center}&\begin{center}\errtype\end{center} &\begin{center}\errmessage\end{center} & \begin{center}\errrequest\end{center} \\
+	\hline
+	 
+	\multicolumn{4}{|p{16.5cm}|}{\errtext} \\
+	\hline
+
+\end{tabular} 

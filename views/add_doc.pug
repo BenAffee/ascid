@@ -1,3 +1,4 @@
+script(src='js/NOE/front_add_doc.js')
 form#uploadForm(name='uploadForm', action='/upload_doc', method='post', enctype='multipart/form-data')
     h4.m-t-0.header-title Форма ввода документа
     .row
@@ -23,7 +24,7 @@ form#uploadForm(name='uploadForm', action='/upload_doc', method='post', enctype=
         .col-6(style="border: solid 1px #DCDCDC;")
             .form-group
                 label.form-label Дата документа:
-                input#date_doc.form-control(type='date', name='date_doc')
+                input#date_doc.form-control.date_input(type='text', name='date_doc', placeholder='ДД.ММ.ГГ')
 
 
     .row
@@ -61,7 +62,7 @@ form#uploadForm(name='uploadForm', action='/upload_doc', method='post', enctype=
                             .div.col-6(style="border: solid 1px #DCDCDC;")
                                 .form-group
                                     label.form-label Дата исполнения:
-                                    input#date_punkt_0.form-control(type='date', name='date_punkt_0')
+                                    input#date_punkt_0.form-control.date_input(type='text', name='date_punkt_0')
                         .row
                             .div.col-6(style="border: solid 1px #DCDCDC;")
                                 .form-group

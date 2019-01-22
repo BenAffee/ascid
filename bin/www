@@ -9,10 +9,11 @@ var debug = require('debug')('askid:server');
 var http = require('http');
 
 /**
- * Get port from environment and store in Express.
+ * Get port from environment and store in Express. В продакшн будем слушать 80 порт иначе 3000
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+if(process.env.NODE_ENV=='production') var port = normalizePort(process.env.PORT || '80');
+else var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**

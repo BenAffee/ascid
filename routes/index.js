@@ -1,27 +1,18 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-//var path = require('path');
-//var fs = require('fs');
-var mongoose = require('mongoose');
-//импоритруем модели монгуса
-var models = require('../config/mongoose');
+const mongoose = require('mongoose');
+const models = require('../config/mongoose');
 
-
-//var crypto = require('crypto');
-var config = require('../config/index');
+const config = require('../config/index');
 
 
-var noe_functions = require('../config/noe_functions');
-var msg='';
-
-var moder_users=[];
-var moder_users_all=[];
-
+const noe_functions = require('../config/noe_functions');
+var msg = '';
 
 
 //--------------------------------------------------------------------------------------------GET home page.
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
 	
 	res.render('index', { 
 		//отсюда то, что по умолчанию
@@ -120,10 +111,9 @@ router.post('/oznakomlen_kontrol', function(req, res) {
 								function(err, doc){
 				//обрабатываем ошибки, если ошибки есть, то логируем все-все-все
 				if(models.err_handler(err, req.session.username)) return;
-				//res.redirect('/control/6');
+
 				res.redirect('/control/7');
-				
-				//res.send("СТАТУС ДОКУМЕНТА ИЗМЕНЁН");
+
 			});
 		});
 	}
@@ -255,14 +245,13 @@ router.post('/delete_doc', function(req, res) {
 						else {
 								console.log('ошибка удаления записи ' + req.body.id + ' из базы')
 						}
-						return ok1
+                        //после того как удалили документ из базы и сам файл, снова показывем страницу со всеми документами
+                        res.redirect('/control/3');
 					});
 				})
+		
 
-			.then((ok1) => {
-				//после того как удалили документ из базы и сам файл, снова показывем страницу со всеми документами
-				res.redirect('/control/3');
-				})
+
 	}
 	
 	else{

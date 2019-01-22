@@ -14,6 +14,8 @@ var router = express.Router();
 //импоритруем модели монгуса
 var models    = require('../config/mongoose');
 
+const noe_functions = require('../config/noe_functions');
+
 var crypto = require('crypto');
 
 var msg='';
@@ -24,8 +26,13 @@ var msg='';
 //================================================================================================
 router.post('/', function (req, res) {
 
-	msg = req.session.username + ': сработал путь auth';
-	console.log(msg.magenta.bold);
+	//логируем срабатывание этого роутера
+	noe_functions.set_log_msg('INFO', //тип сообщения (INFO, WARNING, ERROR)
+							  'undefined', //имя пользователя
+							  '1', //номер сообщения
+							  'сработал путь auth', //сообщение
+                              'пользователь-->'+req.body.username //в тело ошибки запишем имя пользователя
+    );
 	
 	//проверка напустую форму
 	if(!req.body) {

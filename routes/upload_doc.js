@@ -50,7 +50,7 @@ router.post('/', upload_file_doc, function (req, res) {
 			var punkts=[];//массив со всеми пунктами, который будем добавлять в базу
 			var ispoln=[];//массив с исполлнителями одного пункта
 			var kontrols=[];//массив с контроллирующими одного пункта
-			var status = {};//массив с именем исполнителя и полями исполнено и ознакомлен
+
 			
 			for (var i = 0; i <= req.body.punkts_count; i++) {
 				//var pushed=[];//массив в котором хранится один пункт
@@ -62,8 +62,9 @@ router.post('/', upload_file_doc, function (req, res) {
 				
 				//делаем красивую дату
 				name = 'date_punkt_' + i;
-				var str = req.body[name];
-				var date_to_base = str[8] + str[9] + '.' + str[5] + str[6] + '.' + str[0] + str[1] + str[2] + str[3] + ' г.'
+				let str = req.body[name];
+                let date_to_base = noe_functions.dateToMillis(str);
+				//var date_to_base = str[8] + str[9] + '.' + str[5] + str[6] + '.' + str[0] + str[1] + str[2] + str[3] + ' г.'
 				
 				//добавляем в массив исполнителей
 				name = 'ispolniteli_' + i;
@@ -109,8 +110,9 @@ router.post('/', upload_file_doc, function (req, res) {
 				}
 			)
 			//делаем красивую дату
-			var str = req.body.date_doc;
-			var date_to_base = str[8] + str[9] + '.' + str[5] + str[6] + '.' + str[0] + str[1] + str[2] + str[3] + ' г.'			
+			let str = req.body.date_doc;
+            let date_to_base = noe_functions.dateToMillis(str);
+			//var date_to_base = str[8] + str[9] + '.' + str[5] + str[6] + '.' + str[0] + str[1] + str[2] + str[3] + ' г.'
 			
 			//пишем в базу документ...
 			var add_doc = new models.docs({

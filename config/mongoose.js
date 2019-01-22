@@ -157,7 +157,7 @@ var docsSchema = new mongoose.Schema({
 	},
 	//Дата утвердения документа
 	doc_date:{
-		type:String, // тип String
+		type:Number, // тип число
 		required:[true,'Необходимо указать дату утвержедния документа']
 	},
 	// Имя пользователя, утвердившего документ
@@ -182,38 +182,54 @@ var docsSchema = new mongoose.Schema({
 		required:[true,'Опишите хотя бы один пункт']
 	}
 
-	/*//массив пунктов документа
-	doc_punkts: [
-			{
-			num_punkt: Number,
-			date: String,
-			ispoln: [],
-			kontrols: [String]
-			}
-		]*/
 });
 
 var docs = mongoose.model('docs', docsSchema);
-/*
-//схема для кнопки Запомнить меня
-var remembermeSchema = new mongoose.Schema({
-	//имя пользователя
-	username: {
-		type: String,
+
+//--------------------------------------------------------------------------------------------
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//схема модели для логов
+var logsSchema = new mongoose.Schema({
+	// тип сообщения. (INFO, WARNING, ERROR)
+	type_msg:{
+		type:String, // тип: String
+		required:[true,'В лог не попал тип логирующего сообщения'],
 	},
-	//ключ сессии
-	value: {
-		type: String,
+	//Пользователь у которого возник лог
+	user_msg:{
+		type:String, // тип String
+		required:[true,'В лог не попало имя пользователя']
+	},
+	// время записи
+	time_msg:{
+		type:Number, // тип Number
+		required:[true,'В лог не попало время логирующего сообщения']
+	},
+	//Номер сообщения (чтобы можно было отличить сообщения друг от друга)
+	num_msg:{
+		type:Number, // тип String
+		required:[true,'В лог не попал номер логирующего сообщения']
+	},
+	//Текст сообщения 
+	text_msg:{
+		type:String, // тип String
+		required:[true,'В лог не попал текст логирующего сообщения']
+	},
+	//Если есть объект ошибки, то помещаем её сюда
+	err_obj_msg:{
+		type:String, // тип String
 	}
+
+
 });
 
-var rememberme = mongoose.model('rememberme', remembermeSchema);*/
-
+var logs = mongoose.model('logs', logsSchema);
 
 
 module.exports = {
     users: users,
-    docs: docs
+    docs: docs,
+	logs: logs
 };
 
 module.exports.err_handler = function(error, name){
@@ -231,15 +247,5 @@ module.exports.err_handler = function(error, name){
 	}
 }
 
-
-
-//module.exports = mongoose;
-//var my_schemas = {'users' : userSchema, 'docs': docsSchema};
-//var my_schemas = {'users' : userSchema};
-//module.exports = my_schemas;
-
-//module.exports = mongoose.model('docs', docsSchema);
-//module.exports = docs;
-//module.exports = users;
 
 
