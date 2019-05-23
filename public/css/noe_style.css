@@ -25,3 +25,7 @@
 .table tbody tr:hover td, .table tbody tr:hover th {
     background-color: PaleGreen;
 }
+
+.big-checkbox {
+	width: 20px; 
+	height: 20px;}

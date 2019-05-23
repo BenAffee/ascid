@@ -3,7 +3,7 @@ var path = require('path');
 var favicon = require('serve-favicon');
 //var logger = require('morgan');//расширенное логирование запросов
 
-var redis   = require('redis');
+var redis	 = require('redis');
 var session = require('express-session');
 var redisStore = require('connect-redis')(session);
 
@@ -21,7 +21,7 @@ var cookieParser = require('cookie-parser')
 
 //var flow = require('nimble');//для последовательного выполнения операций
 
-var client  = redis.createClient();
+var client	= redis.createClient();
 
 
 
@@ -34,6 +34,8 @@ var auth = require('./routes/auth');
 var control = require('./routes/control');
 var upload_doc = require('./routes/upload_doc');
 var user_settings = require('./routes/user_settings');
+var admin_panel = require('./routes/admin');
+
 
 var app = express();
 
@@ -46,12 +48,12 @@ var app = express();
 var rand_hash = crypto.randomBytes(32).toString("hex"); //случайный хэш для ключа сессии
 
 app.use(session({
-    secret: rand_hash,
+	secret: rand_hash,
 	cookie: { expires: new Date(Date.now() + 86400000)},
-    store: new redisStore({ host: config.redis.url, port: 6379, client: client}),
-    saveUninitialized: false,
+	store: new redisStore({ host: config.redis.url, port: 6379, client: client}),
+	saveUninitialized: false,
 	
-    resave: false
+	resave: false
 }));
 
 
@@ -83,6 +85,7 @@ app.use('/auth', auth);
 app.use('/control', control);
 app.use('/upload_doc', upload_doc);
 app.use('/user_settings', user_settings);
+app.use('/admin', admin_panel);
 
 /*req.session.test='test';
 if (req.session.test=='test') console.log('сессии запущены'.bgGreen.white);
@@ -94,20 +97,20 @@ else console.log('сессии НЕ запущены'.bgRed.white);*/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+	var err = new Error('Not Found');
+	err.status = 404;
+	next(err);
 });
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+	// set locals, only providing error in development
+	res.locals.message = err.message;
+	res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+	// render the error page
+	res.status(err.status || 500);
+	res.render('error');
 });
 
 

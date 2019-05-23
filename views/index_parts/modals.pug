@@ -38,5 +38,29 @@
 									|  Забыли пароль?
 						#reg_message_auth.text-danger
 							
-							//.col-6.text-right.m-0.p-0
-								a.text-muted(href='pages-register.html') Регистрация
+//-------------------------------Модальное окно для отписывания документов
+.container-fluid
+	#ModalTransfer.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabelTransfer', aria-hidden='true')
+		.modal-dialog.col-12
+			.modal-content
+				.modal-header
+					h4#myModalLabelTransfer.modal-title Отписать документ
+					//- if(inferiors)
+						each val in inferiors
+							!= val
+				.modal-body.col-12
+
+					form.form-horizontal.m-t-20(id='form_transfer', name='form_transfer', action='/control/transfer_doc', method='post')
+						.form-group.row.text-center
+							.col-6
+								input(type='hidden' id='transfer_doc_id', name='transfer_doc_id', value='')
+								if(inferiors)
+									select.multi-select(multiple='multiple', name='transfer', data-plugin='multiselect', id='transfer')
+										each val in inferiors
+											option(value=val)!= all_users_short[val]
+								else
+									| У Вас нет подчинённых, указанных в системе
+						.form-group.row
+							.col-6.m-0.p-0.text-right
+								button#transfer_ok_but.btn.btn-primary.btn-custom.w-md.waves-effect.waves-light(type='button') Отписать
+				#message_transfer.text-danger

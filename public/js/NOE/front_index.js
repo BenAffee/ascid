@@ -1,5 +1,12 @@
 $(document).ready(function(){
-
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//Делаем ajax асинхронным
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+$.ajaxPrefilter(function( options, original_Options, jqXHR ) {
+	options.async = true;
+});
 
 	
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
@@ -8,7 +15,7 @@ $(document).ready(function(){
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	$(document).on('click','#auth_ok_but', function(){
-		console.log('событие кнопки вход');
+		//console.log('событие кнопки вход');
 		//проверка на совпадение паролей
 		/*if($('#new_password_1').val() != $('#new_password_2').val()){
 			$('#reg_message').html('Пароли не совпадают!');
@@ -35,58 +42,27 @@ $(document).ready(function(){
 		});
 	});	
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//Отправка формы регистрациии пользователя
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	$(document).on('click','#reg_button', function(){
-		console.log('событие кнопки регистрации');
-		//проверка на совпадение паролей
-		if($('#new_password_1').val() != $('#new_password_2').val()){
-			$('#reg_message').html('Пароли не совпадают!');
-			return;
-		}
-
-		var $form = $('#form_reg');		
-		//console.log('отправка формы');
-
-		$.ajax({
-			type: 'post',
-			url: '/auth/reg',
-			data: $form.serialize()
-		})
-
-		.done(function(msg) {
-			$('#reg_message').text(msg);
-			//$("#ModalEnter").modal('hide');
-		})
-
-		.fail(function() {
-			$('#reg_message').text('Что-то пошло не так... Обратитесь к администратору');
-		});
-	});
 
 
 
 
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //Функция для проверки совпадения паролей
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    $(document).on('input','.input_set_passw', function(){
-        //если в поле старый пароль что-то введено и новые пароли совпадают, то активируем кнопку отправки нового пароля
-        if(($('#new_password1').val()!=='') &&($('#old_password').val()!=='') && ($('#new_password1').val() === $('#new_password2').val())){
-            $('#reg_message_set_passwd').text('сработал скрипт');
-            $('#set_passw_but').prop('disabled',false);
-        }
-        else{
-            $('#reg_message_set_passwd').text('не все поля заполнены, либо пароли не совпадают');
-            $('#set_passw_but').prop('disabled',true);
-        }
+	$(document).on('input','.input_set_passw', function(){
+		//если в поле старый пароль что-то введено и новые пароли совпадают, то активируем кнопку отправки нового пароля
+		if(($('#new_password1').val()!=='') &&($('#old_password').val()!=='') && ($('#new_password1').val() === $('#new_password2').val())){
+			$('#reg_message_set_passwd').text('сработал скрипт');
+			$('#set_passw_but').prop('disabled',false);
+		}
+		else{
+			$('#reg_message_set_passwd').text('не все поля заполнены, либо пароли не совпадают');
+			$('#set_passw_but').prop('disabled',true);
+		}
 
-    });
+	});
 
 
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -94,33 +70,33 @@ $(document).ready(function(){
 //Отправка формы смены пароля
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    $(document).on('click','#set_passw_but', function(){
-        console.log('событие кнопки сменить пароль');
-        //проверка на совпадение паролей
-        /*if($('#new_password_1').val() != $('#new_password_2').val()){
-            $('#reg_message').html('Пароли не совпадают!');
-            return;
-        }*/
+	$(document).on('click','#set_passw_but', function(){
+		console.log('событие кнопки сменить пароль');
+		//проверка на совпадение паролей
+		/*if($('#new_password_1').val() != $('#new_password_2').val()){
+			$('#reg_message').html('Пароли не совпадают!');
+			return;
+		}*/
 
-        var $form = $('#set_passw');
-        //console.log('отправка формы');
+		var $form = $('#set_passw');
+		//console.log('отправка формы');
 
-        $.ajax({
-            type: 'post',
-            url: '/user_settings/set_passw',
-            data: $form.serialize()
-        })
+		$.ajax({
+			type: 'post',
+			url: '/user_settings/set_passw',
+			data: $form.serialize()
+		})
 
-            .done(function(msg) {
-                if(msg == '') location.reload(); // если от сервера пришёл пустой ответ, то перезагружаем страницу. В этом случае, если на бэкэнде всё прошло нормально, то должна подхватиться сессия и т.п.
-                else $('#reg_message_set_passwd').text(msg);//если есть ошибки от сервера, то показываем их в окне
-                //$("#ModalEnter").modal('hide');
-            })
+			.done(function(msg) {
+				if(msg == '') location.reload(); // если от сервера пришёл пустой ответ, то перезагружаем страницу. В этом случае, если на бэкэнде всё прошло нормально, то должна подхватиться сессия и т.п.
+				else $('#reg_message_set_passwd').text(msg);//если есть ошибки от сервера, то показываем их в окне
+				//$("#ModalEnter").modal('hide');
+			})
 
-            .fail(function() {
-                $('#reg_message_set_passwd').text('Что-то пошло не так... Обратитесь к администратору');
-            });
-    });
+			.fail(function() {
+				$('#reg_message_set_passwd').text('Что-то пошло не так... Обратитесь к администратору');
+			});
+	});
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -237,20 +213,22 @@ $(document).ready(function(){
 	
 		e.preventDefault();
 		var page = '/control/' + $(this).attr('href');
-		console.log(page);
+		//console.log(page);
 		$.ajax({
-			type: 'get',
+			async: true,
+			type: "GET",
 			url: page,
-		})
-	
-		.done(function(msg) {
-				$('#main_content').html(msg);
-				$('.multi-select').multiSelect('refresh');
-
-		})
+			dataType: "html",
 		
-		.fail(function() {
-			$('#main_content').html('Что-то пошло не так... Обратитесь к администратору');
+	
+			success: function(msg) {
+					$('#main_content').html(msg);
+					$('.multi-select').multiSelect('refresh');
+			},
+		
+			error: function() {
+				$('#main_content').html('Что-то пошло не так... Обратитесь к администратору');
+			}
 		});
 		//console.log(page);
 	});
@@ -267,9 +245,61 @@ $(document).ready(function(){
 	});
 	
 	
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//Проверка типа браузера
+//взято отсюда --> https://stackoverflow.com/questions/13478303/correct-way-to-use-modernizr-to-detect-ie#13480430
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
 	
-	
+var BrowserDetect = {
+		init: function () {
+			this.browser = this.searchString(this.dataBrowser) || "Other";
+			this.version = this.searchVersion(navigator.userAgent) || this.searchVersion(navigator.appVersion) || "Unknown";
+		},
+		searchString: function (data) {
+			for (var i = 0; i < data.length; i++) {
+				var dataString = data[i].string;
+				this.versionSearchString = data[i].subString;
 
+				if (dataString.indexOf(data[i].subString) !== -1) {
+					return data[i].identity;
+				}
+			}
+		},
+		searchVersion: function (dataString) {
+			var index = dataString.indexOf(this.versionSearchString);
+			if (index === -1) {
+				return;
+			}
+
+			var rv = dataString.indexOf("rv:");
+			if (this.versionSearchString === "Trident" && rv !== -1) {
+				return parseFloat(dataString.substring(rv + 3));
+			} else {
+				return parseFloat(dataString.substring(index + this.versionSearchString.length + 1));
+			}
+		},
+
+		dataBrowser: [
+			{string: navigator.userAgent, subString: "Edge", identity: "MS Edge"},
+			{string: navigator.userAgent, subString: "MSIE", identity: "Explorer"},
+			{string: navigator.userAgent, subString: "Trident", identity: "Explorer"},
+			{string: navigator.userAgent, subString: "Firefox", identity: "Firefox"},
+			{string: navigator.userAgent, subString: "Opera", identity: "Opera"},  
+			{string: navigator.userAgent, subString: "OPR", identity: "Opera"},  
+
+			{string: navigator.userAgent, subString: "Chrome", identity: "Chrome"}, 
+			{string: navigator.userAgent, subString: "Safari", identity: "Safari"}	   
+		]
+	};
+	
+	BrowserDetect.init();
+	//document.write("You are using <b>" + BrowserDetect.browser + "</b> with version <b>" + BrowserDetect.version + "</b>");
+	
+	//если пользователь зашёл через эксплорер или эдж, то ркомендуем ему пользоваться друшими браузерами)))
+	if (BrowserDetect.browser == 'Explorer' || BrowserDetect.browser == 'MS Edge')
+		alert('Вы используете браузер InternetExplorer. Во избежание ошибок при работе приложения используйте браузеры Chrome или Mozilla.');
 
 });
 

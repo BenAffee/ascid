@@ -1,14 +1,19 @@
 //====================================================
 //основное окно
 //=====================================================
+
 .content-page
     // Start content
     .content
         .container-fluid
-            .row#main_content.col-12
-                = node_environment
+            #main_content.col-12
+                //=inferiors
+                //- if(inferiors)
+                    select.multi-select(multiple='multiple', name='transfer', data-plugin='multiselect', id='transfer')
+                        each val in inferiors
+                            option(value=val)!= all_users_short[val]
                 #accordion.m-b-20(role='tablist', aria-multiselectable='true')
-                    .card
+                    .card.d-none
                         #headingOne.card-header(role='tab')
                             h5.mb-0.mt-0.font-16
                                 a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseOne', aria-expanded='false', aria-controls='collapseOne')
@@ -105,3 +110,14 @@
                                 p ORM Mongoose 5.0.11
                                 p inMemory СУБД Redis 4.0.9
                                 p IDE WebStorm 2018.2.6
+                    p
+                    .card
+                        #heading3.card-header(role='tab')
+                            h5.mb-0.mt-0.font-16
+                                a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapse3', aria-expanded='false', aria-controls='collapse3')
+                                    | Документация
+                        #collapse3.collapse(role='tabpanel', aria-labelledby='heading3', style='')
+                            .card-body
+                                a(href='docs/manual.pdf' title='Техническое описание')
+                                    | Техническое описание
+

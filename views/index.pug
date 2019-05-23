@@ -1,151 +1,156 @@
 doctype html
 html
-    head
-        if(node_environment!=='production')
-            meta(http-equiv='Cache-Control', content='no-cache')
-        meta(charset='utf-8')
-        meta(name='viewport', content='width=device-width,initial-scale=1')
-        meta(name='description', content='Автоматизированная система контроля исполнения документов')
-        meta(name='author', content='Nesterenko_Oleg')
-        //link(rel='shortcut icon', href='images/favicon.ico')
-        title АСКИД
-        //link(href='plugins/switchery/switchery.min.css', rel='stylesheet')
-        //link(href='plugins/jquery-circliful/css/jquery.circliful.css', rel='stylesheet', type='text/css')
-        link(href='plugins/multiselect/css/multi-select.css', rel='stylesheet', type='text/css')
+	head
+		if(node_environment!=='production')
+			meta(http-equiv='Cache-Control', content='no-cache')
+		meta(charset='utf-8')
+		meta(name='viewport', content='width=device-width,initial-scale=1')
+		meta(name='description', content='Автоматизированная система контроля исполнения и доведения документов')
+		meta(name='author', content='Nesterenko_Oleg')
+		//link(rel='shortcut icon', href='images/favicon.ico')
+		title АСКИДД
+		//link(href='plugins/switchery/switchery.min.css', rel='stylesheet')
+		//link(href='plugins/jquery-circliful/css/jquery.circliful.css', rel='stylesheet', type='text/css')
+		link(href='plugins/multiselect/css/multi-select.css', rel='stylesheet', type='text/css')
 
-        // DataTables
-        //link(href='plugins/datatables/dataTables.bootstrap4.min.css', rel='stylesheet', type='text/css')
-        link(href='plugins/datatables/buttons.bootstrap4.min.css', rel='stylesheet', type='text/css')
-        // Responsive datatable examples
-        //link(href='plugins/datatables/responsive.bootstrap4.min.css', rel='stylesheet', type='text/css')
-        //link(href='js/datatables_rowspan.js')
-
-
-
-        link(href='css/bootstrap.min.css', rel='stylesheet', type='text/css')
-        link(href='css/icons.css', rel='stylesheet', type='text/css')
-        link(href='css/style.css', rel='stylesheet', type='text/css')
-        link(href='css/noe_style.css', rel='stylesheet', type='text/css')
-        //link(href='css/bootstrap-select.min.css', rel='stylesheet', type='text/css')
-
-
-        script(src='js/modernizr.min.js')
-
-    body.fixed-left
-
-        //подключаем файл с модальными окнами
-        include index_parts/modals
-
-        //подключаем файл с хидером
-        include index_parts/wrapper
-
-        //подключаем левое меню
-        include index_parts/left_menu
-
-        //подключаем главное окно
-        include index_parts/main_window
-
-        //подключаем футер
-        //include index_parts/footer
-
-
-        // circliful Chart - анимированные круговые диаграммы
-        //multiselect - кастомизированное окно ввода типа мультиселект
-        //custombox - кастомизированные модальные окна
-        //datatables- супер таблицы с сортировко, поиском и другими вкусняхами (но не работают с colspan, rowspan)
-        //sparkline - графики на сайтах
-        //switchery - чекбоксы в стиле iOS
-        //dashboard - панельки drag'n'drop
-        //jquery.form - собирает и отправляет поля формы типа multipart
+		// DataTables
+		//link(href='plugins/datatables/dataTables.bootstrap4.min.css', rel='stylesheet', type='text/css')
+		link(href='plugins/datatables/buttons.bootstrap4.min.css', rel='stylesheet', type='text/css')
+		// Responsive datatable examples
+		//link(href='plugins/datatables/responsive.bootstrap4.min.css', rel='stylesheet', type='text/css')
+		//link(href='js/datatables_rowspan.js')
 
 
 
-        // END wrapper
-        script.
-            var resizefunc = [];
-        // Plugins
-        script(src='js/jquery.min.js')
-        script(src='js/popper.min.js')
-        // Popper for Bootstrap
-        script(src='js/bootstrap.min.js')
-        //script(src='js/bootstrap-select.min.js')
-        script(src='js/detect.js')
-        script(src='js/fastclick.js')
-        script(src='js/jquery.slimscroll.js')
-        script(src='js/jquery.blockUI.js')
-        script(src='js/waves.js')
-        script(src='js/wow.min.js')
-        script(src='js/jquery.nicescroll.js')
-        script(src='js/jquery.scrollTo.min.js')
-        script(src='plugins/switchery/switchery.min.js')
-        script(src='plugins/custombox/src/js/custombox.js')
-        script(type='text/javascript', src='plugins/multiselect/js/jquery.multi-select.js')
-
-        // Counter Up
-        script(src='plugins/waypoints/lib/jquery.waypoints.min.js')
-        script(src='plugins/counterup/jquery.counterup.min.js')
-
-        //script(src='plugins/jquery-circliful/js/jquery.circliful.min.js')
-        //script(src='plugins/jquery-sparkline/jquery.sparkline.min.js')
-        // skycons
-        script(src='plugins/skyicons/skycons.min.js', type='text/javascript')
-        // Page js
-        //script(src='pages/jquery.dashboard.js')
-
-        // Required datatable js
-        //script(src='plugins/datatables/jquery.dataTables.min.js')
-        //script(src='plugins/datatables/dataTables.bootstrap4.min.js')
-        // Buttons examples
-        //script(src='plugins/datatables/dataTables.buttons.min.js')
-        //script(src='plugins/datatables/buttons.bootstrap4.min.js')
-        //script(src='plugins/datatables/jszip.min.js')
-        //script(src='plugins/datatables/pdfmake.min.js')
-        //script(src='plugins/datatables/vfs_fonts.js')
-        //script(src='plugins/datatables/buttons.html5.min.js')
-        //script(src='plugins/datatables/buttons.print.min.js')
-        //script(src='plugins/datatables/buttons.colVis.min.js')
-        // Responsive examples
-        //script(src='plugins/datatables/dataTables.responsive.min.js')
-        //script(src='plugins/datatables/responsive.bootstrap4.min.js')
+		link(href='css/bootstrap.min.css', rel='stylesheet', type='text/css')
+		link(href='css/icons.css', rel='stylesheet', type='text/css')
+		link(href='css/style.css', rel='stylesheet', type='text/css')
+		link(href='css/noe_style.css', rel='stylesheet', type='text/css')
+		//link(href='css/noe_style.css', rel='stylesheet', type='text/css')
+		//link(href='css/bootstrap-select.min.css', rel='stylesheet', type='text/css')
 
 
-        // Custom main Js
-        script(src='js/jquery.core.js')
-        script(src='js/jquery.app.js')
+		script(src='js/modernizr.min.js')
+		//script(src='plugins/switchery/switchery.min.js')
 
-        script(src='js/NOE/front_index.js')
-        script(src='js/jquery.form.js')
-        //script(type='text/javascript').
-            $(function () {
-                $("[data-toggle='tooltip']").tooltip();
-            });
+	body.fixed-left
 
-        //script(type='text/javascript').
-            $(document).ready(function() {
-                $('.selectpicker1').selectpicker();
-            });
+		//подключаем файл с модальными окнами
+		include index_parts/modals
 
-        //script(type='text/javascript').
-            jQuery(document).ready(function($) {
-            $('.counter').counterUp({
-            delay: 100,
-            time: 1200
-            });
-            $('.circliful-chart').circliful();
-            });
-            // BEGIN SVG WEATHER ICON
-            if (typeof Skycons !== 'undefined'){
-            var icons = new Skycons(
-            {"color": "#3bafda"},
-            {"resizeClear": true}
-            ),
-            list  = [
-            "clear-day", "clear-night", "partly-cloudy-day",
-            "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
-            "fog"
-            ],
-            i;
-            for(i = list.length; i--; )
-            icons.set(list[i], list[i]);
-            icons.play();
-            };
+		//подключаем файл с хидером
+		include index_parts/wrapper
+
+		//подключаем левое меню
+		include index_parts/left_menu
+
+		//подключаем главное окно
+		include index_parts/main_window
+
+		//подключаем футер
+		//include index_parts/footer
+
+
+		// circliful Chart - анимированные круговые диаграммы
+		//multiselect - кастомизированное окно ввода типа мультиселект
+		//custombox - кастомизированные модальные окна
+		//datatables- супер таблицы с сортировко, поиском и другими вкусняхами (но не работают с colspan, rowspan)
+		//sparkline - графики на сайтах
+		//switchery - чекбоксы в стиле iOS
+		//dashboard - панельки drag'n'drop
+		//jquery.form - собирает и отправляет поля формы типа multipart
+
+
+
+		// END wrapper
+		script.
+			var resizefunc = [];
+		// Plugins
+		script(src='js/jquery-3.3.1.min.js')
+		script(src='js/popper.min.js')
+		// Popper for Bootstrap
+		script(src='js/bootstrap.min.js')
+		//script(src='js/bootstrap-select.min.js')
+		script(src='js/detect.js')
+		script(src='js/fastclick.js')
+		script(src='js/jquery.slimscroll.js')
+		script(src='js/jquery.blockUI.js')
+		script(src='js/waves.js')
+		script(src='js/wow.min.js')
+		script(src='js/jquery.nicescroll.js')
+		script(src='js/jquery.scrollTo.min.js')
+
+		script(src='plugins/custombox/src/js/custombox.js')
+		script(type='text/javascript', src='plugins/multiselect/js/jquery.multi-select.js')
+
+		// Counter Up
+		script(src='plugins/waypoints/lib/jquery.waypoints.min.js')
+		script(src='plugins/counterup/jquery.counterup.min.js')
+
+		//script(src='plugins/jquery-circliful/js/jquery.circliful.min.js')
+		//script(src='plugins/jquery-sparkline/jquery.sparkline.min.js')
+		// skycons
+		script(src='plugins/skyicons/skycons.min.js', type='text/javascript')
+		// Page js
+		//script(src='pages/jquery.dashboard.js')
+
+		// Required datatable js
+		//script(src='plugins/datatables/jquery.dataTables.min.js')
+		//script(src='plugins/datatables/dataTables.bootstrap4.min.js')
+		// Buttons examples
+		//script(src='plugins/datatables/dataTables.buttons.min.js')
+		//script(src='plugins/datatables/buttons.bootstrap4.min.js')
+		//script(src='plugins/datatables/jszip.min.js')
+		//script(src='plugins/datatables/pdfmake.min.js')
+		//script(src='plugins/datatables/vfs_fonts.js')
+		//script(src='plugins/datatables/buttons.html5.min.js')
+		//script(src='plugins/datatables/buttons.print.min.js')
+		//script(src='plugins/datatables/buttons.colVis.min.js')
+		// Responsive examples
+		//script(src='plugins/datatables/dataTables.responsive.min.js')
+		//script(src='plugins/datatables/responsive.bootstrap4.min.js')
+
+
+		// Custom main Js
+		script(src='js/jquery.core.js')
+		script(src='js/jquery.app.js')
+
+		script(src='js/NOE/front_index.js')
+		script(src='js/jquery.form.js')
+		
+		- if (isAdministrator)
+			script(src='js/NOE/front_admin.js')
+		//script(type='text/javascript').
+			$(function () {
+				$("[data-toggle='tooltip']").tooltip();
+			});
+
+		//script(type='text/javascript').
+			$(document).ready(function() {
+				$('.selectpicker1').selectpicker();
+			});
+
+		//script(type='text/javascript').
+			jQuery(document).ready(function($) {
+			$('.counter').counterUp({
+			delay: 100,
+			time: 1200
+			});
+			$('.circliful-chart').circliful();
+			});
+			// BEGIN SVG WEATHER ICON
+			if (typeof Skycons !== 'undefined'){
+			var icons = new Skycons(
+			{"color": "#3bafda"},
+			{"resizeClear": true}
+			),
+			list  = [
+			"clear-day", "clear-night", "partly-cloudy-day",
+			"partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+			"fog"
+			],
+			i;
+			for(i = list.length; i--; )
+			icons.set(list[i], list[i]);
+			icons.play();
+			};

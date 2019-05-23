@@ -1,46 +1,138 @@
 //Форма нового пользователя
 //.row.col-4
-	h4.m-t-0.header-title Регистрация нового пользователя
+    h4.m-t-0.header-title Регистрация нового пользователя
 
-form#form_reg(name='form_reg', action='/auth/reg', method='post')
-	.form-group.row.m-b-5
-		label.col-6.col-form-label Имя пользователя:
-		.col-6
-			input#new_username.form-control(type='text', name='new_username', placeholder='пользователь')
 
-	.form-group.row.m-b-5
-		label.col-6.col-form-label Должность:
-		.col-6
-			input#new_post_long.form-control(type='text', name='new_post_long', placeholder='должность')
 
-	.form-group.row.m-b-5
-		label.col-6.col-form-label Аббревиатура должнсти:
-		.col-6
-			input#new_post_short.form-control(type='text', name='new_post_short', placeholder='аббревиатура')
 
-	.form-group.row.m-b-5
-		label.col-6.col-form-label Уровень руководства:
-		.col-6
-			select#new_ruk_level.custom-select.form-control(type='text', name='new_ruk_level')
-				option(selected='') Выберите уровень
-				option(value='1') Уровень 1
-				option(value='2') Уровень 2
-				option(value='3') Уровень 3
-				option(value='4') Уровень 4
+ul.nav.nav-tabs#admin_tabs
+    li
+        a.nav-link(href='#new_user', data-toggle="tab",aria-expanded="false")
+            | новый пользователь
+    li.active.show
+        a.nav-link(href='#all_users', data-toggle="tab",aria-expanded="true")
+            | все пользователи
+.tab-content#admin_tabsContent
+    .tab-pane.active.show.fade#new_user
+        form#form_reg(name='form_reg', action='/auth/reg', method='post')
+            .form-group.row.m-b-5
+                label.col-6.col-form-label Имя пользователя:
+                .col-6
+                    input#new_username.form-control(type='text', name='new_username', placeholder='пользователь')
 
-	.form-group.row.m-b-5
-		label.col-6.col-form-label Пароль:
-		.col-6
-			input#new_password_1.form-control(type='password', name='new_password_1', value='123456')
+            .form-group.row.m-b-5
+                label.col-6.col-form-label Должность:
+                .col-6
+                    input#new_post_long.form-control(type='text', name='new_post_long', placeholder='должность')
 
-	.form-group.row.m-b-5
-		label.col-6.col-form-label Пароль ещё раз:
-		.col-6
-			input#new_password_2.form-control(type='password', name='new_password_2', value='123456')
-			
-		button.m-b-5.row.btn.btn-primary.btn-custom.w-md.waves-effect.waves-light.col-7#reg_button(type='button') Регистрация
-	
-	//button.m-b-5.row.btn.btn-primary.btn-custom.w-md.waves-effect.waves-light.col-7#reg_button1(type='button') RY1
-	.row.m-b-5.text-danger.col-6#reg_message
-		
-			//здесь сообщения от сервера
+            .form-group.row.m-b-5
+                label.col-6.col-form-label Аббревиатура должности:
+                .col-6
+                    input#new_post_short.form-control(type='text', name='new_post_short', placeholder='аббревиатура')
+
+            .form-group.row.m-b-5
+                label.col-6.col-form-label Уровень руководства:
+                .col-6
+                    select#new_ruk_level.custom-select.form-control(type='text', name='new_ruk_level')
+                        option(selected='') Выберите уровень
+                        option(value='1') Уровень 1
+                        option(value='2') Уровень 2
+                        option(value='3') Уровень 3
+                        option(value='4') Уровень 4
+
+            .form-group.row.m-b-5
+                label.col-6.col-form-label Начальники:
+                .col-6
+                    select.multi-select(multiple='multiple', name='new_chiefs', data-plugin='multiselect', id='new_chiefs')
+                        each val in res
+                            option(value=val.username)!= val.post_short
+
+            .form-group.row.m-b-5
+                label.col-6.col-form-label Пароль:
+                .col-6
+                    input#new_password_1.form-control(type='password', name='new_password_1', value='123456')
+
+            .form-group.row.m-b-5
+                label.col-6.col-form-label Пароль ещё раз:
+                .col-6
+                    input#new_password_2.form-control(type='password', name='new_password_2', value='123456')
+
+            .form-group.row.m-b-5.align-items-center
+                label.col-10.col-form-label.checkbox Пользователь может добавлять документы:
+                .col-2.my-auto.text-right
+                    input#its_moder.big-checkbox(type='checkbox', name='its_moder')
+
+                button.m-b-5.row.btn.btn-primary.btn-custom.w-md.waves-effect.waves-light.col-12#reg_button(type='button') Регистрация
+
+            .row.m-b-5.text-danger.col-6#reg_message
+
+    .tab-pane.fade#all_users
+        table.table.table-bordered.noe-table
+            thead.thead-default
+                tr
+                    th Логин
+                    th Аббревиатура
+                    th Полное наименование
+                    th Уровень
+                    th Модератор
+                    th Администратор
+                    th Командиры
+                    th Подчинённые
+                    th Действия
+
+            tbody
+                each val, index in res
+                    tr
+                        //логин
+                        td.text-center
+                            = val.username
+                        //Аббревиатура
+                        td.text-center
+                            = val.post_short
+
+                        //Полное наименование
+                        td
+                            = val.post_long
+
+                        //Уровень
+                        td.text-center
+                            = val.ruk_level
+
+
+                        //Модератор
+                        if(val.isModerator)
+                            td.text-center.bg-warning
+                                | Да
+                        else
+                            td
+
+                        //Администратор
+                        if(val.isAdministrator)
+                            td.text-center.bg-danger
+                                | Да
+                        else
+                            td
+
+                        //Командиры
+                        td.text-center
+                            = val.chiefs
+
+                        //Подчинённые
+                        td.text-center
+                            = val.inferiors
+
+                        //действия
+                        td.text-center
+                            a.ref_delete_user(href=val.username title='Удалить пользователя' name='delete_user_' + val._id)
+                                i.mdi.mdi-delete-forever.text-danger
+
+script(type='text/javascript').
+    $("#new_chiefs").multiSelect('refresh');
+
+
+//script(type='text/javascript').
+    $(function () {
+        $("#admin_tabs").tab('dispose');
+    });
+
+        //здесь сообщения от сервера

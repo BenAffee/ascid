@@ -6,8 +6,11 @@
 		.topbar-left
 			.text-center
 				a.logo(href='index.html')
-					i.mdi.mdi-radar
-					span АСКИД
+					if(node_environment == 'production')
+						i.mdi.mdi-radar
+					else
+						i.mdi.mdi-radar.text-danger
+					span АСКИДД
 							
 		//----------------------------------------------Button mobile view to collapse sidebar menu
 		nav.navbar-custom
@@ -29,7 +32,8 @@
 							span.caret
 						.dropdown-menu(x-placement='bottom-start', style='position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;')
 							- if (isAdministrator)
-								a.dropdown-item.control_href(href='1') админ-панель
+								a.dropdown-item.control_href(href='1') Админ-панель
+								a.dropdown-item.logs(href='/logs') Логи
 							a.dropdown-item.control_href(href='/get_form_set_passw') Сменить пароль
 							a.dropdown-item(href='/auth/logout') Выйти
 						

@@ -20,6 +20,7 @@ var models    = require('../config/mongoose');
 
 const noe_functions = require('../config/noe_functions');
 
+
 var crypto = require('crypto');
 
 var msg='';
@@ -31,12 +32,8 @@ var msg='';
 router.post('/', csrfProtection, function (req, res) {
 
 	//логируем срабатывание этого роута
-	noe_functions.set_log_msg('INFO', //тип сообщения (INFO, WARNING, ERROR)
-							  'undefined', //имя пользователя
-							  '1', //номер сообщения
-							  'сработал путь auth', //сообщение
-                              'пользователь ввёл-->'+req.body.username //в тело ошибки запишем имя пользователя
-    );
+	let message_arr = ['INFO', 'undefined', '1', 'сработал путь auth', 'пользователь ввёл-->'+req.body.username];
+	noe_functions.set_log_msg(message_arr);
 
 	//защищаемся от инъекции через поле имя пользователя.
     //заодно проверяем на пустую форму
@@ -45,13 +42,9 @@ router.post('/', csrfProtection, function (req, res) {
     if (!req.body.username.match(pattern)){
         console.log ('имя пользователя не соответствует регулярке');
 
-        //логируем ошибку проверки формата имени пользователя
-        noe_functions.set_log_msg('WARNING', //тип сообщения (INFO, WARNING, ERROR)
-            'undefined', //имя пользователя
-            '2', //номер сообщения
-            'имя пользователя не соответствует регулярному выражению', //сообщение
-            'пользователь ввёл-->'+req.body.username //в тело ошибки запишем имя пользователя
-        );
+		//логируем ошибку проверки формата имени пользователя
+		message_arr = ['WARNING', 'undefined', '2', 'имя пользователя не соответствует регулярному выражению', 'пользователь ввёл-->'+req.body.username ];
+		noe_functions.set_log_msg(message_arr);
 
         res.send('ошибка формата имени пользователя');
         return;
@@ -104,9 +97,12 @@ router.post('/', csrfProtection, function (req, res) {
 					//req.session.new_docs_kontrols = results.docs_kontrols;
 					req.session.len_new_docs_kontrols = results.new_docs_kontrols.length;
 					req.session.len_new_docs_ispoln = results.new_docs_ispoln.length;
+                    req.session.inferiors = results.inferiors;
 
 					msg = req.session.username + ': доступ разрешён';
 					console.log(msg.green);
+
+                    console.log(req.session.all_users_short);
 
 					//console.log(req.session.all_users_short);
 					//console.log(req.session.all_users_long);
@@ -131,60 +127,10 @@ router.post('/', csrfProtection, function (req, res) {
 	   
 });
 
-//================================================================================================
-//================================================================================================
-//===================Регистрация нового пользователя============================
-//================================================================================================
-//================================================================================================
-router.post('/reg', function (req, res) {
-	
-	msg = req.session.username + ': сработал путь reg';
-	console.log(msg.magenta.bold);
-	if(req.session.isAdministrator){
-			console.log('вошёл');
-			var add_user = new models.users({
-				username: req.body.new_username,
-				password: req.body.new_password_1,
-				post_long: req.body.new_post_long,
-				post_short: req.body.new_post_short,
-				ruk_level: req.body.new_ruk_level
-			});
-		
-	
 
-			add_user.save(function (err) {
-				if (!err) {
-			
-					msg = 'пользователь: ' + req.body.new_username + ' добавлен!'
-					console.log(msg.red);
-					return res.send(msg);
-				} 
-				
-				else {
-					//console.log(err);
-					if(err.name == 'ValidationError') {
-						//отдаём пользователю все ошибки валидации от монгуса
-						console.log('ошибки регистрации пользователя:'.bgRed.white);
-						//res.statusCode = 400;
-						res.send(err.message);
-					} 
-					
-					else {
-						res.statusCode = 500;
-						msg = 'Статус 500 при регистрации пользователя. Получена форма:' + req.body;
-						res.send(msg);
-						console.log(msg.bgRed.white);
-					}
-				console.log(err.message);
-				}
-			});
-	}
-	else{
-		res.send('а ты жулик)))');
-		msg = req.session.username + ': попытка регистрации нового пользователя не администратором';
-		console.log(msg.bgRed.white);
-	}
-});
+
+
+
 //================================================================================================
 //================================================================================================
 //--------------------------------------------------Выход пользователя
@@ -202,5 +148,9 @@ router.get('/logout', function(req, res, next) {
 	}
 	res.redirect('/');
 });
+
+
+
+
 
 module.exports = router;

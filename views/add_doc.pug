@@ -1,87 +1,87 @@
 script(src='js/NOE/front_add_doc.js')
 form#uploadForm(name='uploadForm', action='/upload_doc', method='post', enctype='multipart/form-data')
-    h4.m-t-0.header-title Форма ввода документа
-    .row
-        .col-6(style="border: solid 1px #DCDCDC;")
-            .form-group
-                label.form-label Файл для загрузки:
-                input.form-control#file_doc(type='file', name='file_doc')
-        .col-6(style="border: solid 1px #DCDCDC;")
-            .form-group
-                label.form-label Тип документа:
-                select#type_doc.custom-select.form-control(type='text', name='type_doc')
-                    option(selected='') Выберите тип
-                    each val, index in docs
-                        option(value=index,
-                        label=val)
-                            =val
+	h4.m-t-0.header-title Форма ввода документа
+	.row
+		.col-6(style="border: solid 1px #DCDCDC;")
+			.form-group
+				label.form-label Файл для загрузки:
+				input.form-control#file_doc(type='file', name='file_doc')
+		.col-6(style="border: solid 1px #DCDCDC;")
+			.form-group
+				label.form-label Тип документа:
+				select#type_doc.custom-select.form-control(type='text', name='type_doc')
+					option(selected='') Выберите тип
+					each val, index in docs
+						option(value=index,
+						label=val)
+							=val
 
-    .row
-        .col-6(style="border: solid 1px #DCDCDC;")
-            .form-group
-                label.form-label Номер документа:
-                input#num_doc.form-control(type='text', placeholder='Номер', name='num_doc')
-        .col-6(style="border: solid 1px #DCDCDC;")
-            .form-group
-                label.form-label Дата документа:
-                input#date_doc.form-control.date_input(type='text', name='date_doc', placeholder='ДД.ММ.ГГ')
-
-
-    .row
-        .col-6(style="border: solid 1px #DCDCDC;")
-            .form-group
-                label.form-label Кто утвердил:
-                select#ruc_doc.custom-select.form-control(type='text', name='ruc_doc')
-                    option(selected='') Руководитель
-                    each val in DL12
-                        option(value = val.username,
-                        label = val.post_short)
-                            =val.post_short
-        .col-6(style="border: solid 1px #DCDCDC;")
-            .form-group
-                label.form-label Краткое описание:
-                input#about_doc.form-control(type='text', placeholder='Описание', name='about_doc')
-
-    .row#div_punkts
-        input#punkts_count.form-control(type='hidden', value=0, name='punkts_count')
-        #accordion.m-b-20(role='tablist', aria-multiselectable='true')
-            .card.m-t-5#card_0
-                #headingOne_0.card-header(role='tab')
-                    h5.mb-0.mt-0.font-16
-                        a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseOne_0', aria-expanded='false', aria-controls='collapseOne_0')
-                            | Настройте пункты документа
-                        //a.close_card(href='0', type='hidden')
-                            i.ti-close
-                #collapseOne_0.collapse(role='tabpanel', aria-labelledby='headingOne_0', style='')
-                    .card-body
-                        .row
-                            .div.col-6(style="border: solid 1px #DCDCDC;")
-                                .form-group
-                                    label.form-label Номер пункта:
-                                    input#num_punkt_0.form-control(type='text', placeholder='Пункт', name='num_punkt_0')
-                            .div.col-6(style="border: solid 1px #DCDCDC;")
-                                .form-group
-                                    label.form-label Дата исполнения:
-                                    input#date_punkt_0.form-control.date_input(type='text', name='date_punkt_0')
-                        .row
-                            .div.col-6(style="border: solid 1px #DCDCDC;")
-                                .form-group
-                                    label.form-label Исполнители:
-                                    select#ispolniteli_0.multi-select(multiple='multiple', name= "ispolniteli_0[]", data-plugin='multiselect')
-                                        each val in DLall
-                                            option(value=val.username)!= val.post_short
-                            .div.col-6(style="border: solid 1px #DCDCDC;")
-                                .form-group
-                                    label.form-label Контролирующие:
-                                    select#controllers_0.multi-select(multiple='multiple', name="controllers_0[]", data-plugin='multiselect')
-                                        each val in DLall
-                                            option(value=val.username)!= val.post_short
+	.row
+		.col-6(style="border: solid 1px #DCDCDC;")
+			.form-group
+				label.form-label Номер документа:
+				input#num_doc.form-control(type='text', placeholder='Номер', name='num_doc')
+		.col-6(style="border: solid 1px #DCDCDC;")
+			.form-group
+				label.form-label Дата документа:
+				input#date_doc.form-control.date_input(type='text', name='date_doc', placeholder='ДД.ММ.ГГ')
 
 
-    .row
-        .col-3
-            button#add-punkt.btn.btn-warning.w-md.waves-effect.waves-light(type='button') + ПУНКТ
-        .col-3
-            button#upload_doc.btn.btn-primary.w-md.waves-effect.waves-light(type='submit') Загрузить на сервер
-    .row#add_doc_message.text-danger
+	.row
+		.col-6(style="border: solid 1px #DCDCDC;")
+			.form-group
+				label.form-label Кто утвердил:
+				select#ruc_doc.custom-select.form-control(type='text', name='ruc_doc')
+					option(selected='') Руководитель
+					each val in DL12
+						option(value = val.username,
+						label = val.post_short)
+							=val.post_short
+		.col-6(style="border: solid 1px #DCDCDC;")
+			.form-group
+				label.form-label Краткое описание:
+				input#about_doc.form-control(type='text', placeholder='Описание', name='about_doc')
+
+	.row#div_punkts
+		input#punkts_count.form-control(type='hidden', value=0, name='punkts_count')
+		#accordion.m-b-20(role='tablist', aria-multiselectable='true')
+			.card.m-t-5#card_0
+				#headingOne_0.card-header(role='tab')
+					h5.mb-0.mt-0.font-16
+						a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseOne_0', aria-expanded='false', aria-controls='collapseOne_0')
+							| Настройте пункты документа
+						//a.close_card(href='0', type='hidden')
+							i.ti-close
+				#collapseOne_0.collapse(role='tabpanel', aria-labelledby='headingOne_0', style='')
+					.card-body
+						.row
+							.div.col-6(style="border: solid 1px #DCDCDC;")
+								.form-group
+									label.form-label Номер пункта:
+									input#num_punkt_0.form-control(type='text', placeholder='Пункт', name='num_punkt_0')
+							.div.col-6(style="border: solid 1px #DCDCDC;")
+								.form-group
+									label.form-label Дата исполнения:
+									input#date_punkt_0.form-control.date_input(type='text', name='date_punkt_0')
+						.row
+							.div.col-6(style="border: solid 1px #DCDCDC;")
+								.form-group
+									label.form-label Исполнители:
+									select#ispolniteli_0.multi-select(multiple='multiple', name= "ispolniteli_0[]", data-plugin='multiselect')
+										each val in DLall
+											option(value=val.username)!= val.post_short
+							.div.col-6(style="border: solid 1px #DCDCDC;")
+								.form-group
+									label.form-label Контролирующие:
+									select#controllers_0.multi-select(multiple='multiple', name="controllers_0[]", data-plugin='multiselect')
+										each val in DLall
+											option(value=val.username)!= val.post_short
+
+
+	.row
+		.col-3
+			button#add-punkt.btn.btn-warning.w-md.waves-effect.waves-light(type='button') + ПУНКТ
+		.col-3
+			button#upload_doc.btn.btn-primary.w-md.waves-effect.waves-light(type='submit') Загрузить на сервер
+	.row#add_doc_message.text-danger
 

@@ -39,7 +39,7 @@ router.post('/', upload_file_doc, function (req, res) {
 	if(req.session.isModerator){
 
 		//формируем имя файла
-		var filename_doc = config.type_of_docs[req.body.type_doc] + '_'+ req.body.num_doc + '_от_' + req.body.date_doc + '.pdf';
+		var filename_doc = config.type_of_docs_eng[req.body.type_doc] + '_'+ req.body.num_doc + '_ot_' + req.body.date_doc + '.pdf';
 
 		//сначала проверка файла и полей, если всё нормально, то пишем файл и записываемв базу
 		if(file_doc_valid(req.file)){
@@ -63,7 +63,7 @@ router.post('/', upload_file_doc, function (req, res) {
 				//делаем красивую дату
 				name = 'date_punkt_' + i;
 				let str = req.body[name];
-                let date_to_base = noe_functions.dateToMillis(str);
+                let date_to_base = noe_functions.dateToMillis(str,'/upload_doc');
 				//var date_to_base = str[8] + str[9] + '.' + str[5] + str[6] + '.' + str[0] + str[1] + str[2] + str[3] + ' г.'
 				
 				//добавляем в массив исполнителей
@@ -111,7 +111,7 @@ router.post('/', upload_file_doc, function (req, res) {
 			)
 			//делаем красивую дату
 			let str = req.body.date_doc;
-            let date_to_base = noe_functions.dateToMillis(str);
+            let date_to_base = noe_functions.dateToMillis(str,'/upload_doc');
 			//var date_to_base = str[8] + str[9] + '.' + str[5] + str[6] + '.' + str[0] + str[1] + str[2] + str[3] + ' г.'
 			
 			//пишем в базу документ...

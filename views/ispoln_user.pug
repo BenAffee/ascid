@@ -1,3 +1,4 @@
+script(src='js/NOE/front_view_doc.js')
 //p= docs
 //p= lengths
 input#num_of_new_ispoln(type='hidden', name='num_of_new_ispoln', value= num_of_new_ispoln)
@@ -10,7 +11,7 @@ table.table.table-bordered.noe-table
 			th Дата документа
 			th Руководитель
 			th Описание
-			th Файл
+			th Действия
 			th Пункт
 			th Дата исполнения
 			th Контроль
@@ -28,7 +29,7 @@ table.table.table-bordered.noe-table
 					= val.doc_num
 					
 				//дата документа
-				td(rowspan=lengths[index], id="data_" + val._id)
+				td.front_date(rowspan=lengths[index], id="data_" + val._id)
 					= val.doc_date
 
 
@@ -47,8 +48,10 @@ table.table.table-bordered.noe-table
 					//input(type='hidden', id='punkts_' + val._id, name='punkts_' + val._id + '[]', value= number_of_punkt_in_base[index])
 					a.ref_download_ispoln.m-r-10(href='files/' + val.filename download='' title='Скачать' name='d_' + val._id)
 						i.mdi.mdi-download.text-success
-					a.ref_download_ispoln(href='files/' + val.filename title='Просмотреть' name='e_' + val._id)
+					a.ref_download_ispoln.m-r-10(href='files/' + val.filename title='Просмотреть' name='e_' + val._id)
 						i.mdi.mdi-eye.text-success
+					a.ref_transfer.m-r-10(href='#ModalTransfer' data-toggle='modal' data-animation='slit' data-plugin='custommodal' data-overlayspeed='100' data-overlaycolor='#36404a' title='Отписать' name='transfer_' + val._id id='transfer_' + val._id)
+						i.mdi.mdi-sitemap.text-success
 
 				//Пункт
 				td.text-center
@@ -56,7 +59,7 @@ table.table.table-bordered.noe-table
 					//= 'jjjj' + number_of_punkt_in_base[0]
 
 				//Дата пункта
-				td
+				td.front_date
 					= val.doc_punkts[0]['date']
 
 				//Контроль
@@ -88,7 +91,7 @@ table.table.table-bordered.noe-table
 						= val.doc_punkts[i]['num_punkt']
 					
 					//Дата пункта
-					td
+					td.front_date
 						= val.doc_punkts[i]['date']
 					
 					//Контроль

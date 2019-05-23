@@ -13,6 +13,8 @@ var router = express.Router();
 //импоритруем модели монгуса
 var models    = require('../config/mongoose');
 
+const noe_functions = require('../config/noe_functions');
+
 var config = require('../config/index');
 
 var flow = require('nimble');//для последовательного выполнения операций
@@ -21,6 +23,7 @@ var msg='';
 
 var moder_users=[];
 var moder_users_all=[];
+
 
 
 //Открываем страничку смены пароля
@@ -36,19 +39,54 @@ router.get('/:page', function(req, res, next) {
 //--------------------------------------------	
 	if (control==1) {
 		if(req.session.isAdministrator) {
-			msg = req.session.username + ': вход в админ-панель';
-			console.log(msg.magenta.bold);
-			res.render('admin');
+			//логируем срабатывание этого роута
+			let message_arr = ['INFO', req.session.username, '3', 'вход в админ-панель', 'ОК'];
+			noe_functions.set_log_msg(message_arr);
+			
+			//выбираем из базы всех пользователей
+			models.users.find({}, function(err, results){
+				if(err){
+					//логируем ошибки полученные от базы
+					message_arr = ['ERROR', req.session.username, '5', 'ошибка получения списка ВСЕХ пользователей', err];
+					noe_functions.set_log_msg(message_arr);
+				} 
+
+				if(!results) {
+					//заносим в лог, если из базы пришёл пустой результат
+					message_arr = ['WARNING', req.session.username, '6', 'база вернула пустой результат при получении списка ВСЕХ пользователей', 'Empty result!'];
+					noe_functions.set_log_msg(message_arr);
+					res.send('неправильное имя пользователя/пароль');
+				}
+
+				else {
+					
+					results.sort(noe_functions.dynamicSort('ruk_level'));//сортируем результаты по уровню руководства
+					//console.log(results);
+					res.render('admin', { 
+						res: results
+					});
+				}
+			});
+
+			//msg = req.session.username + ': вход в админ-панель';
+			//console.log(msg.magenta.bold);
+
 		}
 			
 		else{
+			//логируем попытку несанкционированного доступа
+			let username_log = 'undefined';
+			if (req.session.username) username_log = req.session.username;
+			message_arr = ['WARNING', username_log, '4', 'Неудачная попытка входа в админ-панель', 'Access denied!'];
+			noe_functions.set_log_msg(message_arr);
+			//отдаём юзеру предупреждение
 			res.send('Попытка нарушения прав доступа. Ошибка добавлена в лог');
-		
-			msg = req.session.username + ': неудачная попытка входа в админку';
-			console.log(msg.bgRed.white);
+
 		}
 	
 	}
+	
+
 	
 	
 //--------------------------------------------	
@@ -161,10 +199,10 @@ router.get('/:page', function(req, res, next) {
 	}
 //================================================================================================
 //тут отображаем все документы
-//ТОЛЬКО ДЛЯ МОДЕРАТОРА!!!
+//ТОЛЬКО ДЛЯ МОДЕРАТОРА и АДМИНИСТРАТОРА!!!
 //================================================================================================	
 	if (control==3) {
-		if(req.session.isModerator) {
+		if(req.session.isModerator || req.session.isAdministrator) {
 			msg = req.session.username + ': показываем список всех документов';
 			console.log(msg.magenta.bold);
 
@@ -400,43 +438,21 @@ router.get('/:page', function(req, res, next) {
 				else res.send("НЕТ НОВЫХ ДОКУМЕНТОВ. <input type=hidden id=num_of_new_kontrol value=0>");
 			});
 		});
-		
-		
-		/*
-		//выбираем из базы НОВЫЕ документы в которых пользователь указан как контроллирующий
-		var lengths_of_punkts = [];//здесь хранятся количество пунктов в которых указан пользователь
-		models.docs.find({'_id': {$in: req.session.new_docs_kontrols}}, function(err, results){
-			//обрабатываем ошибки, если ошибки есть, то логируем все-все-все
-			if(models.err_handler(err, req.session.username)) return;
-			
-			if(results.length > 0){
-			//нам нужно оставить только пункты "в части касающейся" пользователя
-			//для этого перебираем выборку и просматриваем элементы массива puncts, если в элементе нет имени пользователя, то удаляем этот элемент
-				results.forEach(function(item, i, arr) {
-					var cur_puncts = item.doc_punkts;
-					cur_puncts.forEach(function(item1, i1, arr1) {
-						//используем in, потому-что ищем в Object
-						if(!(req.session.username in item1['kontrols']))
-							//если пользователь в пунктах не найден, то сплайсим из выборки этот пункт
-							results[i].doc_punkts.splice(i1, 1);
-					});
-					lengths_of_punkts.push(results[i].doc_punkts.length);
-				});
-				//если в массиве нет новых документов то показываем сообщение
-
-				res.render('kontrol_user', { 
-					docs: results,
-					all_users_short: req.session.all_users_short,
-					all_users_long: req.session.all_users_long,
-					type_docs: config.type_of_docs,
-					username: req.session.username,
-					lengths: lengths_of_punkts
-				});
-			}
-			else res.send("НЕТ НОВЫХ ДОКУМЕНТОВ");
-		});*/
 	}
+
+
 });
+
+
+//================================================================================================
+//здесь отрабатываем форму отписывания документа
+//================================================================================================
+router.post('/transfer_doc', function(req, res, next) {
+    res.send(req.body.transfer_doc_id);
+    console.log('тут');
+});
+
+
 
 //================================================================================================
 //тут всякие аяксовые штуки

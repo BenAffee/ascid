@@ -87,9 +87,19 @@ var userSchema = new mongoose.Schema({
 	
 	//признак модератора
 	isModerator: {
-		type: Boolean,
-		default: false
+		type: Boolean
+		//default: false
 	},
+
+    //массив, в котором хранятся имена подчинённых пользователя
+    inferiors: {
+        type: Array,
+    },
+
+    //массив, в котором хранятся имена начальников пользователя
+    chiefs: {
+        type: Array,
+    },
 	
 	//массив, в котором хранятся id ВСЕХ документов, в которых пользователь является исполнителем
 	docs_ispoln: {

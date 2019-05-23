@@ -6,6 +6,8 @@ var csrf = require('csurf')
 const mongoose = require('mongoose');
 const models = require('../config/mongoose');
 
+const redisProcessing = require('../config/redisClient');
+
 const config = require('../config/index');
 
 
@@ -24,10 +26,12 @@ router.get('/', csrfProtection, function(req, res) {
 		username: req.session.username,//отдаём в шаблон ИМЯ ПОЛЬЗОВАТЕЛЯ
 		isAdministrator: req.session.isAdministrator,//отдаём в шаблон СТАТУСЫ ПОЛЬЗОВАТЕЛЯ
 		isModerator: req.session.isModerator,
-		node_environment: process.env.NODE_ENV,//отправляем состояние среды исполнения
+		node_environment: config.node_env_mode,//отправляем состояние среды исполнения
 						// чтобы включить кеширование страниц на стороне пользователя в режиме продакшн
 		post_short: req.session.post_short,//отдаём в шаблон СИСОК ИМЁН ПОЛЬЗОВАЕЛЕЙ
 		post_long: req.session.post_long,
+		inferiors: req.session.inferiors,
+        all_users_short:req.session.all_users_short,
 		len_new_docs_ispoln: req.session.len_new_docs_ispoln,//отдаём в шаблон количество записей в поле НОВЫЕ
 		len_new_docs_kontrols: req.session.len_new_docs_kontrols
 		//дальше для теста
@@ -180,65 +184,65 @@ router.post('/delete_doc', function(req, res) {
 	if (req.session.isModerator){
 		
 			new Promise (function (resolve, reject){
-                models.docs.findOne({_id: req.body.id}, function(err, results){
-                    if(err) console.log(err);
+				models.docs.findOne({_id: req.body.id}, function(err, results){
+					if(err) console.log(err);
 
-                    if(!results) {
-                        msg = 'при попытке поиска документа >>>' + req.body.id + '<<< для удаления,  база вернула пустой результат';
-                        console.log(msg.bgRed.white);
-                        console.log(results);
-                        res.send('ошибка поиска документа для удаления');
-                    }
+					if(!results) {
+						msg = 'при попытке поиска документа >>>' + req.body.id + '<<< для удаления,  база вернула пустой результат';
+						console.log(msg.bgRed.white);
+						console.log(results);
+						res.send('ошибка поиска документа для удаления');
+					}
 
-                    else {
-                        //если документ нашёлся,
-                        //то резолвим дальше по цепочке список пользователей в которых этот документ указан для исполнения или контроля
-                        //и имя файла для удаления
+					else {
+						//если документ нашёлся,
+						//то резолвим дальше по цепочке список пользователей в которых этот документ указан для исполнения или контроля
+						//и имя файла для удаления
 
-                        //сначала выберем все пункты из документа...
-                        var punkts=results.doc_punkts;
-                        var tmp=[];
+						//сначала выберем все пункты из документа...
+						var punkts=results.doc_punkts;
+						var tmp=[];
 
-                        //затем выберем все имена пользователей, которые указаны в этих пунктах
-                        punkts.forEach(function(item, i, arr) {
-                            //сначала исполнители...
-                            var ispoln = item.ispoln;
-                            for (var key in ispoln){
-                                tmp.push(key);
-                            }
+						//затем выберем все имена пользователей, которые указаны в этих пунктах
+						punkts.forEach(function(item, i, arr) {
+							//сначала исполнители...
+							var ispoln = item.ispoln;
+							for (var key in ispoln){
+								tmp.push(key);
+							}
 
-                            //...затем контроллирующие
-                            var kontrols = item.kontrols;
-                            for (var key in kontrols){
-                                tmp.push(key);
-                            }
-                        });
-                        //оставляем только уникальные значения в массиве
-                        tmp = noe_functions.unique_item_in_arr(tmp);
+							//...затем контроллирующие
+							var kontrols = item.kontrols;
+							for (var key in kontrols){
+								tmp.push(key);
+							}
+						});
+						//оставляем только уникальные значения в массиве
+						tmp = noe_functions.unique_item_in_arr(tmp);
 
-                        //и удаляем сам файл
-                        noe_functions.file_doc_delete(config.path_to_files + results.filename);
+						//и удаляем сам файл
+						noe_functions.file_doc_delete(config.path_to_files + results.filename);
 
-                        punkts = tmp;
-                        resolve (punkts);
-                     }
-			    })
-            })
+						punkts = tmp;
+						resolve (punkts);
+					 }
+				})
+			})
 
 			.then((punkts) => {
-					console.log(punkts);
-                    console.log(req.body.id);
+					//console.log(punkts);
+					//console.log(req.body.id);
 					let ok;
 					//проходим по всем пользователям указанным в документе и удаляем id документа
-                    models.users.update({"username": {$in: punkts}},
-                        {$pull: {"docs_kontrols": mongoose.Types.ObjectId(req.body.id),
-                                "new_docs_kontrols": mongoose.Types.ObjectId(req.body.id),
-                                "docs_ispoln": mongoose.Types.ObjectId(req.body.id),
-                                "new_docs_ispoln": mongoose.Types.ObjectId(req.body.id)}},
-                        {multi: true},
-                        function(err){
-                            if(models.err_handler(err, req.session.username)) return ok;
-                    });
+					models.users.update({"username": {$in: punkts}},
+						{$pull: {"docs_kontrols": mongoose.Types.ObjectId(req.body.id),
+								"new_docs_kontrols": mongoose.Types.ObjectId(req.body.id),
+								"docs_ispoln": mongoose.Types.ObjectId(req.body.id),
+								"new_docs_ispoln": mongoose.Types.ObjectId(req.body.id)}},
+						{multi: true},
+						function(err){
+							if(models.err_handler(err, req.session.username)) return ok;
+					});
 				})
 		
 			.then((ok) => {
@@ -250,8 +254,8 @@ router.post('/delete_doc', function(req, res) {
 						else {
 								console.log('ошибка удаления записи ' + req.body.id + ' из базы')
 						}
-                        //после того как удалили документ из базы и сам файл, снова показывем страницу со всеми документами
-                        res.redirect('/control/3');
+						//после того как удалили документ из базы и сам файл, снова показывем страницу со всеми документами
+						res.redirect('/control/3');
 					});
 				})
 		
